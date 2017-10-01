@@ -1,165 +1,71 @@
 #include "../include/Robo.h"
 
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
-    #define DEBUG_PRINT(x) do{ cout << x <<  endl; }while(0)
+    #define DEBUG_PRINT(x) do{ cout << x <<  endl; }while(0);
 #else
     #define DEBUG_PRINT(x)
 #endif // DEBUG
 
-Robo::Robo(float x, float y, TileMap* mapRef, bool lider, string nome)
+Robo::Robo(GameObject& associated, float x, float y, string file):
+    associated(associated),
+    sp(new Sprite(associated, file, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES)),//, ROBO_SHEET_LINES)),
+    selected(false)
 {
     DEBUG_PRINT("Robo::Robo()-inicio");
-    mapReference = mapRef;
-    tileNumber = 1;
-    sp.Open(ROBO_SP1);
-    sp.SetSpriteSheet(ROBO_SHEET_LINES, ROBO_SHEET_FRAMES);
-    sp.SetAnimation(0, ROBO_SHEET_FRAMES);
-    sp.SetFrameTime(ROBO_SHEET_FRAME_TIME);
 
-    this->lider = lider;
-    this->nome = nome;
+    associated.AddComponent(sp);
+    associated.box.h = sp->GetHeight();
+    associated.box.w = sp->GetWidth();
+    associated.box.x = x;
+    associated.box.y = y;
 
-    box.h = sp.GetHeight();
-    box.w = sp.GetWidth();
-    box.SetRectCenterX( mapReference->MapPositionToPixelPosition(x,tileNumber) );
-    box.SetRectCenterY( mapReference->MapPositionToPixelPosition(y,tileNumber) );
-    currentPosition.SetPoint( x, y );
 
-    this->rotation = 0;
+    //Barra de vida
+    Bar* barraVida =  new Bar(200, BARRA_VIDA_MOLDURA, BARRA_VIDA, associated);
+    barraVida->SetPosition(0,0);
+    associated.AddComponent(barraVida);
 
-    allyPosition = FRONT;
-    charState = REPOUSO;
-    menuAberto = false;
-    //cout << "(" << x << ", " << y << ")" << endl;
-    //mapReference->At(x, y).state = ALLY;
-    //mapReference->At(x, y).occuper = this;
+    //barra de cooldown
+    Bar* coolDownBar = new Bar(10, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN, associated);
+    coolDownBar->SetY(10);
+    coolDownBar->SetRefilAuto(10);
+    coolDownBar->SetPoints(0);
+    coolDownBar->SetPosition(0,10);
+    DEBUG_PRINT(coolDownBar.GetY() << "x" << coolDownBar.GetY());
+    associated.AddComponent(coolDownBar);
 
-    mapReference->SetTileState(currentPosition, ALLY, tileNumber);
-    mapReference->SetTileOccuper(currentPosition, this, tileNumber);
-
-    components.push_back(new Bar(200, *this));//mapReference->MapPositionToPixelPosition(x,tileNumber),
-                                             //mapReference->MapPositionToPixelPosition(y,tileNumber) ));
+//    Walkable* walkable = new Walkable(associated);
+//    walkable->SetControlable(true);
+//    associated.AddComponent(walkable);
 
     DEBUG_PRINT("Robo::Robo()-fim");
 }
 
-Robo::~Robo()
-{
-     mapReference->At( mapReference->PixelPositionToMapPosition( box.RectCenterX() ),
-                       mapReference->PixelPositionToMapPosition( box.RectCenterY() ) ).state = FREE;
+Robo::~Robo(){
 }
 
-void Robo::Update(float dt)
-{
-    if(charState != INATIVO){
-        Ally::Update(dt);
-        //barraCooldown.Update(dt);
-        //barraCooldown.SetX(box.RectCenterX());
-        //barraCooldown.SetY(box.RectCenterY());
-    }
-
-    /*if(IsDead() == true){
-        cout << this->nome <<": Fui destruido!! Noooooooo.... D: " << endl;
-        mapReference->At( currentPosition.x, currentPosition.y ).state = FREE;
-        mapReference->At( currentPosition.x , currentPosition.y ).occuper = NULL;
-
-    }
-
-    vida.Update();
-    vida.SetX(box.RectCenterX());
-    vida.SetY(box.RectCenterY());
-    */
+void Robo::Update(float dt){
+    DEBUG_PRINT("COMP - Robo::Update()-inicio");
+    //sp->SetPosition(associated.box.x, associated.box.y);
+    DEBUG_PRINT("COMP - Robo::Update()-fim");
 }
 
 void Robo::Render(){
-    DEBUG_PRINT("Robo::Render()-inicio");
-    sp.Render(box.x - Camera::pos.x, box.y - Camera::pos.y);
-    for(unsigned int i = 0; i < components.size(); i++){
-        components[i]->Render();
-    }
-    /*
-    if(menuAberto){
-        int offSet = 100;
-        int angulo = 90;
-        for(int i = 0; i < buttonArray.size(); i++){
-            buttonArray[i].SetX(box.RectCenterX() + cos(angulo*M_PI/180)*offSet);
-            buttonArray[i].SetY(box.RectCenterY() - 20 + sin(angulo*M_PI/180)*offSet);
-            buttonArray[i].Render(cameraX,cameraY);
-            angulo += 90;
-        }
-    }else{
-        barraCooldown.Render(cameraX, cameraY);
-        vida.Render(cameraX, cameraY);
-    }
-    */
-    DEBUG_PRINT("Robo::Render()-fim");
+//    DEBUG_PRINT("Robo::Render()-inicio");
+//    sp.Render();
+//    for(unsigned int i = 0; i < components.size(); i++){
+//        components[i]->Render();
+//    }
+//    DEBUG_PRINT("Robo::Render()-fim");
 }
 
-bool Robo::Is(string type){
-    if(type == "Robo" || type == "Ally"){
-        return true;
-    }
-    return false;
+bool Robo::Is(ComponentType type)const{
+    return type == ROBO;
 }
 
-bool Robo::Ejetar()
-{
-    /*
-    Piloto* piloto = pilotoArray.back();
-    if(piloto->Ejetar() == true){
-        pilotoArray.pop_back();
-        if(pilotoArray.size() == 0){
-            this->charState = INATIVO;
-        }else{
-            this->charState = REPOUSO;
-        }
-        return true;
-    }
-    */
-    return false;
-}
-
-void Robo::InserePiloto(Piloto *piloto)
-{
-    //pilotoArray.push_back(piloto);
-}
-
-
-void Robo::Morrer()
-{
-    /*
-    for(int i = 0; i < pilotoArray.size(); i++){
-        pilotoArray[i]->Morrer();
-    }*/
-}
-
-bool Robo::Embarcar(Ally *alvo)
-{
-    /*
-    if(pilotoArray.size() < 2){
-        if(charState == INATIVO){
-            charState = REPOUSO;
-        }
-        Piloto* piloto = (Piloto*) alvo;
-        pilotoArray.push_back(piloto);
-        return true;
-    }else{
-        return false;
-    }*/
-}
-
-void Robo::Danificar(float dano)
-{
-    /*
-    Sprite hit(HIT);
-    Game::GetInstance().GetCurrentState().AddObject(new StillAnimation(box.RectCenterX() + 10,
-                                                                       box.RectCenterY() - 25, rotation, hit, 0.5, true));
-    int vidaNova = vida.GetVida();
-    vidaNova -= dano - defesa/10;
-    vida.SetVida(vidaNova);
-    */
-}
+void Robo::EarlyUpdate(float dt){}
+void Robo::LateUpdate(float dt){}
 
 #ifdef DEBUG
     #undef DEBUG

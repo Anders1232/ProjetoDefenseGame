@@ -4,9 +4,11 @@
 #include <iostream>
 #include <string>
 
-#include "Ally.h"
-#include "Piloto.h"
 #include "Camera.h"
+#include "Component.h"
+#include "resources_path.h"
+#include "Bar.h"
+#include "Walkable.h"
 
 using std::string;
 
@@ -14,23 +16,22 @@ using std::string;
 #define ROBO_SHEET_FRAMES       4
 #define ROBO_SHEET_FRAME_TIME   4.0*1.0/24.0
 
-class Robo: public Ally{
+class Robo: public Component{//public GameObject{
 public:
-    Robo(float x, float y, TileMap* mapRef, bool lider, string nome);
+    Robo(GameObject& associated, float x, float y, string file);
     ~Robo();
-    void Render();
-    bool Is(string type);
-    bool Ejetar();
     void Update(float dt);
-    bool Embarcar(Ally* alvo);
-    void InserePiloto(Piloto* piloto);
-    void Morrer();
-    void Danificar(float dano);
+    void Render();
+    bool Is(ComponentType type) const;
+
+    void EarlyUpdate(float dt);
+	void LateUpdate(float dt);
 
 protected:
-    /*vazio*/
 private:
-    std::vector<Piloto*> pilotoArray;
+    GameObject& associated;
+    Sprite* sp;
+    bool selected;
 };
 
 #endif // ROBO_H

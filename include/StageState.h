@@ -2,21 +2,31 @@
 #ifndef STAGESTATE_H
 #define STAGESTATE_H
 
+#include <sstream>
+
 #include "Game.h"
 #include "State.h"
 #include "Sprite.h"
-#include "BlockTileSet.h"
-#include "TileMap.h"
 #include "Music.h"
-#include "StateData.h"
-#include "EndState.h"
 #include "Text.h"
-#include "InfoMenu.h"
 #include "Robo.h"
 #include "resources_path.h"
-#define STAGE_TILE_W_H               64
+#include "TileMap.h"
+
+#define STAGE_BACKGROUND_FILE   "resources/img/bg/ocean.jpg"
+
+#define STAGE_TILESET_FILE      "resources/img/tileset/tileset.jpg"
+#define STAGE_TILE_WIDTH          64
+#define STAGE_TILE_HEIGHT         64
+
+#define STAGE_TILEMAP_FILE           "resources/maps/tileMap20x20.txt"
+#define STAGE_BACKGROUND_MUSIC_FILE  "resources/audio/Tema_Boss_01.wav"
+
+#define CAMERA_SPEED    1
+
 
 using std::find;
+using std::stringstream;
 
 class StageState : public State
 {
@@ -26,20 +36,22 @@ class StageState : public State
         //void InicializaPersonagens(CharacterData characters, InfoMenu *infoMenu);
         ~StageState();
         void Update(float dt);
-        void Render();
+        void Render() const;
+        void Pause();
+        void Resume();
+        void LoadAssets() const;
+
+        void SetOnGrid(GameObject& gameObject, int x, int y);
 
     protected:
     private:
-        InfoMenu* infoMenu;
         void Input(float dt);
-        Sprite bg;
-        BlockTileSet tileSet;
-        TileMap tileMap;
+        //Sprite bg;
         Music backGroundMusic;
-        Text chessPosition;
-        int tileNumber;
         Timer vitoriaTime;
-        bool showDebug;
+        TileMap* tilemap;//verificar o que significa a warning reorder
+        GameObject ambient;
+        GameObject robo;
 };
 
 #endif // STAGESTATE_H

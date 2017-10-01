@@ -1,21 +1,32 @@
 #include "../include/Bar.h"
 
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
     #define DEBUG_PRINT(x) do{ cout << x <<  endl; }while(0)
 #else
     #define DEBUG_PRINT(x)
 #endif // DEBUG
 
-Bar::Bar(int points, GameObject &associated): fluid(BARRA_VIDA), frame(BARRA_VIDA_MOLDURA)
+Bar::Bar(int points, string frameFile, string fluidFile, GameObject &associated):
+    associated(associated),
+    fluid(*(new Sprite(associated, fluidFile) ) ),
+    frame(*(new Sprite(associated, frameFile) ) ),
+    maxPoints(points),
+    currPoints(points),
+    refilAuto(false)
 {
     DEBUG_PRINT("Bar::Bar()-inicio");
-    box.x = associated.box.x;
-    box.y = associated.box.y;
-    maxPoints = currPoints = points;
+    xRelative = this->associated.box.x;
+    yRelative = this->associated.box.y;
+
+    //fluid.SetPosition(box.x, box.y);
+    //frame.SetPosition(box.x, box.y);
+
+    associated.AddComponent(&fluid);
+    associated.AddComponent(&frame);
+
     box.w = frame.GetWidth();
     box.h = frame.GetHeight();
-    refilAuto = false;
     DEBUG_PRINT("Bar::Bar()-fim");
 }
 
@@ -28,10 +39,16 @@ void Bar::EarlyUpdate(float dt){
 
 void Bar::Update(float dt)
 {
-    //Nessas buscas que a barra de vida faz, dá erro quando o personagem morre!!
-    float porCento = 100*currPoints/maxPoints;
-    if(porCento > 100) porCento = 100;
-    fluid.SetClip(0, 0, box.w*porCento/100, box.h);
+    DEBUG_PRINT("Bar::Update()-inicio");
+    Reposition();
+    if(refilAuto){
+        if(currPoints < maxPoints){
+            currPoints += refilPace*dt;
+            if(currPoints > maxPoints) currPoints = maxPoints;
+            fluid.SetClip(0, 0, box.w * (currPoints/maxPoints), box.h);
+        }
+    }
+    DEBUG_PRINT("Bar::Update()-fim");
 }
 
 void Bar::LateUpdate(float dt){
@@ -47,16 +64,20 @@ bool Bar::IsDead()
 
 void Bar::Render()
 {
-    fluid.Render(box.x - Camera::pos.x, box.y - Camera::pos.y);
-    frame.Render(box.x - Camera::pos.x, box.y - Camera::pos.y);
+    //fluid.Render();
+    //frame.Render();
 }
 
 void Bar::SetX(float x){
-    box.SetRectCenterX(x);
+    box.x = x;
+    //frame.SetPosition(box.x, box.y);
+    //fluid.SetPosition(box.x, box.y);
 }
 
 void Bar::SetY(float y){
-    box.SetRectCenterY(y);
+    box.y = y + associated.box.y;
+    //frame.SetPosition(box.x, box.y);
+    //fluid.SetPosition(box.x, box.y);
 }
 
 void Bar::SetPoints(int points)
@@ -79,18 +100,40 @@ float Bar::GetPercentPoints()
 }
 
 bool Bar::IsFull(){
-    if(currPoints/maxPoints == 1){
+    if(currPoints == maxPoints){
         return true;
     }
     return false;
 }
 
-void Bar::SetRefilAuto(bool refilAuto){
-    this->refilAuto = refilAuto;
+void Bar::SetRefilAuto(float time){
+    this->refilAuto = true;
+    this->refilPace = maxPoints/time;
+    DEBUG_PRINT("refilPace: " << refilPace);
 }
 
-void Bar::SetRefilPace(int refilPace){
-    this->refilPace = refilPace;
+void Bar::SetPosition(float x, float y){
+    xRelative = x;
+    yRelative = y;
+    box.x = xRelative + associated.box.x;
+    box.y = yRelative + associated.box.y;
+//    frame.SetPosition(box.x, box.y);
+//    fluid.SetPosition(box.x, box.y);
+}
+
+void Bar::Reposition(){
+    box.x = xRelative + associated.box.x;
+    box.y = yRelative + associated.box.y;
+//    frame.SetPosition(box.x, box.y);
+//    fluid.SetPosition(box.x, box.y);
+}
+
+int Bar::GetX(){
+    return box.x;
+}
+
+int Bar::GetY(){
+    return box.y;
 }
 
 #ifdef DEBUG
