@@ -30,7 +30,6 @@ public:
 protected:
 private:
     GameObject& associated;
-    Sprite* sp;
     bool selected;
 };
 

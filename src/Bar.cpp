@@ -39,7 +39,6 @@ void Bar::EarlyUpdate(float dt){
 
 void Bar::Update(float dt)
 {
-    DEBUG_PRINT("Bar::Update()-inicio");
     Reposition();
     if(refilAuto){
         if(currPoints < maxPoints){
@@ -48,7 +47,6 @@ void Bar::Update(float dt)
             fluid.SetClip(0, 0, box.w * (currPoints/maxPoints), box.h);
         }
     }
-    DEBUG_PRINT("Bar::Update()-fim");
 }
 
 void Bar::LateUpdate(float dt){
@@ -64,6 +62,7 @@ bool Bar::IsDead()
 
 void Bar::Render()
 {
+    DEBUG_PRINT("Bar: Faz nada");
     //fluid.Render();
     //frame.Render();
 }
@@ -109,7 +108,6 @@ bool Bar::IsFull(){
 void Bar::SetRefilAuto(float time){
     this->refilAuto = true;
     this->refilPace = maxPoints/time;
-    DEBUG_PRINT("refilPace: " << refilPace);
 }
 
 void Bar::SetPosition(float x, float y){

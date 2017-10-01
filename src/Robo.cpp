@@ -9,11 +9,10 @@
 
 Robo::Robo(GameObject& associated, float x, float y, string file):
     associated(associated),
-    sp(new Sprite(associated, file, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES)),//, ROBO_SHEET_LINES)),
     selected(false)
 {
     DEBUG_PRINT("Robo::Robo()-inicio");
-
+    Sprite* sp = new Sprite(associated, file, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);//, ROBO_SHEET_LINES)),
     associated.AddComponent(sp);
     associated.box.h = sp->GetHeight();
     associated.box.w = sp->GetWidth();
@@ -32,12 +31,11 @@ Robo::Robo(GameObject& associated, float x, float y, string file):
     coolDownBar->SetRefilAuto(10);
     coolDownBar->SetPoints(0);
     coolDownBar->SetPosition(0,10);
-    DEBUG_PRINT(coolDownBar.GetY() << "x" << coolDownBar.GetY());
-    associated.AddComponent(coolDownBar);
+    DEBUG_PRINT(coolDownBar->GetY() << "x" << coolDownBar->GetY());
+    DEBUG_PRINT(Camera::pos.x << "x" << Camera::pos.y);
+    DEBUG_PRINT(associated.box.x << "x" << associated.box.y);
 
-//    Walkable* walkable = new Walkable(associated);
-//    walkable->SetControlable(true);
-//    associated.AddComponent(walkable);
+    associated.AddComponent(coolDownBar);
 
     DEBUG_PRINT("Robo::Robo()-fim");
 }
@@ -46,18 +44,10 @@ Robo::~Robo(){
 }
 
 void Robo::Update(float dt){
-    DEBUG_PRINT("COMP - Robo::Update()-inicio");
-    //sp->SetPosition(associated.box.x, associated.box.y);
-    DEBUG_PRINT("COMP - Robo::Update()-fim");
 }
 
 void Robo::Render(){
-//    DEBUG_PRINT("Robo::Render()-inicio");
-//    sp.Render();
-//    for(unsigned int i = 0; i < components.size(); i++){
-//        components[i]->Render();
-//    }
-//    DEBUG_PRINT("Robo::Render()-fim");
+    DEBUG_PRINT("Robo: Faz nada");
 }
 
 bool Robo::Is(ComponentType type)const{

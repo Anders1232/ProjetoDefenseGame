@@ -8,26 +8,33 @@
 #endif // DEBUG
 
 StageState::StageState():
-    //bg(STAGE_BACKGROUND_FILE),
     backGroundMusic(STAGE_BACKGROUND_MUSIC_FILE)
-//    ,tilemap(new TileMap(STAGE_TILEMAP_FILE, new TileSet(STAGE_TILE_WIDTH, STAGE_TILE_WIDTH, STAGE_TILESET_FILE)))
 {
     DEBUG_PRINT("StageState::StageState()-inicio");
-    Sprite* bg = new Sprite(ambient, STAGE_BACKGROUND_FILE);
-    //bg->SetCameraRelative(false);
+    Camera::pos.x = 0;
+    Camera::pos.y = 0;
 
-    //Sempre lembrando que a ordem é importante!!
-    //BG é renderizado primeiro, tilemap é desenhado logo acima, e assim sucessivamente
-    ambient.AddComponent(bg);
-    //ambient.AddComponent((Component*)tilemap);
+    /*
+        Constroi cenario
+    */
+    GameObject* ambient = new GameObject();
+    ambient->AddComponent((Component*)new Sprite(*ambient, STAGE_BACKGROUND_FILE));
+    ambient->box.x = 0;
+    ambient->box.y = 0;
+    AddObject(ambient);
 
+    /*
+        Coloca a musica
+    */
     backGroundMusic.Play(-1);
 
-    robo.AddComponent(new Robo(robo, 10, 10, ROBO_SP1));
-    SetOnGrid(robo, 3 , 5);
+    /*
+        Coloca os personagens
+    */
+//    GameObject* robo = new GameObject();
+//    robo->AddComponent(new Robo(*robo, 0, 0, ROBO_SP1));
+//    AddObject(robo);
 
-    //AddObject(ambient);
-    AddObject(&robo);
     DEBUG_PRINT("StageState::StageState()-fim");
 }
 
@@ -40,28 +47,21 @@ StageState::~StageState()
 
 void StageState::Update(float dt)
 {
-    DEBUG_PRINT("StageState::Update()- inicio");
+    //DEBUG_PRINT("StageState::Update()- inicio");
     //Tranqueira-----
     Input(dt);
-    stringstream aux;
     //---------------
 
-
-    for(auto it = objectArray.begin(); it != objectArray.end(); it++){
-        (*it)->Update(dt);
-    }
+    State::UpdateArray(dt);
     Camera::Update(Game::GetInstance().GetDeltaTime());
-    DEBUG_PRINT("StageState::Update()- fim");
+    //DEBUG_PRINT("StageState::Update()- fim");
 }
 
 void StageState::Render() const
 {
-    DEBUG_PRINT("StageState::Render()- inicio");
-    for(auto it = objectArray.begin(); it != objectArray.end(); it++){
-	    if( (*it)->IsDead() == true) continue;
-	    (*it)->Render();
-    }
-	DEBUG_PRINT("StageState::Render()- fim");
+    //DEBUG_PRINT("StageState::Render()- inicio");
+    State::RenderArray();
+	//DEBUG_PRINT("StageState::Render()- fim");
 }
 
 void StageState::Input(float dt) {

@@ -7,6 +7,9 @@
 
 #include "resources_path.h"
 
+using std::cout;
+using std::endl;
+
 class Bar: public Component
 {
 public:
