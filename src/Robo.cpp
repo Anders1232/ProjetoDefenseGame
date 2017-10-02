@@ -12,7 +12,8 @@ Robo::Robo(GameObject& associated, float x, float y, string file):
     selected(false)
 {
     DEBUG_PRINT("Robo::Robo()-inicio");
-    Sprite* sp = new Sprite(associated, file, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);//, ROBO_SHEET_LINES)),
+    Sprite* sp = new Sprite(associated, file, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
+    sp->SetAnimationLines(4);
     associated.AddComponent(sp);
     associated.box.h = sp->GetHeight();
     associated.box.w = sp->GetWidth();
@@ -47,7 +48,6 @@ void Robo::Update(float dt){
 }
 
 void Robo::Render(){
-    DEBUG_PRINT("Robo: Faz nada");
 }
 
 bool Robo::Is(ComponentType type)const{

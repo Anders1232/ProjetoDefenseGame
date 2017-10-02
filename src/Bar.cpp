@@ -62,7 +62,6 @@ bool Bar::IsDead()
 
 void Bar::Render()
 {
-    DEBUG_PRINT("Bar: Faz nada");
     //fluid.Render();
     //frame.Render();
 }

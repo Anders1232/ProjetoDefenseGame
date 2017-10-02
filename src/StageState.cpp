@@ -31,9 +31,9 @@ StageState::StageState():
     /*
         Coloca os personagens
     */
-//    GameObject* robo = new GameObject();
-//    robo->AddComponent(new Robo(*robo, 0, 0, ROBO_SP1));
-//    AddObject(robo);
+    GameObject* robo = new GameObject();
+    robo->AddComponent(new Robo(*robo, 0, 0, ROBO_SP1));
+    AddObject(robo);
 
     DEBUG_PRINT("StageState::StageState()-fim");
 }
