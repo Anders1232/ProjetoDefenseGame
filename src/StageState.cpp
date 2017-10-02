@@ -1,12 +1,10 @@
 #include "../include/StageState.h"
 
-#define DEBUG
 #include "Error.h"
-
 StageState::StageState():
     backGroundMusic(STAGE_BACKGROUND_MUSIC_FILE)
 {
-    DEBUG_PRINT("StageState::StageState()-inicio");
+    DEBUG_CONSTRUCTOR("StageState", "inicio");
     Camera::pos.x = 0;
     Camera::pos.y = 0;
 
@@ -15,7 +13,7 @@ StageState::StageState():
     */
     GameObject* ambient = new GameObject();
     ambient->AddComponent(new RectTransform(*ambient, nullptr));
-    ambient->AddComponent((Component*)new Sprite(*ambient, STAGE_BACKGROUND_FILE));
+    ambient->AddComponent((Component*)new Sprite(*ambient, STAGE_BACKGROUND_FILE, true));
     ambient->box.x = 0;
     ambient->box.y = 0;
     AddObject(ambient);
@@ -33,7 +31,7 @@ StageState::StageState():
     robo->AddComponent(new Robo(*robo, this, 50, 50, ROBO_SP1));
     AddObject(robo);
 
-    DEBUG_PRINT("StageState::StageState()-fim");
+    DEBUG_CONSTRUCTOR("StageState", "fim");
 }
 
 StageState::~StageState()
@@ -57,9 +55,9 @@ void StageState::Update(float dt)
 
 void StageState::Render() const
 {
-    //DEBUG_PRINT("StageState::Render()- inicio");
+    DEBUG_RENDER("StageState", "inicio");
     State::RenderArray();
-	//DEBUG_PRINT("StageState::Render()- fim");
+	DEBUG_RENDER("StageState", "fim");
 }
 
 void StageState::Input(float dt) {

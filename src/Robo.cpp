@@ -1,6 +1,5 @@
 #include "../include/Robo.h"
 
-//#define DEBUG
 #include "Error.h"
 Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     Component(associated),
@@ -8,9 +7,11 @@ Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     stage(stage),
     selected(false)
 {
-    DEBUG_PRINT("Robo::Robo()-inicio");
-    DEBUG_PRINT("endereco de stage: " << stage);
-    associated.AddComponent(new RectTransform(associated, nullptr));
+    DEBUG_CONSTRUCTOR("Robo", "inicio");
+    //RectTransform* rt = new RectTransform(associated, nullptr);
+    //rt->debugRender = true;
+    //associated.AddComponent(rt);
+
     /*
         Ao criar o Robo, ele que organiza como será o GameObject
     */
@@ -20,7 +21,7 @@ Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     /*
         Coloca a image do robo
     */
-    sp = new Sprite(associated, file, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
+    sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
 
@@ -48,7 +49,7 @@ Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     barraCoolDown->SetRefilAuto(10);
     barraCoolDown->SetPoints(0);
 
-    DEBUG_PRINT("Robo::Robo()-fim");
+    DEBUG_CONSTRUCTOR("Robo", "fim");
 }
 
 Robo::~Robo(){

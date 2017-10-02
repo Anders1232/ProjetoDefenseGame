@@ -5,13 +5,13 @@
 Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile):
     Component(associated),
     associated(associated),
-    fluid(*(new Sprite(associated, fluidFile) ) ),
-    frame(*(new Sprite(associated, frameFile) ) ),
+    fluid(*(new Sprite(associated, fluidFile, true) ) ),
+    frame(*(new Sprite(associated, frameFile, true) ) ),
     maxPoints(points),
     currPoints(points),
     refilAuto(false)
 {
-    DEBUG_PRINT("Bar::Bar()-inicio");
+    DEBUG_CONSTRUCTOR("Bar", "inicio");
     associated.AddComponent(new RectTransform(associated, nullptr));
     /*
         Inicialmente, a box de Bar tem o tamanho do sprite da moldura
@@ -23,7 +23,7 @@ Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile)
     associated.AddComponent(&fluid);
     associated.AddComponent(&frame);
 
-    DEBUG_PRINT("Bar::Bar()-fim");
+    DEBUG_CONSTRUCTOR("Bar", "fim");
 }
 
 bool Bar::Is(ComponentType comp) const{
