@@ -1,11 +1,7 @@
 #include "../include/StageState.h"
 
 #define DEBUG
-#ifdef DEBUG
-    #define DEBUG_PRINT(x) do{std::cout << x << std::endl;}while(0)
-#else
-    #define DEBUG_PRINT(x)
-#endif // DEBUG
+#include "Error.h"
 
 StageState::StageState():
     backGroundMusic(STAGE_BACKGROUND_MUSIC_FILE)
@@ -116,6 +112,4 @@ void StageState::Resume(){
 void StageState::LoadAssets() const{
 }
 
-#ifdef DEBUG
-#undef DEBUG
-#endif // DEBUG
+#include "Error_footer.h"

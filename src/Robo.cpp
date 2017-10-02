@@ -1,12 +1,7 @@
 #include "../include/Robo.h"
 
 //#define DEBUG
-#ifdef DEBUG
-    #define DEBUG_PRINT(x) do{ std::cout << x <<  std::endl; }while(0);
-#else
-    #define DEBUG_PRINT(x)
-#endif // DEBUG
-
+#include "Error.h"
 Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     Component(associated),
     associated(associated),
@@ -89,6 +84,4 @@ void Robo::onClick(){
     }
 }
 
-#ifdef DEBUG
-    #undef DEBUG
-#endif
+#include "Error_footer.h"

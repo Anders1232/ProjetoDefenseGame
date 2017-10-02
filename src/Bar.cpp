@@ -1,12 +1,7 @@
 #include "../include/Bar.h"
 
 //#define DEBUG
-#ifdef DEBUG
-    #define DEBUG_PRINT(x) do{ std::cout << x <<  std::endl; }while(0)
-#else
-    #define DEBUG_PRINT(x)
-#endif // DEBUG
-
+#include "Error.h"
 Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile):
     Component(associated),
     associated(associated),
@@ -140,7 +135,4 @@ int Bar::GetY(){
     return box.y;
 }
 
-#ifdef DEBUG
-    #undef DEBUG
-#endif
-
+#include "Error_footer.h"
