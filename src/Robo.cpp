@@ -2,16 +2,18 @@
 
 //#define DEBUG
 #ifdef DEBUG
-    #define DEBUG_PRINT(x) do{ cout << x <<  endl; }while(0);
+    #define DEBUG_PRINT(x) do{ std::cout << x <<  std::endl; }while(0);
 #else
     #define DEBUG_PRINT(x)
 #endif // DEBUG
 
-Robo::Robo(GameObject& associated, float x, float y, string file):
+Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     associated(associated),
+    stage(stage),
     selected(false)
 {
     DEBUG_PRINT("Robo::Robo()-inicio");
+    DEBUG_PRINT("endereco de stage: " << stage);
     /*
         Ao criar o Robo, ele que organiza como será o GameObject
     */
@@ -21,13 +23,13 @@ Robo::Robo(GameObject& associated, float x, float y, string file):
     /*
         Coloca a image do robo
     */
-    Sprite* sp = new Sprite(associated, file, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
+    sp = new Sprite(associated, file, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
 
     /*
-        box.w e box.h de Robo só são usados por comodidade/praticidade
-        o Width e Height que realmente importam são os de sp.
+        box.w e box.h de Robo são usados para dar referencia aos outros
+        objetos que ele vier a criar
     */
     associated.box.h = sp->GetHeight();
     associated.box.w = sp->GetWidth();
@@ -35,20 +37,19 @@ Robo::Robo(GameObject& associated, float x, float y, string file):
     /*
         Barra de vida
     */
-    Bar* barraVida =  new Bar(associated, 200, BARRA_VIDA_MOLDURA, BARRA_VIDA);
+    barraVida =  new Bar(associated, 200, BARRA_VIDA_MOLDURA, BARRA_VIDA);
     barraVida->Centralize(0, (5/8.0)*associated.box.h);// (int)5/8.0(float) spritesheet mal diagramada
     associated.AddComponent(barraVida);
 
     /*
         Barra de cooldown
     */
-    Bar* coolDownBar = new Bar(associated, 10, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN);
-    coolDownBar->Centralize(0,(5/8.0)*associated.box.h + 10);// 5/8.0 spritesheet mal diagramada
+    barraCoolDown = new Bar(associated, 10, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN);
+    associated.AddComponent(barraCoolDown);
 
-    coolDownBar->SetRefilAuto(10);
-    coolDownBar->SetPoints(0);
-
-    associated.AddComponent(coolDownBar);
+    barraCoolDown->Centralize(0,(5/8.0)*associated.box.h + 10);// 5/8.0 spritesheet mal diagramada
+    barraCoolDown->SetRefilAuto(10);
+    barraCoolDown->SetPoints(0);
 
     DEBUG_PRINT("Robo::Robo()-fim");
 }
@@ -71,11 +72,19 @@ void Robo::EarlyUpdate(float dt){}
 void Robo::LateUpdate(float dt){}
 
 void Robo::onClick(){
-    //InputManager::GetInstance().MousePress(LEFT_ARROW_KEY);
-//    if(InputManager::GetInstance().IsMouseDown(LEFT_ARROW_KEY) &&
-//       InputManager::GetInstance().GetMousePos().IsInRect(associated.box)){
-//        DEBUG_PRINT("Click no robo!");
-//    }
+    if(InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)){
+       if(InputManager::GetInstance().GetMousePos().IsInRect(associated.box)){
+       /*
+            Mostra os botões do menu
+        */
+            GameObject* gObj = new GameObject();            //Cria o objeto
+            gObj->box = associated.box;
+            stage->AddObject(gObj);                         //adiciona objeto ao state
+            gObj->AddComponent(new Button(*gObj, BOTAO4));
+
+       }else{
+       }
+    }
 }
 
 #ifdef DEBUG

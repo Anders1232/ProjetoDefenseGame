@@ -1,8 +1,8 @@
 #include "../include/StageState.h"
 
-//#define DEBUG
+#define DEBUG
 #ifdef DEBUG
-    #define DEBUG_PRINT(x) do{cout << x << endl;}while(0)
+    #define DEBUG_PRINT(x) do{std::cout << x << std::endl;}while(0)
 #else
     #define DEBUG_PRINT(x)
 #endif // DEBUG
@@ -32,7 +32,8 @@ StageState::StageState():
         Coloca os personagens
     */
     GameObject* robo = new GameObject();
-    robo->AddComponent(new Robo(*robo, 50, 50, ROBO_SP1));
+    DEBUG_PRINT("endereco de stageState: " << this);
+    robo->AddComponent(new Robo(*robo, this, 50, 50, ROBO_SP1));
     AddObject(robo);
 
     DEBUG_PRINT("StageState::StageState()-fim");

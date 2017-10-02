@@ -3,12 +3,15 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "Camera.h"
 #include "Component.h"
 #include "resources_path.h"
 #include "Bar.h"
-#include "Walkable.h"
+#include "Button.h"
+#include "GameObject.h"
+#include "State.h"
 
 using std::string;
 
@@ -18,7 +21,7 @@ using std::string;
 
 class Robo: public Component{
 public:
-    Robo(GameObject& associated, float x, float y, string file);
+    Robo(GameObject& associated, State* stage, float x, float y, string file);
     ~Robo();
     void Update(float dt);
     void Render();
@@ -31,6 +34,10 @@ public:
 protected:
 private:
     GameObject& associated;
+    State* stage;
+    Bar* barraVida;
+    Bar* barraCoolDown;
+    Sprite* sp;
     bool selected;
 };
 

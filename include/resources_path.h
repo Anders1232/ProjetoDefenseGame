@@ -68,9 +68,6 @@
 #define MENU_PEN_ICON7 "resources/img/troops/portrait/penguinfaceIcon7.png"
 #define MENU_PEN_ICON8 "resources/img/troops/portrait/penguinfaceIcon8.png"
 
-#define BOTAO_ANDAR     "resources/img/botao2andar.png"
-#define BOTAO_EMBARCAR  "resources/img/botao2embarcar.png"
-
 #define PILOTO_SP1 "resources/img/troops/spritesheet/piloto1.png"
 #define PILOTO_SP2 "resources/img/troops/spritesheet/piloto2.png"
 #define PILOTO_SP3 "resources/img/troops/spritesheet/piloto3.png"
