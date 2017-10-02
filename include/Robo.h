@@ -16,7 +16,7 @@ using std::string;
 #define ROBO_SHEET_FRAMES       4
 #define ROBO_SHEET_FRAME_TIME   4.0*1.0/24.0
 
-class Robo: public Component{//public GameObject{
+class Robo: public Component{
 public:
     Robo(GameObject& associated, float x, float y, string file);
     ~Robo();

@@ -13,7 +13,7 @@ using std::endl;
 class Bar: public Component
 {
 public:
-    Bar(int points, string frameFile, string fluidFile, GameObject& associated);
+    Bar(GameObject& associated, int points, string frameFile, string fluidFile);
     ~Bar(){};
     bool Is(ComponentType comp) const;
     void EarlyUpdate(float dt);
@@ -31,6 +31,7 @@ public:
     float GetPercentPoints();
     bool IsFull();
     void SetRefilAuto(float time = 1);
+    void Centralize(int x = 0, int y = 0);
     void SetPosition(float x, float y);
     void Reposition();
     //void Open(GameObject* alvo, int vidaMaxima);

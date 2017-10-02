@@ -7,7 +7,7 @@
     #define DEBUG_PRINT(x)
 #endif // DEBUG
 
-Bar::Bar(int points, string frameFile, string fluidFile, GameObject &associated):
+Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile):
     associated(associated),
     fluid(*(new Sprite(associated, fluidFile) ) ),
     frame(*(new Sprite(associated, frameFile) ) ),
@@ -16,17 +16,16 @@ Bar::Bar(int points, string frameFile, string fluidFile, GameObject &associated)
     refilAuto(false)
 {
     DEBUG_PRINT("Bar::Bar()-inicio");
-    xRelative = this->associated.box.x;
-    yRelative = this->associated.box.y;
-
-    //fluid.SetPosition(box.x, box.y);
-    //frame.SetPosition(box.x, box.y);
+    /*
+        Inicialmente, a box de Bar tem o tamanho do sprite da moldura
+    */
+    box.w = frame.GetWidth();
+    box.h = frame.GetHeight();
+    Centralize(0, associated.box.h);
 
     associated.AddComponent(&fluid);
     associated.AddComponent(&frame);
 
-    box.w = frame.GetWidth();
-    box.h = frame.GetHeight();
     DEBUG_PRINT("Bar::Bar()-fim");
 }
 
@@ -62,20 +61,14 @@ bool Bar::IsDead()
 
 void Bar::Render()
 {
-    //fluid.Render();
-    //frame.Render();
 }
 
 void Bar::SetX(float x){
     box.x = x;
-    //frame.SetPosition(box.x, box.y);
-    //fluid.SetPosition(box.x, box.y);
 }
 
 void Bar::SetY(float y){
     box.y = y + associated.box.y;
-    //frame.SetPosition(box.x, box.y);
-    //fluid.SetPosition(box.x, box.y);
 }
 
 void Bar::SetPoints(int points)
@@ -107,6 +100,18 @@ bool Bar::IsFull(){
 void Bar::SetRefilAuto(float time){
     this->refilAuto = true;
     this->refilPace = maxPoints/time;
+}
+
+void Bar::Centralize(int x, int y){
+    float centerX = associated.box.x + associated.box.w/2;
+    float centerY = associated.box.y + associated.box.h/2;
+
+    xRelative = centerX - box.w/2 + x;
+    yRelative = centerY - box.h/2 + y;
+
+    frame.SetPosition(xRelative, yRelative);
+    fluid.SetPosition(xRelative, yRelative);
+
 }
 
 void Bar::SetPosition(float x, float y){
