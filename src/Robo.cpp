@@ -57,6 +57,7 @@ Robo::~Robo(){
 }
 
 void Robo::Update(float dt){
+    onClick();
 }
 
 void Robo::Render(){
@@ -68,6 +69,14 @@ bool Robo::Is(ComponentType type)const{
 
 void Robo::EarlyUpdate(float dt){}
 void Robo::LateUpdate(float dt){}
+
+void Robo::onClick(){
+    //InputManager::GetInstance().MousePress(LEFT_ARROW_KEY);
+//    if(InputManager::GetInstance().IsMouseDown(LEFT_ARROW_KEY) &&
+//       InputManager::GetInstance().GetMousePos().IsInRect(associated.box)){
+//        DEBUG_PRINT("Click no robo!");
+//    }
+}
 
 #ifdef DEBUG
     #undef DEBUG

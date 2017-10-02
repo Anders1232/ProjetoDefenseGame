@@ -23,6 +23,7 @@ public:
     void Update(float dt);
     void Render();
     bool Is(ComponentType type) const;
+    void onClick();
 
     void EarlyUpdate(float dt);
 	void LateUpdate(float dt);
