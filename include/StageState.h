@@ -6,6 +6,7 @@
 
 #include "Game.h"
 #include "State.h"
+#include "RectTransform.h"
 #include "Sprite.h"
 #include "Music.h"
 #include "Text.h"

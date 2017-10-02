@@ -8,12 +8,14 @@
 #endif // DEBUG
 
 Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
+    Component(associated),
     associated(associated),
     stage(stage),
     selected(false)
 {
     DEBUG_PRINT("Robo::Robo()-inicio");
     DEBUG_PRINT("endereco de stage: " << stage);
+    associated.AddComponent(new RectTransform(associated, nullptr));
     /*
         Ao criar o Robo, ele que organiza como será o GameObject
     */
@@ -80,7 +82,7 @@ void Robo::onClick(){
             GameObject* gObj = new GameObject();            //Cria o objeto
             gObj->box = associated.box;
             stage->AddObject(gObj);                         //adiciona objeto ao state
-            gObj->AddComponent(new Button(*gObj, BOTAO4));
+            //gObj->AddComponent(new Button(*gObj, BOTAO4));
 
        }else{
        }

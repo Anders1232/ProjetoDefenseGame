@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "Camera.h"
 #include "Timer.h"
+#include "RectTransform.h"
 
 #include "resources_path.h"
 

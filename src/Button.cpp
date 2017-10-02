@@ -8,6 +8,7 @@
 #endif // DEBUG
 
 Button::Button(GameObject& associated, string path):
+    Component(associated),
     sp(new Sprite(associated, path))
 {
     associated.AddComponent(sp);

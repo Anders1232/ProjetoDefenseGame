@@ -12,6 +12,7 @@
 #include "Button.h"
 #include "GameObject.h"
 #include "State.h"
+#include "RectTransform.h"
 
 using std::string;
 

@@ -18,6 +18,7 @@ StageState::StageState():
         Constroi cenario
     */
     GameObject* ambient = new GameObject();
+    ambient->AddComponent(new RectTransform(*ambient, nullptr));
     ambient->AddComponent((Component*)new Sprite(*ambient, STAGE_BACKGROUND_FILE));
     ambient->box.x = 0;
     ambient->box.y = 0;
