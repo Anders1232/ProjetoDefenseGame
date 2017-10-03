@@ -8,9 +8,9 @@ Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     selected(false)
 {
     DEBUG_CONSTRUCTOR("Robo", "inicio");
-    //RectTransform* rt = new RectTransform(associated, nullptr);
-    //rt->debugRender = true;
-    //associated.AddComponent(rt);
+    RectTransform* rt = new RectTransform(associated, nullptr);
+    rt->debugRender = true;
+    associated.AddComponent(rt);
 
     /*
         Ao criar o Robo, ele que organiza como será o GameObject
@@ -49,6 +49,11 @@ Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     barraCoolDown->SetRefilAuto(10);
     barraCoolDown->SetPoints(0);
 
+    DEBUG_CONSTRUCTOR("Robo", "box:{" <<
+                      associated.box.x << ", " <<
+                      associated.box.y << ", " <<
+                      associated.box.w << ", " <<
+                      associated.box.h << "}");
     DEBUG_CONSTRUCTOR("Robo", "fim");
 }
 
@@ -71,15 +76,23 @@ void Robo::LateUpdate(float dt){}
 
 void Robo::onClick(){
     if(InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)){
+        DEBUG_PRINT("associated.box:{" <<
+                      associated.box.x << ", " <<
+                      associated.box.y << ", " <<
+                      associated.box.w << ", " <<
+                      associated.box.h << "}");
+        DEBUG_PRINT("IsInRect: " << InputManager::GetInstance().GetMousePos().IsInRect(associated.box));
        if(InputManager::GetInstance().GetMousePos().IsInRect(associated.box)){
+       DEBUG_PRINT("Click em Robo");
        /*
             Mostra os botões do menu
         */
             GameObject* gObj = new GameObject();            //Cria o objeto
             gObj->box = associated.box;
             stage->AddObject(gObj);                         //adiciona objeto ao state
-            //gObj->AddComponent(new Button(*gObj, BOTAO4));
-
+            gObj->AddComponent(new RectTransform(*gObj, &associated));
+            gObj->AddComponent(new Sprite(*gObj, BOTAO4, true));
+            gObj->AddComponent(new Button(*gObj));
        }else{
        }
     }
