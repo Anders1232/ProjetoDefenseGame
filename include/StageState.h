@@ -13,6 +13,7 @@
 #include "Robo.h"
 #include "resources_path.h"
 #include "TileMap.h"
+#include "Text.h"
 
 #define STAGE_BACKGROUND_FILE   "resources/img/bg/ocean.jpg"
 
@@ -28,6 +29,7 @@
 
 using std::find;
 using std::stringstream;
+using std::to_string;
 
 class StageState : public State
 {
@@ -46,9 +48,11 @@ class StageState : public State
 
     protected:
     private:
+        bool showDEBUG;
         void Input(float dt);
         Music backGroundMusic;
         Timer vitoriaTime;
+        Text mousePosition;
         //TileMap* tilemap;//verificar o que significa a warning reorder
 };
 

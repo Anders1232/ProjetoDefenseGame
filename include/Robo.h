@@ -19,7 +19,7 @@ using std::string;
 #define ROBO_SHEET_LINES        4
 #define ROBO_SHEET_FRAMES       4
 #define ROBO_SHEET_FRAME_TIME   4.0*1.0/24.0
-
+void Eject (void*);
 class Robo: public Component{
 public:
     Robo(GameObject& associated, State* stage, float x, float y, string file);

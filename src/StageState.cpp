@@ -3,6 +3,8 @@
 #include "Error.h"
 StageState::StageState():
     backGroundMusic(STAGE_BACKGROUND_MUSIC_FILE)
+    ,mousePosition(FONT2, 10, BLENDED, {0, 0, 0, 0})
+    ,showDEBUG(false)
 {
     DEBUG_CONSTRUCTOR("StageState", "inicio");
     Camera::pos.x = 0;
@@ -27,7 +29,7 @@ StageState::StageState():
         Coloca os personagens
     */
     GameObject* robo = new GameObject();
-    DEBUG_PRINT("endereco de stageState: " << this);
+    DEBUG_PRINT("StageState", "endereco de stageState: " << this);
     robo->AddComponent(new Robo(*robo, this, 50, 50, ROBO_SP1));
     AddObject(robo);
 
@@ -44,10 +46,11 @@ StageState::~StageState()
 void StageState::Update(float dt)
 {
     //DEBUG_PRINT("StageState::Update()- inicio");
-    //Tranqueira-----
     Input(dt);
-    //---------------
-
+    if(showDEBUG){
+        mousePosition.SetText(to_string((int)(InputManager::GetInstance().GetMouseX() + Camera::pos.x))+"x"
+                             +to_string((int)(InputManager::GetInstance().GetMouseY() + Camera::pos.y)));
+    }
     State::UpdateArray(dt);
     Camera::Update(Game::GetInstance().GetDeltaTime());
     //DEBUG_PRINT("StageState::Update()- fim");
@@ -57,6 +60,9 @@ void StageState::Render() const
 {
     DEBUG_RENDER("StageState", "inicio");
     State::RenderArray();
+    if(showDEBUG){
+        mousePosition.Render(0, 0);
+    }
 	DEBUG_RENDER("StageState", "fim");
 }
 
@@ -68,6 +74,12 @@ void StageState::Input(float dt) {
             backGroundMusic.Stop();
             popRequested = true;
     }
+    if( InputManager::GetInstance().KeyPress(SDLK_0) == true ){
+            showDEBUG = !showDEBUG;
+            DEBUG_PRINT("StageState", "showDEBUG: " << showDEBUG);
+    }
+
+
 //    if( InputManager::GetInstance().IsKeyDown(SDLK_KP_EQUALS)){
 //        backGroundMusic.VolumeUpdate(-50);
 //    }

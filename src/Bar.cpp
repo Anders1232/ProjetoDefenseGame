@@ -12,7 +12,7 @@ Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile)
     refilAuto(false)
 {
     DEBUG_CONSTRUCTOR("Bar", "inicio");
-    associated.AddComponent(new RectTransform(associated, nullptr));
+    //associated.AddComponent(new RectTransform(associated, nullptr));
     /*
         Inicialmente, a box de Bar tem o tamanho do sprite da moldura
     */

@@ -8,9 +8,9 @@ Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     selected(false)
 {
     DEBUG_CONSTRUCTOR("Robo", "inicio");
-    RectTransform* rt = new RectTransform(associated, nullptr);
-    rt->debugRender = true;
-    associated.AddComponent(rt);
+//    RectTransform* rt = new RectTransform(associated, nullptr);
+//    rt->debugRender = true;
+//    associated.AddComponent(rt);
 
     /*
         Ao criar o Robo, ele que organiza como será o GameObject
@@ -76,26 +76,40 @@ void Robo::LateUpdate(float dt){}
 
 void Robo::onClick(){
     if(InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)){
-        DEBUG_PRINT("associated.box:{" <<
+        DEBUG_PRINT("Robo", "associated.box:{" <<
                       associated.box.x << ", " <<
                       associated.box.y << ", " <<
                       associated.box.w << ", " <<
                       associated.box.h << "}");
-        DEBUG_PRINT("IsInRect: " << InputManager::GetInstance().GetMousePos().IsInRect(associated.box));
+        DEBUG_PRINT("Robo", "IsInRect: " << InputManager::GetInstance().GetMousePos().IsInRect(associated.box));
        if(InputManager::GetInstance().GetMousePos().IsInRect(associated.box)){
-       DEBUG_PRINT("Click em Robo");
+       DEBUG_PRINT("Robo", "Click em Robo");
        /*
             Mostra os botões do menu
         */
-            GameObject* gObj = new GameObject();            //Cria o objeto
-            gObj->box = associated.box;
-            stage->AddObject(gObj);                         //adiciona objeto ao state
-            gObj->AddComponent(new RectTransform(*gObj, &associated));
-            gObj->AddComponent(new Sprite(*gObj, BOTAO4, true));
-            gObj->AddComponent(new Button(*gObj));
+            GameObject* buttonObject = new GameObject();            //Cria o objeto
+            buttonObject->box.x = associated.box.x + associated.box.w;
+            buttonObject->box.y = associated.box.y + associated.box.h;
+            buttonObject->box.w = associated.box.w;
+            buttonObject->box.h = associated.box.h;
+            stage->AddObject(buttonObject);                         //adiciona objeto ao state
+            buttonObject->AddComponent(new RectTransform(*buttonObject, &associated));
+            buttonObject->AddComponent(new Sprite(*buttonObject, BOTAO4, true));
+
+            Button* btnComponent = new Button(*buttonObject);
+            Button::Callback callbackFunction;
+            callbackFunction.callbackFunc = Eject;
+            callbackFunction.caller = this;
+
+            btnComponent->SetReleaseCallback(callbackFunction);
+            buttonObject->AddComponent(btnComponent);
        }else{
        }
     }
+}
+
+void Eject(void*){
+    DEBUG_PRINT("Eject", "Olha eu");
 }
 
 #include "Error_footer.h"
