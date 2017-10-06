@@ -88,14 +88,10 @@ void Robo::onClick(){
             Mostra os botões do menu
         */
             GameObject* buttonObject = new GameObject();            //Cria o objeto
-            buttonObject->box.x = associated.box.x + associated.box.w;
-            buttonObject->box.y = associated.box.y + associated.box.h;
-            buttonObject->box.w = associated.box.w;
-            buttonObject->box.h = associated.box.h;
             stage->AddObject(buttonObject);                         //adiciona objeto ao state
             buttonObject->AddComponent(new RectTransform(*buttonObject, &associated));
             buttonObject->AddComponent(new Sprite(*buttonObject, BOTAO4, true));
-
+            (dynamic_cast<RectTransform&>(buttonObject->GetComponent(RECT_TRANSFORM))).SetAnchors(0, 0, 1, 1);
             Button* btnComponent = new Button(*buttonObject);
             Button::Callback callbackFunction;
             callbackFunction.callbackFunc = Eject;
