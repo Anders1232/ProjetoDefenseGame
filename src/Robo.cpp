@@ -5,18 +5,16 @@ Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     Component(associated),
     associated(associated),
     stage(stage),
-    selected(false)
+    selected(false),
+    barraVida( *(new GameObject()) ),
+    barraCoolDown( *(new GameObject()) )
 {
     DEBUG_CONSTRUCTOR("Robo", "inicio");
-//    RectTransform* rt = new RectTransform(associated, nullptr);
-//    rt->debugRender = true;
-//    associated.AddComponent(rt);
+    associated.AddComponent(new RectTransform(associated, nullptr));
 
     /*
         Ao criar o Robo, ele que organiza como será o GameObject
     */
-    associated.box.x = x;
-    associated.box.y = y;
 
     /*
         Coloca a image do robo
@@ -24,30 +22,28 @@ Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
-
-    /*
-        box.w e box.h de Robo são usados para dar referencia aos outros
-        objetos que ele vier a criar
-    */
-    associated.box.h = sp->GetHeight();
-    associated.box.w = sp->GetWidth();
+    (dynamic_cast<RectTransform&>(associated.GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
 
     /*
         Barra de vida
     */
-    barraVida =  new Bar(associated, 200, BARRA_VIDA_MOLDURA, BARRA_VIDA);
-    barraVida->Centralize(0, (5/8.0)*associated.box.h);// (int)5/8.0(float) spritesheet mal diagramada
-    associated.AddComponent(barraVida);
+//    barraVida.AddComponent(new RectTransform(barraVida, &associated));
+//    (dynamic_cast<RectTransform&>(barraVida.GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
+//    barraVida.AddComponent(new Bar(barraVida, 200, BARRA_VIDA_MOLDURA, BARRA_VIDA));
+//    stage->AddObject(&barraVida);
+
 
     /*
         Barra de cooldown
     */
-    barraCoolDown = new Bar(associated, 10, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN);
-    associated.AddComponent(barraCoolDown);
+//    barraCoolDown.AddComponent(new RectTransform(barraCoolDown, &associated));
+//    (dynamic_cast<RectTransform&>(barraCoolDown.GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
+//    barraCoolDown.AddComponent(new Bar(associated, 10, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN));
+//    stage->AddObject(&barraCoolDown);
 
-    barraCoolDown->Centralize(0,(5/8.0)*associated.box.h + 10);// 5/8.0 spritesheet mal diagramada
-    barraCoolDown->SetRefilAuto(10);
-    barraCoolDown->SetPoints(0);
+//    barraCoolDown->Centralize(0,(5/8.0)*associated.box.h + 10);// 5/8.0 spritesheet mal diagramada
+//    barraCoolDown->SetRefilAuto(10);
+//    barraCoolDown->SetPoints(0);
 
     DEBUG_CONSTRUCTOR("Robo", "box:{" <<
                       associated.box.x << ", " <<

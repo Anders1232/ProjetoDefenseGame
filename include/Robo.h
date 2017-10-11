@@ -36,8 +36,8 @@ protected:
 private:
     GameObject& associated;
     State* stage;
-    Bar* barraVida;
-    Bar* barraCoolDown;
+    GameObject& barraVida;
+    GameObject& barraCoolDown;
     Sprite* sp;
     bool selected;
 };
