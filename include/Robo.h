@@ -13,6 +13,7 @@
 #include "GameObject.h"
 #include "State.h"
 #include "RectTransform.h"
+#include "RoboPath.h"
 
 using std::string;
 using std::vector;
@@ -59,6 +60,7 @@ private:
     GameObject& associated;
     GameObject& barraVida;
     GameObject& barraCoolDown;
+    GameObject* movingPath;
     GameObject* button;
     State* stage;
     Sprite* sp;
@@ -67,7 +69,6 @@ private:
     RoboState roboState;
     Direction direction;
     Vec2 destination;
-    vector<Vec2*> *movingPath;
 };
 
 #endif // ROBO_H

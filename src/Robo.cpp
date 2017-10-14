@@ -97,15 +97,13 @@ void Robo::UpdateState(){
         if(destination.x == associated.box.x &&
            destination.y == associated.box.y){
                DEBUG_PRINT("Robo", "chegou em (" << destination.x << "," << destination.y << ")");
-               if(movingPath->size() > 0){
+               if( (dynamic_cast<RoboPath&>(movingPath->GetComponent(ROBOPATH))).HasPoints() ){
                     DEBUG_PRINT("Robo", "pega proximo ponto");
-                    destination = *(movingPath->front());
-                    delete(movingPath->front());
-                    movingPath->erase(movingPath->begin());
+                    destination = (dynamic_cast<RoboPath&>(movingPath->GetComponent(ROBOPATH))).GetNext();
                }else{
                     DEBUG_PRINT("Robo", "encerrou o vetor");
                     roboState = IDLE;
-                    delete(movingPath);
+                    movingPath->RequestDelete();
                }
            }
         if(destination.x > associated.box.x){
@@ -132,31 +130,23 @@ void Robo::TryMove(){
        InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)){
            DEBUG_PRINT("Robo", "selecionado");
            selected = true;
-           movingPath = new vector<Vec2*>();
+           //movingPath = new vector<Vec2*>();
+           movingPath = new GameObject();
+           Vec2 temp(associated.box.x, associated.box.y);
+           movingPath->AddComponent(new RoboPath(*movingPath, temp));
+           movingPath->parent = &associated;
     }
     if(selected){
-        if(InputManager::GetInstance().GetMousePos().x > destination.x + associated.box.w ||
-           InputManager::GetInstance().GetMousePos().x < destination.x - associated.box.w){
-            DEBUG_PRINT("Robo", "adicionado ponto(" << destination.x + associated.box.w << ", " << destination.y << ")");
-            movingPath->push_back(new Vec2(InputManager::GetInstance().GetMousePos().x, destination.y) );
-            destination.x = InputManager::GetInstance().GetMousePos().x;
-        }
-        if(InputManager::GetInstance().GetMousePos().y > destination.y + associated.box.h ||
-           InputManager::GetInstance().GetMousePos().y < destination.y - associated.box.h ){
-            DEBUG_PRINT("Robo", "adicionado ponto(" << destination.x << ", " << destination.y + associated.box.h << ")");
-            movingPath->push_back(new Vec2(destination.x, InputManager::GetInstance().GetMousePos().y) );
-            destination.y = InputManager::GetInstance().GetMousePos().y;
-        }
+        (dynamic_cast<RoboPath&>(movingPath->GetComponent(ROBOPATH))).AddPoint();
     }
     if(selected &&
        InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON)){
         selected = false;
         DEBUG_PRINT("Robo", "solto");
-        if(movingPath != nullptr && movingPath->size() > 0){
-            destination = *(movingPath->front());
-            delete(movingPath->front());
-            movingPath->erase(movingPath->begin());
-            roboState = MOVING;
+        if(movingPath != nullptr &&
+           (dynamic_cast<RoboPath&>(movingPath->GetComponent(ROBOPATH))).HasPoints()){
+                destination = (dynamic_cast<RoboPath&>(movingPath->GetComponent(ROBOPATH))).GetNext();
+                roboState = MOVING;
         }
     }
 }
