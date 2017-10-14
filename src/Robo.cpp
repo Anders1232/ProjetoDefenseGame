@@ -10,7 +10,8 @@ Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     barraVida( *(new GameObject()) ),
     barraCoolDown( *(new GameObject()) ),
     direction(DOWN),
-    roboState(IDLE)
+    roboState(IDLE),
+    button(nullptr)
 {
     DEBUG_CONSTRUCTOR("Robo", "inicio");
     /*
@@ -79,6 +80,10 @@ void Robo::onClick(){
             if(clicked) MenuOpen();
             if(!clicked) MenuClose();
        }else{
+           if(clicked){
+                clicked = false;
+                MenuClose();
+           }
        }
     }
 }
@@ -144,7 +149,6 @@ void Robo::TryMove(){
         }
     }
     if(selected &&
-       !InputManager::GetInstance().GetMousePos().IsInRect(associated.box) &&
        InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON)){
         selected = false;
         DEBUG_PRINT("Robo", "solto");
@@ -158,21 +162,23 @@ void Robo::TryMove(){
 }
 
 void Robo::MenuOpen(){
-            GameObject* buttonObject = new GameObject();            //Cria o objeto
-            buttonObject->parent = &associated;
-            stage->AddObject(buttonObject);                         //adiciona objeto ao state
-            buttonObject->AddComponent(new Sprite(*buttonObject, BOTAO4, true));
+    button = new GameObject();            //Cria o objeto
+    button->parent = &associated;
+    stage->AddObject(button);                         //adiciona objeto ao state
+    button->AddComponent(new Sprite(*button, BOTAO4, true));
 
-//            Button* btnComponent = new Button(*buttonObject);
-//            Button::Callback callbackFunction;
-//            callbackFunction.callbackFunc = Eject;
-//            callbackFunction.caller = this;
+    //            Button* btnComponent = new Button(*buttonObject);
+    //            Button::Callback callbackFunction;
+    //            callbackFunction.callbackFunc = Eject;
+    //            callbackFunction.caller = this;
 
-//            btnComponent->SetReleaseCallback(callbackFunction);
-//            buttonObject->AddComponent(btnComponent);
+    //            btnComponent->SetReleaseCallback(callbackFunction);
+    //            buttonObject->AddComponent(btnComponent);
 }
 
 void Robo::MenuClose(){
+    button->RequestDelete();
+    button = nullptr;
 }
 
 void Robo::SetPosition(float x, float y){
@@ -217,6 +223,9 @@ void Robo::debug(){
     }
     if(InputManager::GetInstance().KeyPress(SDLK_DOWN)){
         Move(DOWN);
+    }
+    if(InputManager::GetInstance().KeyPress(SDLK_0)){
+        associated.debug = !associated.debug;
     }
 }
 

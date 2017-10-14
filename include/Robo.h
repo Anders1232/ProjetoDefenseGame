@@ -57,9 +57,10 @@ protected:
 private:
     void UpdateState();
     GameObject& associated;
-    State* stage;
     GameObject& barraVida;
     GameObject& barraCoolDown;
+    GameObject* button;
+    State* stage;
     Sprite* sp;
     bool clicked;
     bool selected;
