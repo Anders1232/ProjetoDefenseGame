@@ -15,12 +15,25 @@
 #include "RectTransform.h"
 
 using std::string;
+using std::vector;
 
 #define ROBO_SHEET_LINES        4
 #define ROBO_SHEET_FRAMES       4
 #define ROBO_SHEET_FRAME_TIME   4.0*1.0/24.0
 void Eject (void*);
 class Robo: public Component{
+private:
+    enum Direction{
+        UP = 0,
+        DOWN,
+        LEFT,
+        RIGHT
+    };
+    enum RoboState{
+        IDLE = 0,
+        MOVING,
+    };
+
 public:
     Robo(GameObject& associated, State* stage, float x, float y, string file);
     ~Robo();
@@ -28,18 +41,32 @@ public:
     void Render();
     bool Is(ComponentType type) const;
     void onClick();
+    void TryMove();
+    void SetPosition(float x, float y);
 
     void EarlyUpdate(float dt);
 	void LateUpdate(float dt);
+	void Move(Direction dir);
+	void MenuOpen();
+	void MenuClose();
+
+	void debug();
 
 protected:
+
 private:
+    void UpdateState();
     GameObject& associated;
     State* stage;
     GameObject& barraVida;
     GameObject& barraCoolDown;
     Sprite* sp;
+    bool clicked;
     bool selected;
+    RoboState roboState;
+    Direction direction;
+    Vec2 destination;
+    vector<Vec2*> *movingPath;
 };
 
 #endif // ROBO_H

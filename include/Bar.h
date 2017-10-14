@@ -31,7 +31,6 @@ public:
     void SetRefilAuto(float time = 1);
     void Centralize(int x = 0, int y = 0);
     void SetPosition(float x, float y);
-    void Reposition();
     //void Open(GameObject* alvo, int vidaMaxima);
 //    bool IsDead();
 //    void SetVida(int vidaNova);
@@ -43,7 +42,6 @@ protected:
 
 private:
     GameObject& associated;
-    Rect box;
     //Sprite fluid;
     //Sprite frame;
     Sprite& fluid;
@@ -54,8 +52,7 @@ private:
     bool refilAuto;
     float refilPace;
     Timer timer;
-    int xRelative;
-    int yRelative;
+    Vec2 relative;
 };
 
 #endif // BAR_H

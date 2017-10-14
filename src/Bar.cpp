@@ -9,16 +9,16 @@ Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile)
     frame(*(new Sprite(associated, frameFile, true) ) ),
     maxPoints(points),
     currPoints(points),
-    refilAuto(false)
+    refilAuto(false),
+    relative(0,0)
 {
     DEBUG_CONSTRUCTOR("Bar", "inicio");
     //associated.AddComponent(new RectTransform(associated, nullptr));
     /*
         Inicialmente, a box de Bar tem o tamanho do sprite da moldura
     */
-    box.w = frame.GetWidth();
-    box.h = frame.GetHeight();
-    Centralize(0, associated.box.h);
+    associated.box.w = frame.GetWidth();
+    associated.box.h = frame.GetHeight();
 
     associated.AddComponent(&fluid);
     associated.AddComponent(&frame);
@@ -35,14 +35,19 @@ void Bar::EarlyUpdate(float dt){
 
 void Bar::Update(float dt)
 {
-    Reposition();
+    DEBUG_UPDATE("Bar", "inicio");
     if(refilAuto){
+        DEBUG_UPDATE("Bar", "currPoints: " << currPoints);
+        DEBUG_UPDATE("Bar", "maxPoints: " << maxPoints);
         if(currPoints < maxPoints){
             currPoints += refilPace*dt;
             if(currPoints > maxPoints) currPoints = maxPoints;
-            fluid.SetClip(0, 0, box.w * (currPoints/maxPoints), box.h);
+            fluid.SetScreenRect(0, 0, associated.box.w * (currPoints/maxPoints), associated.box.h); //SetClip(0, 0, associated.box.w * (currPoints/maxPoints), associated.box.h);
         }
     }
+    associated.box.x = associated.parent->box.x + relative.x;
+    associated.box.y = associated.parent->box.y + relative.y;
+    DEBUG_UPDATE("Bar", "fim");
 }
 
 void Bar::LateUpdate(float dt){
@@ -61,11 +66,11 @@ void Bar::Render()
 }
 
 void Bar::SetX(float x){
-    box.x = x;
+    associated.box.x = x + associated.parent->box.x;
 }
 
 void Bar::SetY(float y){
-    box.y = y + associated.box.y;
+    associated.box.y = y + associated.parent->box.y;
 }
 
 void Bar::SetPoints(int points)
@@ -100,39 +105,23 @@ void Bar::SetRefilAuto(float time){
 }
 
 void Bar::Centralize(int x, int y){
-    float centerX = associated.box.x + associated.box.w/2;
-    float centerY = associated.box.y + associated.box.h/2;
-
-    xRelative = centerX - box.w/2 + x;
-    yRelative = centerY - box.h/2 + y;
-
-    frame.SetPosition(xRelative, yRelative);
-    fluid.SetPosition(xRelative, yRelative);
-
+    relative.x = associated.parent->box.w/2 - associated.box.w/2 + x;
+    relative.y = associated.parent->box.h/2 - associated.box.h/2 + y;
+    associated.box.x = associated.parent->box.x + relative.x;
+    associated.box.y = associated.parent->box.y + relative.y;
 }
 
 void Bar::SetPosition(float x, float y){
-    xRelative = x;
-    yRelative = y;
-    box.x = xRelative + associated.box.x;
-    box.y = yRelative + associated.box.y;
-//    frame.SetPosition(box.x, box.y);
-//    fluid.SetPosition(box.x, box.y);
-}
-
-void Bar::Reposition(){
-    box.x = xRelative + associated.box.x;
-    box.y = yRelative + associated.box.y;
-//    frame.SetPosition(box.x, box.y);
-//    fluid.SetPosition(box.x, box.y);
+    associated.box.x = associated.box.x + associated.parent->box.x;
+    associated.box.y = associated.box.y + associated.parent->box.y;
 }
 
 int Bar::GetX(){
-    return box.x;
+    return associated.box.x;
 }
 
 int Bar::GetY(){
-    return box.y;
+    return associated.box.y;
 }
 
 #include "Error_footer.h"
