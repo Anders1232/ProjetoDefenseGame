@@ -3,7 +3,6 @@
 #include "Error.h"
 Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     Component(associated),
-    associated(associated),
     stage(stage),
     clicked(false),
     selected(false),
@@ -11,7 +10,7 @@ Robo::Robo(GameObject& associated, State* stage, float x, float y, string file):
     barraCoolDown( *(new GameObject()) ),
     direction(DOWN),
     roboState(IDLE),
-    button(nullptr)
+    roboMenu(nullptr)
 {
     DEBUG_CONSTRUCTOR("Robo", "inicio");
     /*
@@ -73,6 +72,7 @@ void Robo::EarlyUpdate(float dt){}
 void Robo::LateUpdate(float dt){}
 
 void Robo::onClick(){
+    TryMove();
     if(InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON)){
         if(InputManager::GetInstance().GetMousePos().IsInRect(associated.box)){
             DEBUG_PRINT("Robo", "Click em Robo");
@@ -91,9 +91,9 @@ void Robo::onClick(){
 void Robo::UpdateState(){
     switch(roboState){
     case IDLE:
-        TryMove();
         break;
     case MOVING:
+        //TODO: Condição fraca, melhorar depois
         if(destination.x == associated.box.x &&
            destination.y == associated.box.y){
                DEBUG_PRINT("Robo", "chegou em (" << destination.x << "," << destination.y << ")");
@@ -105,19 +105,19 @@ void Robo::UpdateState(){
                     roboState = IDLE;
                     movingPath->RequestDelete();
                }
-           }
+        }
         if(destination.x > associated.box.x){
-            if(direction != RIGHT) Move(RIGHT);
+            if(direction != RIGHT) ChangeDirection(RIGHT);
             associated.box.x += 1;
         }else if(destination.x < associated.box.x){
-            if(direction != LEFT) Move(LEFT);
+            if(direction != LEFT) ChangeDirection(LEFT);
             associated.box.x -= 1;
         }
         if(destination.y > associated.box.y){
-            if(direction != DOWN) Move(DOWN);
+            if(direction != DOWN) ChangeDirection(DOWN);
             associated.box.y += 1;
         }else if(destination.y < associated.box.y){
-            if(direction != UP) Move(UP);
+            if(direction != UP) ChangeDirection(UP);
             associated.box.y -= 1;
         }
         break;
@@ -130,16 +130,18 @@ void Robo::TryMove(){
        InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)){
            DEBUG_PRINT("Robo", "selecionado");
            selected = true;
-           //movingPath = new vector<Vec2*>();
            movingPath = new GameObject();
+           movingPath->parent = &associated;
+
            Vec2 temp(associated.box.x, associated.box.y);
            movingPath->AddComponent(new RoboPath(*movingPath, temp));
-           movingPath->parent = &associated;
+           stage->AddObject(movingPath);
     }
     if(selected){
-        (dynamic_cast<RoboPath&>(movingPath->GetComponent(ROBOPATH))).AddPoint();
+        (dynamic_cast<RoboPath&>(movingPath->GetComponent(ROBOPATH))).CreatePath();
     }
     if(selected &&
+       !InputManager::GetInstance().GetMousePos().IsInRect(associated.box) &&
        InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON)){
         selected = false;
         DEBUG_PRINT("Robo", "solto");
@@ -152,23 +154,16 @@ void Robo::TryMove(){
 }
 
 void Robo::MenuOpen(){
-    button = new GameObject();            //Cria o objeto
-    button->parent = &associated;
-    stage->AddObject(button);                         //adiciona objeto ao state
-    button->AddComponent(new Sprite(*button, BOTAO4, true));
+    roboMenu = new GameObject();
+    roboMenu->parent = &associated;
 
-    //            Button* btnComponent = new Button(*buttonObject);
-    //            Button::Callback callbackFunction;
-    //            callbackFunction.callbackFunc = Eject;
-    //            callbackFunction.caller = this;
-
-    //            btnComponent->SetReleaseCallback(callbackFunction);
-    //            buttonObject->AddComponent(btnComponent);
+    roboMenu->AddComponent(new RoboMenu(*roboMenu));
+    stage->AddObject(roboMenu);
 }
 
 void Robo::MenuClose(){
-    button->RequestDelete();
-    button = nullptr;
+    roboMenu->RequestDelete();
+    roboMenu = nullptr;
 }
 
 void Robo::SetPosition(float x, float y){
@@ -180,39 +175,41 @@ void Eject(void*){
     DEBUG_PRINT("Eject", "Olha eu");
 }
 
-void Robo::Move(Direction dir){
+void Robo::ChangeDirection(Direction dir){
     switch(dir){
     case UP:
+        direction = UP;
         (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(3);
-        associated.box.y -= 1;
         break;
     case DOWN:
+        direction = DOWN;
         (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(0);
-        associated.box.y += 1;
         break;
     case LEFT:
+        direction = LEFT;
         (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(1);
-        associated.box.x -= 1;
         break;
     case RIGHT:
+        direction = RIGHT;
         (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(2);
-        associated.box.x += 1;
         break;
     }
 }
 
 void Robo::debug(){
-    if(InputManager::GetInstance().KeyPress(SDLK_LEFT)){
-        Move(LEFT);
-    }
-    if(InputManager::GetInstance().KeyPress(SDLK_UP)){
-        Move(UP);
-    }
-    if(InputManager::GetInstance().KeyPress(SDLK_RIGHT)){
-        Move(RIGHT);
-    }
-    if(InputManager::GetInstance().KeyPress(SDLK_DOWN)){
-        Move(DOWN);
+    if(associated.debug){
+        if(InputManager::GetInstance().KeyPress(SDLK_LEFT)){
+            ChangeDirection(LEFT);
+        }
+        if(InputManager::GetInstance().KeyPress(SDLK_UP)){
+            ChangeDirection(UP);
+        }
+        if(InputManager::GetInstance().KeyPress(SDLK_RIGHT)){
+            ChangeDirection(RIGHT);
+        }
+        if(InputManager::GetInstance().KeyPress(SDLK_DOWN)){
+            ChangeDirection(DOWN);
+        }
     }
     if(InputManager::GetInstance().KeyPress(SDLK_0)){
         associated.debug = !associated.debug;

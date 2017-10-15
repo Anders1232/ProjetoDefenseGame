@@ -14,6 +14,7 @@
 #include "State.h"
 #include "RectTransform.h"
 #include "RoboPath.h"
+#include "RoboMenu.h"
 
 using std::string;
 using std::vector;
@@ -47,7 +48,7 @@ public:
 
     void EarlyUpdate(float dt);
 	void LateUpdate(float dt);
-	void Move(Direction dir);
+	void ChangeDirection(Direction dir);
 	void MenuOpen();
 	void MenuClose();
 
@@ -57,11 +58,10 @@ protected:
 
 private:
     void UpdateState();
-    GameObject& associated;
     GameObject& barraVida;
     GameObject& barraCoolDown;
     GameObject* movingPath;
-    GameObject* button;
+    GameObject* roboMenu;
     State* stage;
     Sprite* sp;
     bool clicked;

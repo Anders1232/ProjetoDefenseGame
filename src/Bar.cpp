@@ -4,7 +4,6 @@
 #include "Error.h"
 Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile):
     Component(associated),
-    associated(associated),
     fluid(*(new Sprite(associated, fluidFile, true) ) ),
     frame(*(new Sprite(associated, frameFile, true) ) ),
     maxPoints(points),

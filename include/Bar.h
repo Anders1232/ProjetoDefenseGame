@@ -41,7 +41,6 @@ public:
 protected:
 
 private:
-    GameObject& associated;
     //Sprite fluid;
     //Sprite frame;
     Sprite& fluid;

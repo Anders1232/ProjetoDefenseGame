@@ -6,6 +6,7 @@
 #include "Component.h"
 #include "Vec2.h"
 #include "Sprite.h"
+#include "resources_path.h"
 
 using std::vector;
 
@@ -15,13 +16,13 @@ class RoboPath: public Component
         RoboPath(GameObject& associated, Vec2 first);
         virtual ~RoboPath();
         void EarlyUpdate(float dt){}
-        void Update(float dt){}
+        void Update(float dt);
         void LateUpdate(float dt){}
         void Render(){}
         bool Is(ComponentType type)const;
 
 
-        void AddPoint();
+        void CreatePath();
         Vec2 GetNext();
         bool HasPoints();
 
@@ -29,9 +30,8 @@ class RoboPath: public Component
     protected:
 
     private:
-        GameObject& associated;
         vector<Vec2*> movingPath;
-        vector<Sprite*> sprites;
+        vector<Sprite*> pathMarkers;
 };
 
 #endif // ROBOPATH_H

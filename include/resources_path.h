@@ -42,6 +42,7 @@
 #define CHEFE_RANGED    "resources/img/enemies/chefe2ranged.png"
 
 #define HIT "resources/img/misc/hit.png"
+#define PATH_MARKER "resources/img/misc/pathMarker.png"
 
 #define BG_WIN  "resources/img/win.jpg"
 #define BG_LOSE "resources/img/lose.jpg"
