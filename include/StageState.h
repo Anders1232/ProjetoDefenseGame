@@ -10,10 +10,11 @@
 #include "Sprite.h"
 #include "Music.h"
 #include "Text.h"
+#include "TileMap.h"
+
 #include "PlayerUnity.h"
 #include "resources_path.h"
-#include "TileMap.h"
-#include "Text.h"
+#include "Robo.h"
 
 #define STAGE_BACKGROUND_FILE   "resources/img/bg/ocean.jpg"
 

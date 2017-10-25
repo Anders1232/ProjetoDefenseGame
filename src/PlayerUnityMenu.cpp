@@ -1,64 +1,68 @@
 #include "PlayerUnityMenu.h"
-
-RoboMenu::RoboMenu(GameObject& associated):
-    Component(associated)
+#define CLASS "PlayerUnityMenu"
+PlayerUnityMenu::PlayerUnityMenu(GameObject& associated, State* stage):
+    Component(associated),
+    stage(stage)
 {
-    associated.box.x = associated.parent->box.x + associated.parent->box.w;
-    associated.box.y = associated.parent->box.y + associated.parent->box.h;
+    Reposition();
     associated.showOnScreen = false;
-
-    //for(int i = 0; i < 4; i++){
-        buttons.push_back(new Sprite(associated, BOTAO4, true) );
-        associated.AddComponent( buttons.back() );
-    //}
 }
 
-RoboMenu::~RoboMenu()
+PlayerUnityMenu::~PlayerUnityMenu()
 {
     //dtor
 }
 
-void RoboMenu::EarlyUpdate(float dt){
+void PlayerUnityMenu::EarlyUpdate(float dt){
 }
 
-void RoboMenu::Update(float dt){
-    DEBUG_UPDATE("RoboMenu", "inicio");
+void PlayerUnityMenu::Update(float dt){
+    DEBUG_UPDATE("inicio");
     Toogle();
     if(associated.showOnScreen){
+        Reposition();
         OnClick();
     }
-    DEBUG_UPDATE("RoboMenu", "fim");
+    DEBUG_UPDATE("fim");
 }
 
-void RoboMenu::LateUpdate(float dt){
+void PlayerUnityMenu::LateUpdate(float dt){
 }
 
-void RoboMenu::OnClick(){
-    DEBUG_UPDATE("RoboMenu", "inicio");
+void PlayerUnityMenu::OnClick(){
+    DEBUG_UPDATE("inicio");
     if(InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON)){
-        if(InputManager::GetInstance().GetMousePos().IsInRect(buttons.back()->GetScreenRect() )){
-            DEBUG_PRINT("RoboMenu", "Botao pressionado/solto. Menu sera fechado");
-        }
+
     }
-    DEBUG_UPDATE("RoboMenu", "fim");
+    DEBUG_UPDATE("fim");
 }
 
-void RoboMenu::Render(){
+void PlayerUnityMenu::Render(){
 }
 
-bool RoboMenu::Is(ComponentType type) const{
-    return (type == ROBOMENU);
+bool PlayerUnityMenu::Is(ComponentType type) const{
+    return (type == PLAYER_UNITY_MENU);
 }
 
-void RoboMenu::Toogle(){
-    DEBUG_UPDATE("RoboMenu", "inicio");
+void PlayerUnityMenu::Toogle(){
+    DEBUG_UPDATE("inicio");
     SDL_Rect parentRect = {associated.parent->box.x, associated.parent->box.y,
                            associated.parent->box.w, associated.parent->box.h};
     if(InputManager::GetInstance().GetMousePos().IsInRect(parentRect)){
         if(InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON)){
             associated.showOnScreen = !associated.showOnScreen;
-            DEBUG_PRINT("RoboMenu", "clicado");
+            for(int i = 0; i < buttons.size(); i++){
+                buttons[i]->showOnScreen = associated.showOnScreen;
+            }
+            DEBUG_PRINT("clicado");
         }
     }
-    DEBUG_UPDATE("RoboMenu", "fim");
+    DEBUG_UPDATE("fim");
+}
+
+void PlayerUnityMenu::Reposition(){
+    associated.box.x = associated.parent->box.x + associated.parent->box.w;
+    associated.box.y = associated.parent->box.y + associated.parent->box.h;
+    associated.box.w = 100;
+    associated.box.h = 100;
 }

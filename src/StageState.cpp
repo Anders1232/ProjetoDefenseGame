@@ -6,7 +6,7 @@ StageState::StageState():
     ,mousePosition(FONT2, 10, BLENDED, {0, 0, 0, 0})
     ,showDEBUG(false)
 {
-    DEBUG_CONSTRUCTOR("StageState", "inicio");
+    DEBUG_CONSTRUCTOR("inicio");
     Camera::pos.x = 0;
     Camera::pos.y = 0;
 
@@ -30,15 +30,19 @@ StageState::StageState():
     */
     GameObject* robo = new GameObject();
     AddObject(robo);
-    DEBUG_PRINT("StageState", "endereco de stageState: " << this);
+    DEBUG_PRINT("endereco de stageState: " << this);
     robo->AddComponent(new PlayerUnity(*robo, this, 50, 50, ROBO_SP1));
+    Robo* roboComponent = new Robo(*robo, this);
+    robo->AddComponent(roboComponent);
 
-    GameObject* piloto = new GameObject();
-    AddObject(piloto);
-    piloto->AddComponent(new PlayerUnity(*piloto, this, 0, 0, PILOTO_SP1));
+//    GameObject* piloto = new GameObject();
+//    piloto->showOnScreen = false;
+//    AddObject(piloto);
+//    piloto->AddComponent(new PlayerUnity(*piloto, this, 0, 0, PILOTO_SP1));
+//
+//    roboComponent->BoardPilot(piloto);
 
-
-    DEBUG_CONSTRUCTOR("StageState", "fim");
+    DEBUG_CONSTRUCTOR("fim");
 }
 
 StageState::~StageState()
@@ -63,12 +67,12 @@ void StageState::Update(float dt)
 
 void StageState::Render() const
 {
-    DEBUG_RENDER("StageState", "inicio");
+    DEBUG_RENDER("inicio");
     State::RenderArray();
     if(showDEBUG){
         mousePosition.Render(0, 0);
     }
-	DEBUG_RENDER("StageState", "fim");
+	DEBUG_RENDER("fim");
 }
 
 void StageState::Input(float dt) {
@@ -81,7 +85,7 @@ void StageState::Input(float dt) {
     }
     if( InputManager::GetInstance().KeyPress(SDLK_0) == true ){
             showDEBUG = !showDEBUG;
-            DEBUG_PRINT("StageState", "showDEBUG: " << showDEBUG);
+            DEBUG_PRINT("showDEBUG: " << showDEBUG);
     }
 
 

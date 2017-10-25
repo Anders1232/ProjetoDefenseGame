@@ -1,18 +1,22 @@
-#ifndef ROBOMENU_H
-#define ROBOMENU_H
+#ifndef PLAYER_UNITY_MENU_H
+#define PLAYER_UNITY_MENU_H
 
 #include <vector>
 
 #include "Component.h"
+#include "RectTransform.h"
+#include "Button.h"
 #include "Sprite.h"
+#include "State.h"
+
 #include "resources_path.h"
 
 using std::vector;
-class RoboMenu: public Component
+class PlayerUnityMenu: public Component
 {
     public:
-        RoboMenu(GameObject& associated);
-        virtual ~RoboMenu();
+        PlayerUnityMenu(GameObject& associated, State* stage);
+        virtual ~PlayerUnityMenu();
         void EarlyUpdate(float dt);
         void Update(float dt);
         void LateUpdate(float dt);
@@ -21,10 +25,35 @@ class RoboMenu: public Component
         void OnClick();
         void Toogle();
 
+        template<typename OBJ>
+        int AddButton(string buttonSpritePath, OBJ* obj, void(OBJ::*buttonFunction)(void*)){
+
+            GameObject* buttonObject = new GameObject();
+            buttonObject->AddComponent(new RectTransform(*buttonObject, &associated));
+            buttonObject->AddComponent(new Sprite(*buttonObject, buttonSpritePath, true));
+            Button<OBJ>* buttonComponent = new Button<OBJ>(*buttonObject);
+            typename Button<OBJ>::Callback callback;
+            callback.obj = obj;
+            callback.callbackFunc = buttonFunction;
+            callback.caller = nullptr;
+            buttonComponent->SetCallback(Button<OBJ>::State::DISABLED, callback);
+
+            buttonObject->AddComponent(buttonComponent);
+
+            stage->AddObject(buttonObject);
+            buttonObject->parent = &associated;
+            buttonObject->showOnScreen = associated.showOnScreen;
+            buttons.push_back(buttonObject);
+
+            return buttons.size() - 1;
+        }
+        void Reposition();
+
     protected:
 
     private:
-        vector<Sprite*> buttons;
+        State* stage;
+        vector<GameObject*> buttons;
 };
 
-#endif // ROBOMENU_H
+#endif // PLAYER_UNITY_MENU_H

@@ -1,21 +1,21 @@
-#ifndef ROBO_H
-#define ROBO_H
+#ifndef PLAYER_UNITY_H
+#define PLAYER_UNITY_H
 
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include "Camera.h"
-#include "Component.h"
-#include "resources_path.h"
-#include "Bar.h"
-#include "Button.h"
 #include "GameObject.h"
+#include "Component.h"
 #include "State.h"
-#include "RectTransform.h"
+#include "Camera.h"
+#include "Button.h"
+
 #include "PlayerUnityPath.h"
 #include "PlayerUnityMenu.h"
-#include "Piloto.h"
+#include "Bar.h"
+#include "resources_path.h"
+
 
 using std::string;
 using std::vector;
@@ -53,6 +53,7 @@ public:
 	void MenuOpen();
 	void MenuClose();
 	Vec2& Destination();
+	GameObject* GetMenu();
 
 	void debug();
 
@@ -64,7 +65,7 @@ private:
     GameObject& barraCoolDown;
     GameObject* piloto;
     GameObject* movingPath;
-    GameObject* roboMenu;
+    GameObject* playerUnityMenu;
     State* stage;
     Sprite* sp;
     bool clicked;
@@ -74,4 +75,4 @@ private:
     Vec2 destination;
 };
 
-#endif // ROBO_H
+#endif // PLAYER_UNITY_H

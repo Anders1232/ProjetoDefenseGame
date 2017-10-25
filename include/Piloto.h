@@ -30,6 +30,8 @@ class Piloto: public Component
         void Render();
         void OnClick();
         Vec2& Destination();
+        void SetPosition(int x, int y);
+        void ShowOnScreen();
 
     protected:
 

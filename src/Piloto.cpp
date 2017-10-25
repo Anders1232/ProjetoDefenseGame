@@ -38,3 +38,12 @@ void Piloto::OnClick(){
 
 Vec2& Piloto::Destination(){
 }
+
+void Piloto::SetPosition(int x, int y){
+    associated.box.x = x;
+    associated.box.y = y;
+}
+
+void Piloto::ShowOnScreen(){
+    associated.showOnScreen = true;
+}

@@ -10,11 +10,11 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y,
     barraCoolDown( *(new GameObject()) ),
     direction(DOWN),
     roboState(IDLE),
-    roboMenu(nullptr)
+    playerUnityMenu(nullptr)
 {
-    DEBUG_CONSTRUCTOR("Robo", "inicio");
+    DEBUG_CONSTRUCTOR("inicio");
     /*
-        Coloca a image do robo
+        Coloca a image no playerUnity
     */
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
@@ -44,22 +44,23 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y,
     (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).SetRefilAuto(10);
     (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).SetPoints(0);
 
-    roboMenu = new GameObject();
-    roboMenu->parent = &associated;
-    roboMenu->AddComponent(new RoboMenu(*roboMenu));
-    stage->AddObject(roboMenu);
+    playerUnityMenu = new GameObject();
+    playerUnityMenu->parent = &associated;
+    playerUnityMenu->AddComponent(new PlayerUnityMenu(*playerUnityMenu, stage));
+    stage->AddObject(playerUnityMenu);
+    playerUnityMenu->debug = true;
 
     movingPath = new GameObject();
     movingPath->parent = &associated;
     movingPath->AddComponent(new RoboPath(*movingPath, destination));
     stage->AddObject(movingPath);
 
-    DEBUG_CONSTRUCTOR("Robo", "box:{" <<
+    DEBUG_CONSTRUCTOR("box:{" <<
                       associated.box.x << ", " <<
                       associated.box.y << ", " <<
                       associated.box.w << ", " <<
                       associated.box.h << "}");
-    DEBUG_CONSTRUCTOR("Robo", "fim");
+    DEBUG_CONSTRUCTOR("fim");
 }
 
 PlayerUnity::~PlayerUnity()
@@ -80,7 +81,7 @@ void PlayerUnity::Render()
 
 bool PlayerUnity::Is(ComponentType type)const
 {
-    return type == ROBO;
+    return (type == PLAYER_UNITY);
 }
 
 void PlayerUnity::EarlyUpdate(float dt) {}
@@ -92,7 +93,7 @@ void PlayerUnity::onClick()
     {
         if(InputManager::GetInstance().GetMousePos().IsInRect(associated.box))
         {
-            DEBUG_PRINT("Robo", "Click em Robo");
+            DEBUG_PRINT("Click em Robo");
         }
         else
         {
@@ -155,8 +156,8 @@ void PlayerUnity::MenuOpen()
 
 void PlayerUnity::MenuClose()
 {
-    roboMenu->RequestDelete();
-    roboMenu = nullptr;
+    playerUnityMenu->RequestDelete();
+    playerUnityMenu = nullptr;
 }
 
 void PlayerUnity::SetPosition(float x, float y)
@@ -218,6 +219,10 @@ void PlayerUnity::debug()
     {
         associated.debug = !associated.debug;
     }
+}
+
+GameObject* PlayerUnity::GetMenu(){
+    return playerUnityMenu;
 }
 
 #include "Error_footer.h"

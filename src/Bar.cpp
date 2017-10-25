@@ -11,7 +11,7 @@ Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile)
     refilAuto(false),
     relative(0,0)
 {
-    DEBUG_CONSTRUCTOR("Bar", "inicio");
+    DEBUG_CONSTRUCTOR("inicio");
     //associated.AddComponent(new RectTransform(associated, nullptr));
     /*
         Inicialmente, a box de Bar tem o tamanho do sprite da moldura
@@ -22,7 +22,7 @@ Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile)
     associated.AddComponent(&fluid);
     associated.AddComponent(&frame);
 
-    DEBUG_CONSTRUCTOR("Bar", "fim");
+    DEBUG_CONSTRUCTOR("fim");
 }
 
 bool Bar::Is(ComponentType comp) const{
@@ -34,10 +34,13 @@ void Bar::EarlyUpdate(float dt){
 
 void Bar::Update(float dt)
 {
-    DEBUG_UPDATE("Bar", "inicio");
+    DEBUG_UPDATE("inicio");
+    if(associated.parent->showOnScreen != associated.showOnScreen){
+        associated.showOnScreen = associated.parent->showOnScreen;
+    }
     if(refilAuto){
-        DEBUG_UPDATE("Bar", "currPoints: " << currPoints);
-        DEBUG_UPDATE("Bar", "maxPoints: " << maxPoints);
+        DEBUG_UPDATE("currPoints: " << currPoints);
+        DEBUG_UPDATE("maxPoints: " << maxPoints);
         if(currPoints < maxPoints){
             currPoints += refilPace*dt;
             if(currPoints > maxPoints) currPoints = maxPoints;
@@ -46,7 +49,7 @@ void Bar::Update(float dt)
     }
     associated.box.x = associated.parent->box.x + relative.x;
     associated.box.y = associated.parent->box.y + relative.y;
-    DEBUG_UPDATE("Bar", "fim");
+    DEBUG_UPDATE("fim");
 }
 
 void Bar::LateUpdate(float dt){
