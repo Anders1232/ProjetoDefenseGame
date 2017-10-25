@@ -18,6 +18,8 @@ class RoboMenu: public Component
         void LateUpdate(float dt);
         void Render();
         bool Is(ComponentType type) const;
+        void OnClick();
+        void Toogle();
 
     protected:
 
