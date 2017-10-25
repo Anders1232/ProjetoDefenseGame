@@ -1,5 +1,6 @@
 #include "PlayerUnityMenu.h"
 #define CLASS "PlayerUnityMenu"
+
 PlayerUnityMenu::PlayerUnityMenu(GameObject& associated, State* stage):
     Component(associated),
     stage(stage)
@@ -53,6 +54,13 @@ void PlayerUnityMenu::Toogle(){
             associated.showOnScreen = !associated.showOnScreen;
             for(int i = 0; i < buttons.size(); i++){
                 buttons[i]->showOnScreen = associated.showOnScreen;
+
+//                So pra lembrar oq tava fazendo
+//
+//                template<typename T>
+//                void ToogleButtons(){
+//                    (dynamic_cast<Button<T>&>(associated.GetComponent(BUTTON))).SetState(Button<T>::State::ENABED);
+//                }
             }
             DEBUG_PRINT("clicado");
         }

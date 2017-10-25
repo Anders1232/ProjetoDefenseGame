@@ -24,6 +24,7 @@ class PlayerUnityMenu: public Component
         bool Is(ComponentType type) const;
         void OnClick();
         void Toogle();
+        void Reposition();
 
         template<typename OBJ>
         int AddButton(string buttonSpritePath, OBJ* obj, void(OBJ::*buttonFunction)(void*)){
@@ -36,7 +37,7 @@ class PlayerUnityMenu: public Component
             callback.obj = obj;
             callback.callbackFunc = buttonFunction;
             callback.caller = nullptr;
-            buttonComponent->SetCallback(Button<OBJ>::State::DISABLED, callback);
+            buttonComponent->SetReleaseCallback(callback);
 
             buttonObject->AddComponent(buttonComponent);
 
@@ -47,7 +48,6 @@ class PlayerUnityMenu: public Component
 
             return buttons.size() - 1;
         }
-        void Reposition();
 
     protected:
 
