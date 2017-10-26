@@ -1,9 +1,15 @@
 #include "Robo.h"
 
-Robo::Robo(GameObject& associated, State* stage):
+Robo::Robo(GameObject& associated, State* stage, string file):
     Component(associated)
 {
     DEBUG_CONSTRUCTOR("inicio");
+    sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
+    sp->SetAnimationLines(4);
+    associated.AddComponent(sp);
+    associated.box.w = sp->GetWidth();
+    associated.box.h = sp->GetHeight();
+
     //ctor
     PlayerUnity& playerUnity = (dynamic_cast<PlayerUnity&>(associated.GetComponent(PLAYER_UNITY)));
     buttons.push_back((dynamic_cast<PlayerUnityMenu&>(playerUnity.GetMenu()->GetComponent(PLAYER_UNITY_MENU))).AddButton(BOTAO4, this, EjectPilot));

@@ -13,7 +13,7 @@
 #include "GameObject.h"
 
 using std::string;
-using std::string;
+using std::vector;
 
 #define PILOTO_SHEET_LINES        4
 #define PILOTO_SHEET_FRAMES       4
@@ -23,7 +23,7 @@ using std::string;
 class Piloto: public Component
 {
     public:
-        Piloto(GameObject& associated);
+        Piloto(GameObject& associated, string file);
         virtual ~Piloto();
         bool Is(ComponentType comp) const;
         void EarlyUpdate(float dt);
@@ -39,6 +39,7 @@ class Piloto: public Component
     protected:
 
     private:
+        Sprite* sp;
         vector<int> buttons;
 };
 

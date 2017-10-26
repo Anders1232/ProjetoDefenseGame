@@ -38,7 +38,7 @@ private:
     };
 
 public:
-    PlayerUnity(GameObject& associated, State* stage, float x, float y, string file);
+    PlayerUnity(GameObject& associated, State* stage, float x, float y);
     ~PlayerUnity();
     void Update(float dt);
     void Render();
@@ -67,7 +67,6 @@ private:
     GameObject* movingPath;
     GameObject* playerUnityMenu;
     State* stage;
-    Sprite* sp;
     bool clicked;
     bool selected;
     RoboState roboState;

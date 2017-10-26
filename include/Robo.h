@@ -1,6 +1,7 @@
 #ifndef ROBO_H
 #define ROBO_H
 
+#include <string>
 #include <vector>
 
 #include "Component.h"
@@ -10,10 +11,12 @@
 #include "PlayerUnityMenu.h"
 
 using std::vector;
+using std::string;
+
 class Robo : public Component
 {
     public:
-        Robo(GameObject& associated, State* stage);
+        Robo(GameObject& associated, State* stage, string file);
         virtual ~Robo();
         void EarlyUpdate(float dt);
         void LateUpdate(float dt);
@@ -26,6 +29,7 @@ class Robo : public Component
     protected:
 
     private:
+        Sprite* sp;
         vector<GameObject*> pilotos;
         vector<int> buttons;
 };

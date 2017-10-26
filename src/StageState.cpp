@@ -31,15 +31,15 @@ StageState::StageState():
     GameObject* robo = new GameObject();
     AddObject(robo);
     DEBUG_PRINT("endereco de stageState: " << this);
-    robo->AddComponent(new PlayerUnity(*robo, this, 50, 50, ROBO_SP1));
-    Robo* roboComponent = new Robo(*robo, this);
+    robo->AddComponent(new PlayerUnity(*robo, this, 50, 50));
+    Robo* roboComponent = new Robo(*robo, this, ROBO_SP1);
     robo->AddComponent(roboComponent);
 
     GameObject* piloto = new GameObject();
     piloto->showOnScreen = false;
     AddObject(piloto);
-    piloto->AddComponent(new PlayerUnity(*piloto, this, 0, 0, PILOTO_SP1));
-    piloto->AddComponent(new Piloto(*piloto));
+    piloto->AddComponent(new PlayerUnity(*piloto, this, 0, 0));
+    piloto->AddComponent(new Piloto(*piloto, PILOTO_SP1));
     roboComponent->BoardPilot(piloto);
 
     DEBUG_CONSTRUCTOR("fim");

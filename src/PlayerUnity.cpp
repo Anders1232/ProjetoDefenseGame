@@ -1,7 +1,7 @@
 #include "../include/PlayerUnity.h"
 
 #include "Error.h"
-PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y, string file):
+PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y):
     Component(associated),
     stage(stage),
     clicked(false),
@@ -16,12 +16,6 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y,
     /*
         Coloca a image no playerUnity
     */
-    sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
-    sp->SetAnimationLines(4);
-    associated.AddComponent(sp);
-    associated.box.w = sp->GetWidth();
-    associated.box.h = sp->GetHeight();
-
     SetPosition(50, 50);
     destination.x = associated.box.x;
     destination.y = associated.box.y;
