@@ -2,6 +2,7 @@
 #define PILOTO_H
 
 #include <string>
+#include <vector>
 
 #include "Component.h"
 #include "State.h"
@@ -11,6 +12,7 @@
 #include "InputManager.h"
 #include "GameObject.h"
 
+using std::string;
 using std::string;
 
 #define PILOTO_SHEET_LINES        4
@@ -32,10 +34,12 @@ class Piloto: public Component
         Vec2& Destination();
         void SetPosition(int x, int y);
         void ShowOnScreen();
+        void BoardPilot(void*);
 
     protected:
 
     private:
+        vector<int> buttons;
 };
 
 #endif // PILOTO_H

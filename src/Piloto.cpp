@@ -3,6 +3,12 @@
 Piloto::Piloto(GameObject& associated):
     Component(associated)
 {
+    DEBUG_CONSTRUCTOR("inicio");
+    //ctor
+    PlayerUnity& playerUnity = (dynamic_cast<PlayerUnity&>(associated.GetComponent(PLAYER_UNITY)));
+    buttons.push_back((dynamic_cast<PlayerUnityMenu&>(playerUnity.GetMenu()->GetComponent(PLAYER_UNITY_MENU))).AddButton(BOTAO5, this, BoardPilot));
+    DEBUG_CONSTRUCTOR("indice do botao: " << buttons.back());
+    DEBUG_CONSTRUCTOR("fim");
 }
 
 Piloto::~Piloto()
@@ -46,4 +52,8 @@ void Piloto::SetPosition(int x, int y){
 
 void Piloto::ShowOnScreen(){
     associated.showOnScreen = true;
+}
+
+void Piloto::BoardPilot(void*){
+
 }

@@ -15,6 +15,7 @@
 #include "PlayerUnity.h"
 #include "resources_path.h"
 #include "Robo.h"
+#include "Piloto.h"
 
 #define STAGE_BACKGROUND_FILE   "resources/img/bg/ocean.jpg"
 

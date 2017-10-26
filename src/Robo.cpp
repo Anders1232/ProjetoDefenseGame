@@ -34,13 +34,13 @@ void Robo::Render(){
 
 void Robo::EjectPilot(void* entry){
     DEBUG_PRINT("HAHA!!");
-    /*if(pilotos.size() > 0){
+    if(pilotos.size() > 0){
         GameObject* desembarcado = pilotos[0];
         desembarcado->box.x = associated.box.x + associated.box.w;
         desembarcado->box.y = associated.box.y;
         pilotos.erase(pilotos.begin());
         desembarcado->showOnScreen = true;
-    }*/
+    }
 }
 
 void Robo::BoardPilot(GameObject* piloto){

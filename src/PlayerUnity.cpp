@@ -93,7 +93,7 @@ void PlayerUnity::onClick()
     {
         if(InputManager::GetInstance().GetMousePos().IsInRect(associated.box))
         {
-            DEBUG_PRINT("Click em Robo");
+            DEBUG_PRINT("Click em PlayerUnity");
         }
         else
         {

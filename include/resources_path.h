@@ -16,7 +16,8 @@
 #define BOTAO1 "resources/img/buttons/botao2andar.png"
 #define BOTAO2 "resources/img/buttons/botao2especial.png"
 #define BOTAO3 "resources/img/buttons/botaoItens.png"
-#define BOTAO4 "resources/img/buttons/botao2Ejetar.png"
+#define BOTAO4 "resources/img/buttons/botaoEjetar.png"
+#define BOTAO5 "resources/img/buttons/botaoEmbarcar.png"
 
 #define BARRA_COOLDOWN          "resources/img/misc/barraCooldown.png"
 #define BARRA_COOLDDOWN_MOLDURA "resources/img/misc/barraCooldownMoldura.png"
