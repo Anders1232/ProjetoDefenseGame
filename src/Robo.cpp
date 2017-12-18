@@ -12,8 +12,8 @@ Robo::Robo(GameObject& associated, State* stage, string file):
 
     //ctor
     PlayerUnity& playerUnity = (dynamic_cast<PlayerUnity&>(associated.GetComponent(PLAYER_UNITY)));
-    buttons.push_back((dynamic_cast<PlayerUnityMenu&>(playerUnity.GetMenu()->GetComponent(PLAYER_UNITY_MENU))).AddButton(BOTAO4, this, EjectPilot));
-    DEBUG_CONSTRUCTOR("indice do botao: " << buttons.back());
+    //buttons.push_back((dynamic_cast<PlayerUnityMenu&>(playerUnity.GetMenu()->GetComponent(PLAYER_UNITY_MENU))).AddButton(BOTAO4, this, EjectPilot));
+    //DEBUG_CONSTRUCTOR("indice do botao: " << buttons.back());
     DEBUG_CONSTRUCTOR("fim");
 }
 

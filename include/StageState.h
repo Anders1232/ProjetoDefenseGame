@@ -10,7 +10,7 @@
 #include "Sprite.h"
 #include "Music.h"
 #include "Text.h"
-#include "TileMap.h"
+//#include "TileMap.h"
 
 #include "PlayerUnity.h"
 #include "resources_path.h"
@@ -54,7 +54,7 @@ class StageState : public State
         void Input(float dt);
         Music backGroundMusic;
         Timer vitoriaTime;
-        Text mousePosition;
+        //Text mousePosition;
         //TileMap* tilemap;//verificar o que significa a warning reorder
 };
 

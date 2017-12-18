@@ -60,7 +60,7 @@ void PlayerUnityMenu::Toogle(){
 //                template<typename T>
 //                void ToogleButtons(){
 //                    (dynamic_cast<Button<T>&>(associated.GetComponent(BUTTON))).SetState(Button<T>::State::ENABED);
-//                }
+//              s  }
             }
             DEBUG_PRINT("clicado");
         }

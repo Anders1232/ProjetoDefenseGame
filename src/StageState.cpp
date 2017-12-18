@@ -3,12 +3,13 @@
 #include "Error.h"
 StageState::StageState():
     backGroundMusic(STAGE_BACKGROUND_MUSIC_FILE)
-    ,mousePosition(FONT2, 10, BLENDED, {0, 0, 0, 0})
     ,showDEBUG(false)
 {
     DEBUG_CONSTRUCTOR("inicio");
     Camera::pos.x = 0;
     Camera::pos.y = 0;
+
+    //mousePosition(new Text(FONT2, 10, Text::BLENDED, {0, 0, 0, 0} );
 
     /*
         Constroi cenario
@@ -16,7 +17,7 @@ StageState::StageState():
     GameObject* ambient = new GameObject();
     ambient->AddComponent(new RectTransform(*ambient, nullptr));
     ambient->AddComponent((Component*)new Sprite(*ambient, STAGE_BACKGROUND_FILE, true));
-    (dynamic_cast<RectTransform&>(ambient->GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
+    //(dynamic_cast<RectTransform&>(ambient->GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
     ambient->box.y = 0;
     AddObject(ambient);
 
@@ -56,11 +57,13 @@ void StageState::Update(float dt)
 {
     //DEBUG_PRINT("StageState::Update()- inicio");
     Input(dt);
+    /*
     if(showDEBUG){
         mousePosition.SetText(to_string((int)(InputManager::GetInstance().GetMouseX() + Camera::pos.x))+"x"
                              +to_string((int)(InputManager::GetInstance().GetMouseY() + Camera::pos.y)));
     }
-    State::UpdateArray(dt);
+    */
+    //State::UpdateArray(dt);
     Camera::Update(Game::GetInstance().GetDeltaTime());
     //DEBUG_PRINT("StageState::Update()- fim");
 }
@@ -68,10 +71,12 @@ void StageState::Update(float dt)
 void StageState::Render() const
 {
     DEBUG_RENDER("inicio");
-    State::RenderArray();
+    State::Render();
+    /*
     if(showDEBUG){
         mousePosition.Render(0, 0);
     }
+    */
 	DEBUG_RENDER("fim");
 }
 

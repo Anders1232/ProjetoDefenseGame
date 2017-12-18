@@ -26,6 +26,7 @@ class PlayerUnityMenu: public Component
         void Toogle();
         void Reposition();
 
+        /*
         template<typename OBJ>
         int AddButton(string buttonSpritePath, OBJ* obj, void(OBJ::*buttonFunction)(void*)){
 
@@ -47,7 +48,7 @@ class PlayerUnityMenu: public Component
             buttons.push_back(buttonObject);
 
             return buttons.size() - 1;
-        }
+        }*/
 
     protected:
 
