@@ -5,8 +5,11 @@ PlayerUnityMenu::PlayerUnityMenu(GameObject& associated, State* stage):
     Component(associated),
     stage(stage)
 {
+    DEBUG_CONSTRUCTOR("inicio");
     Reposition();
     associated.showOnScreen = false;
+    AddButton(BOTAO1, this);
+    DEBUG_CONSTRUCTOR("fim");
 }
 
 PlayerUnityMenu::~PlayerUnityMenu()
@@ -22,7 +25,6 @@ void PlayerUnityMenu::Update(float dt){
     Toogle();
     if(associated.showOnScreen){
         Reposition();
-        OnClick();
     }
     DEBUG_UPDATE("fim");
 }
@@ -32,9 +34,6 @@ void PlayerUnityMenu::LateUpdate(float dt){
 
 void PlayerUnityMenu::OnClick(){
     DEBUG_UPDATE("inicio");
-    if(InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON)){
-
-    }
     DEBUG_UPDATE("fim");
 }
 
@@ -48,10 +47,8 @@ bool PlayerUnityMenu::Is(ComponentType type) const{
 void PlayerUnityMenu::Toogle(){
     DEBUG_UPDATE("inicio");
     if(associated.parent->Released()){
-        DEBUG_PRINT("mouse solto");
-        associated.showOnScreen = !associated.showOnScreen;
         for(int i = 0; i < buttons.size(); i++){
-            buttons[i]->showOnScreen = associated.showOnScreen;
+            buttons[i]->SetActive(true);
         }
     }
     DEBUG_UPDATE("fim");
@@ -62,4 +59,37 @@ void PlayerUnityMenu::Reposition(){
     associated.box.y = associated.parent->box.y + associated.parent->box.h;
     associated.box.w = 100;
     associated.box.h = 100;
+}
+
+int PlayerUnityMenu::AddButton(string buttonSpritePath, Component* observer){
+    DEBUG_PRINT("inicio");
+    //  GameObject recipiente
+    GameObject* buttonObject = new GameObject();
+    buttonObject->parent = &associated;
+    buttonObject->SetActive(false);
+
+    buttonObject->AddComponent(new RectTransform(*buttonObject, &associated));
+    buttonObject->AddComponent(new Sprite(*buttonObject, buttonSpritePath, true));
+
+    //  componente Button
+    Button* buttonComponent = new Button(*buttonObject);
+    buttonComponent->AddObserver(observer);
+
+    //  equipando componente
+    buttonObject->AddComponent(buttonComponent);
+
+    //  colocando objeto no vetor do mainGameLoop
+    stage->AddObject(buttonObject);
+
+    //  colocando no vetor do menu
+    buttons.push_back(buttonObject);
+
+    DEBUG_PRINT("fim");
+    return buttons.size() - 1;
+}
+
+void PlayerUnityMenu::ButtonObserver(Component* btn){
+    for(int i = 0; i < buttons.size(); i++){
+            buttons[i]->SetActive(false);
+    }
 }

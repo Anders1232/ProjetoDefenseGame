@@ -13,7 +13,7 @@
 #define TITLE_STATE_BACKGROUND  "resources/img/bg/screenSbuttons.png"
 #define TITLE_STATE_MUSIC       "resources/audio/Tema_01.wav"
 
-#define BOTAO1 "resources/img/buttons/botao2andar.png"
+#define BOTAO1 "resources/img/buttons/botaoAndar.png"
 #define BOTAO2 "resources/img/buttons/botao2especial.png"
 #define BOTAO3 "resources/img/buttons/botaoItens.png"
 #define BOTAO4 "resources/img/buttons/botaoEjetar.png"

@@ -25,30 +25,8 @@ class PlayerUnityMenu: public Component
         void OnClick();
         void Toogle();
         void Reposition();
-
-        /*
-        template<typename OBJ>
-        int AddButton(string buttonSpritePath, OBJ* obj, void(OBJ::*buttonFunction)(void*)){
-
-            GameObject* buttonObject = new GameObject();
-            buttonObject->AddComponent(new RectTransform(*buttonObject, &associated));
-            buttonObject->AddComponent(new Sprite(*buttonObject, buttonSpritePath, true));
-            Button<OBJ>* buttonComponent = new Button<OBJ>(*buttonObject);
-            typename Button<OBJ>::Callback callback;
-            callback.obj = obj;
-            callback.callbackFunc = buttonFunction;
-            callback.caller = nullptr;
-            buttonComponent->SetReleaseCallback(callback);
-
-            buttonObject->AddComponent(buttonComponent);
-
-            stage->AddObject(buttonObject);
-            buttonObject->parent = &associated;
-            buttonObject->showOnScreen = associated.showOnScreen;
-            buttons.push_back(buttonObject);
-
-            return buttons.size() - 1;
-        }*/
+        int AddButton(string buttonSpritePath, Component* observer);
+        void ButtonObserver(Component* btn);
 
     protected:
 
