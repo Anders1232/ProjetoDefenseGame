@@ -32,7 +32,7 @@ private:
         LEFT,
         RIGHT
     };
-    enum RoboState{
+    enum PlayerUnityState{
         IDLE = 0,
         MOVING,
     };
@@ -41,7 +41,7 @@ public:
     PlayerUnity(GameObject& associated, State* stage, float x, float y);
     ~PlayerUnity();
     void Update(float dt);
-    void Render();
+    void Render() const;
     bool Is(ComponentType type) const;
     void onClick();
     void TryMove();
@@ -69,7 +69,7 @@ private:
     State* stage;
     bool clicked;
     bool selected;
-    RoboState roboState;
+    PlayerUnityState playerUnityState;
     Direction direction;
     Vec2 destination;
 };

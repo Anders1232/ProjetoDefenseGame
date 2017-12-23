@@ -38,7 +38,7 @@ void PlayerUnityMenu::OnClick(){
     DEBUG_UPDATE("fim");
 }
 
-void PlayerUnityMenu::Render(){
+void PlayerUnityMenu::Render() const{
 }
 
 bool PlayerUnityMenu::Is(ComponentType type) const{
@@ -47,22 +47,11 @@ bool PlayerUnityMenu::Is(ComponentType type) const{
 
 void PlayerUnityMenu::Toogle(){
     DEBUG_UPDATE("inicio");
-    SDL_Rect parentRect = {associated.parent->box.x, associated.parent->box.y,
-                           associated.parent->box.w, associated.parent->box.h};
-    if(InputManager::GetInstance().GetMousePos().IsInRect(parentRect)){
-        if(InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON)){
-            associated.showOnScreen = !associated.showOnScreen;
-            for(int i = 0; i < buttons.size(); i++){
-                buttons[i]->showOnScreen = associated.showOnScreen;
-
-//                So pra lembrar oq tava fazendo
-//
-//                template<typename T>
-//                void ToogleButtons(){
-//                    (dynamic_cast<Button<T>&>(associated.GetComponent(BUTTON))).SetState(Button<T>::State::ENABED);
-//              s  }
-            }
-            DEBUG_PRINT("clicado");
+    if(associated.parent->Released()){
+        DEBUG_PRINT("mouse solto");
+        associated.showOnScreen = !associated.showOnScreen;
+        for(int i = 0; i < buttons.size(); i++){
+            buttons[i]->showOnScreen = associated.showOnScreen;
         }
     }
     DEBUG_UPDATE("fim");

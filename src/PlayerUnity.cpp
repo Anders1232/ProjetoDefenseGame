@@ -9,43 +9,40 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y)
     barraVida( *(new GameObject()) ),
     barraCoolDown( *(new GameObject()) ),
     direction(DOWN),
-    roboState(IDLE),
+    playerUnityState(IDLE),
     playerUnityMenu(nullptr)
 {
+    associated.box.x = x;
+    associated.box.y = y;
     DEBUG_CONSTRUCTOR("inicio");
-    /*
-        Coloca a image no playerUnity
-    */
-    SetPosition(50, 50);
     destination.x = associated.box.x;
     destination.y = associated.box.y;
+
     /*
         Barra de vida
     */
-    barraVida.parent = &associated;
+    barraVida.SetParent(associated, -16, 64);//Hardcoded = posicionando a barra em relação ao parent
     barraVida.AddComponent(new Bar(barraVida, 200, BARRA_VIDA_MOLDURA, BARRA_VIDA));
     stage->AddObject(&barraVida);
-    (dynamic_cast<Bar&>(barraVida.GetComponent(BAR))).Centralize(0,(5/8.0)*associated.box.h);
 
     /*
         Barra de cooldown
     */
-    barraCoolDown.parent = &associated;
+    barraCoolDown.SetParent(associated, -14, 74);//Hardcoded = posicionando a barra em relação ao parent
     barraCoolDown.AddComponent(new Bar(barraCoolDown, 10, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN));
     stage->AddObject(&barraCoolDown);
 
-    (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).Centralize(0,(5/8.0)*associated.box.h + 10);// 5/8.0 spritesheet mal diagramada
     (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).SetRefilAuto(10);
     (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).SetPoints(0);
 
     playerUnityMenu = new GameObject();
-    playerUnityMenu->parent = &associated;
+    playerUnityMenu->SetParent(associated);
     playerUnityMenu->AddComponent(new PlayerUnityMenu(*playerUnityMenu, stage));
     stage->AddObject(playerUnityMenu);
     playerUnityMenu->debug = true;
 
     movingPath = new GameObject();
-    movingPath->parent = &associated;
+    movingPath->SetParent(associated);
     movingPath->AddComponent(new RoboPath(*movingPath, destination));
     stage->AddObject(movingPath);
 
@@ -69,7 +66,7 @@ void PlayerUnity::Update(float dt)
     UpdateState();
 }
 
-void PlayerUnity::Render()
+void PlayerUnity::Render() const
 {
 }
 
@@ -97,7 +94,7 @@ void PlayerUnity::onClick()
 
 void PlayerUnity::UpdateState()
 {
-    switch(roboState)
+    switch(playerUnityState)
     {
     case IDLE:
         break;
@@ -106,7 +103,7 @@ void PlayerUnity::UpdateState()
         if(destination.x == associated.box.x &&
                 destination.y == associated.box.y)
         {
-            roboState = IDLE;
+            playerUnityState = IDLE;
         }
         else
         {
@@ -138,9 +135,9 @@ void PlayerUnity::UpdateState()
 void PlayerUnity::TryMove()
 {
     Vec2 aux(associated.box.x, associated.box.y);
-    if(roboState != MOVING && destination.DistanceTo(aux) > 0 )
+    if(playerUnityState != MOVING && destination.DistanceTo(aux) > 0 )
     {
-        roboState = MOVING;
+        playerUnityState = MOVING;
     }
 }
 

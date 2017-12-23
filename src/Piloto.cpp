@@ -1,9 +1,11 @@
 #include "Piloto.h"
 
-Piloto::Piloto(GameObject& associated, string file):
+Piloto::Piloto(GameObject& associated, State* stage, string file):
     Component(associated)
 {
     DEBUG_CONSTRUCTOR("inicio");
+    associated.AddComponent(new PlayerUnity(associated, stage, 30, 80));
+
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
@@ -36,7 +38,7 @@ void Piloto::Update(float dt){
 void Piloto::LateUpdate(float dt){
 }
 
-void Piloto::Render(){
+void Piloto::Render() const{
 }
 
 void Piloto::OnClick(){

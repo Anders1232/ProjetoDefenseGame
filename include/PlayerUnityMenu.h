@@ -20,7 +20,7 @@ class PlayerUnityMenu: public Component
         void EarlyUpdate(float dt);
         void Update(float dt);
         void LateUpdate(float dt);
-        void Render();
+        void Render() const;
         bool Is(ComponentType type) const;
         void OnClick();
         void Toogle();

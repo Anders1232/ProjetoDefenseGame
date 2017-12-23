@@ -21,7 +21,7 @@ class Robo : public Component
         void EarlyUpdate(float dt);
         void LateUpdate(float dt);
         void Update(float dt);
-        void Render();
+        void Render() const;
         bool Is(ComponentType) const;
         void EjectPilot(void*);
         void BoardPilot(GameObject* piloto);

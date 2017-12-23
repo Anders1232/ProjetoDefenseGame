@@ -4,6 +4,7 @@ Robo::Robo(GameObject& associated, State* stage, string file):
     Component(associated)
 {
     DEBUG_CONSTRUCTOR("inicio");
+    associated.AddComponent(new PlayerUnity(associated, stage, 100, 100));
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
@@ -35,7 +36,7 @@ void Robo::EarlyUpdate(float dt){
 void Robo::LateUpdate(float dt){
 }
 
-void Robo::Render(){
+void Robo::Render() const{
 }
 
 void Robo::EjectPilot(void* entry){

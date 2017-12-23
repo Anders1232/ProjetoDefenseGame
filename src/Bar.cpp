@@ -47,8 +47,6 @@ void Bar::Update(float dt)
             fluid.SetScreenRect(0, 0, associated.box.w * (currPoints/maxPoints), associated.box.h); //SetClip(0, 0, associated.box.w * (currPoints/maxPoints), associated.box.h);
         }
     }
-    associated.box.x = associated.parent->box.x + relative.x;
-    associated.box.y = associated.parent->box.y + relative.y;
     DEBUG_UPDATE("fim");
 }
 
@@ -63,7 +61,7 @@ bool Bar::IsDead()
 }
 */
 
-void Bar::Render()
+void Bar::Render() const
 {
 }
 

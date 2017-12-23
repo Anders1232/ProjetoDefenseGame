@@ -1,6 +1,7 @@
 #ifndef BAR_H
 #define BAR_H
 
+#include "Component.h"
 #include "Sprite.h"
 #include "Camera.h"
 #include "Timer.h"
@@ -17,7 +18,7 @@ public:
     void EarlyUpdate(float dt);
     void Update(float dt);
     void LateUpdate(float dt);
-    void Render();
+    void Render() const;
     void SetX(float x);
     void SetY(float y);
 

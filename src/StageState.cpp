@@ -17,7 +17,7 @@ StageState::StageState():
     GameObject* ambient = new GameObject();
     ambient->AddComponent(new RectTransform(*ambient, nullptr));
     ambient->AddComponent((Component*)new Sprite(*ambient, STAGE_BACKGROUND_FILE, true));
-    //(dynamic_cast<RectTransform&>(ambient->GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
+    (dynamic_cast<RectTransform&>(ambient->GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
     ambient->box.y = 0;
     AddObject(ambient);
 
@@ -32,15 +32,14 @@ StageState::StageState():
     GameObject* robo = new GameObject();
     AddObject(robo);
     DEBUG_PRINT("endereco de stageState: " << this);
-    robo->AddComponent(new PlayerUnity(*robo, this, 50, 50));
     Robo* roboComponent = new Robo(*robo, this, ROBO_SP1);
     robo->AddComponent(roboComponent);
+
 
     GameObject* piloto = new GameObject();
     piloto->showOnScreen = false;
     AddObject(piloto);
-    piloto->AddComponent(new PlayerUnity(*piloto, this, 0, 0));
-    piloto->AddComponent(new Piloto(*piloto, PILOTO_SP1));
+    piloto->AddComponent(new Piloto(*piloto, this, PILOTO_SP1));
     roboComponent->BoardPilot(piloto);
 
     DEBUG_CONSTRUCTOR("fim");
@@ -55,17 +54,18 @@ StageState::~StageState()
 
 void StageState::Update(float dt)
 {
-    //DEBUG_PRINT("StageState::Update()- inicio");
+    DEBUG_UPDATE("StageState::Update()- inicio");
     Input(dt);
+    State::Update(dt);
+
     /*
     if(showDEBUG){
         mousePosition.SetText(to_string((int)(InputManager::GetInstance().GetMouseX() + Camera::pos.x))+"x"
                              +to_string((int)(InputManager::GetInstance().GetMouseY() + Camera::pos.y)));
     }
     */
-    //State::UpdateArray(dt);
     Camera::Update(Game::GetInstance().GetDeltaTime());
-    //DEBUG_PRINT("StageState::Update()- fim");
+    DEBUG_UPDATE("StageState::Update()- fim");
 }
 
 void StageState::Render() const

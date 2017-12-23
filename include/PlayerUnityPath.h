@@ -15,10 +15,10 @@ class RoboPath: public Component
     public:
         RoboPath(GameObject& associated, Vec2& destination);
         virtual ~RoboPath();
-        void EarlyUpdate(float dt){}
+        void EarlyUpdate(float dt){};
         void Update(float dt);
-        void LateUpdate(float dt){}
-        void Render(){}
+        void LateUpdate(float dt){};
+        void Render() const {};
         bool Is(ComponentType type)const;
 
 
