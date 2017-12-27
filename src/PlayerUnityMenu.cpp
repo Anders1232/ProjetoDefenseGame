@@ -8,7 +8,6 @@ PlayerUnityMenu::PlayerUnityMenu(GameObject& associated, State* stage):
     DEBUG_CONSTRUCTOR("inicio");
     Reposition();
     associated.showOnScreen = false;
-    AddButton(BOTAO1, this);
     DEBUG_CONSTRUCTOR("fim");
 }
 
@@ -65,15 +64,17 @@ int PlayerUnityMenu::AddButton(string buttonSpritePath, Component* observer){
     DEBUG_PRINT("inicio");
     //  GameObject recipiente
     GameObject* buttonObject = new GameObject();
-    buttonObject->parent = &associated;
+    buttonObject->SetParent(associated, 100, 100);
     buttonObject->SetActive(false);
 
-    buttonObject->AddComponent(new RectTransform(*buttonObject, &associated));
+    //buttonObject->AddComponent(new RectTransform(*buttonObject, &associated));
     buttonObject->AddComponent(new Sprite(*buttonObject, buttonSpritePath, true));
 
     //  componente Button
     Button* buttonComponent = new Button(*buttonObject);
+    buttonComponent->AddObserver(this);
     buttonComponent->AddObserver(observer);
+
 
     //  equipando componente
     buttonObject->AddComponent(buttonComponent);
@@ -88,8 +89,34 @@ int PlayerUnityMenu::AddButton(string buttonSpritePath, Component* observer){
     return buttons.size() - 1;
 }
 
+GameObject* PlayerUnityMenu::GetButton(int i){
+    if(buttons.size() && i < buttons.size()){
+        return buttons[i];
+    }else{
+        return nullptr;
+    }
+}
+
+int PlayerUnityMenu::GetButtons(){
+    return buttons.size();
+}
+
 void PlayerUnityMenu::ButtonObserver(Component* btn){
     for(int i = 0; i < buttons.size(); i++){
             buttons[i]->SetActive(false);
     }
 }
+
+
+void PlayerUnityMenu::OnPathFinished(RoboPath* eventSource, int& unused, void* context){
+    PlayerUnityMenu* pum = static_cast<PlayerUnityMenu*>(context);
+    for(int i = 0; i < pum->GetButtons(); i++){
+        (pum->GetButton(i))->SetActive(true);
+    }
+}
+
+
+void PlayerUnityMenu::SubscribeToPath(RoboPath& roboPath){
+    roboPath.pathFinished.Subscribe(OnPathFinished, this);
+}
+

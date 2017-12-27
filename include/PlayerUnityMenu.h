@@ -9,8 +9,11 @@
 #include "Sprite.h"
 #include "State.h"
 
+#include "PlayerUnityPath.h"
+
 #include "resources_path.h"
 
+class RoboPath;
 using std::vector;
 class PlayerUnityMenu: public Component
 {
@@ -25,8 +28,17 @@ class PlayerUnityMenu: public Component
         void OnClick();
         void Toogle();
         void Reposition();
+        GameObject* GetButton(int i);
+        int GetButtons();
+        //O menu adiciona botões de acordo com interesses de outras classes
+        //no caso, para andar, robopath adiciona o botão Andar.
         int AddButton(string buttonSpritePath, Component* observer);
         void ButtonObserver(Component* btn);
+
+        //Se inscreve no evento de RoboPath, para quando o caminho for completado,
+        //o menu abrir
+        void SubscribeToPath(RoboPath& roboPath);
+        static void OnPathFinished(RoboPath* eventSource, int& unused, void* context);
 
     protected:
 

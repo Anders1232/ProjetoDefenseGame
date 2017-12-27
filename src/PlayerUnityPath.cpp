@@ -4,8 +4,11 @@
 RoboPath::RoboPath(GameObject& associated, Vec2& destination):
     Component(associated),
     parentSelected(false),
-    destination(destination)
+    destination(destination),
+    listenerId(0),
+    pathFinished(this)
 {
+    listeners = StartMapping();
     associated.showOnScreen = false;
     //ctor
 }
@@ -94,12 +97,14 @@ void RoboPath::OnClick(){
        InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON)){
         parentSelected = false;
         DEBUG_PRINT("solto");
+        int i = 0;
+        pathFinished.FireEvent(i);
+    }
+}
 
-        //TODO: Cria botão GO!
-        //TODO: Se o botão for clicado, confirma a ação. Se clicar fora do botão, elimina botão e caminho.
-        if(movingPath.size() > 0){
-            destination = GetNext();
-        }
+void RoboPath::ButtonObserver(Component* btn){
+    if(movingPath.size() > 0){
+        destination = GetNext();
     }
 }
 

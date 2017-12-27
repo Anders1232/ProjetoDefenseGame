@@ -37,14 +37,23 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y)
 
     playerUnityMenu = new GameObject();
     playerUnityMenu->SetParent(associated);
-    playerUnityMenu->AddComponent(new PlayerUnityMenu(*playerUnityMenu, stage));
+    PlayerUnityMenu* playerUnityMenuComponent = new PlayerUnityMenu(*playerUnityMenu, stage);
+    playerUnityMenu->AddComponent(playerUnityMenuComponent);
     stage->AddObject(playerUnityMenu);
     playerUnityMenu->debug = true;
 
     movingPath = new GameObject();
     movingPath->SetParent(associated);
-    movingPath->AddComponent(new RoboPath(*movingPath, destination));
+    RoboPath* roboPathComponent = new RoboPath(*movingPath, destination);
+    movingPath->AddComponent(roboPathComponent);
     stage->AddObject(movingPath);
+
+    //roboPathComponent contem uma função que será atribuida a um botão do menu
+    playerUnityMenuComponent->AddButton(BOTAO1, roboPathComponent);
+
+    //O menu reage a um evento do roboPath:
+    //Quando terminar de criar o caminho, os listeners serão chamados
+    playerUnityMenuComponent->SubscribeToPath(*roboPathComponent);
 
     DEBUG_CONSTRUCTOR("box:{" <<
                       associated.box.x << ", " <<

@@ -35,13 +35,13 @@ StageState::StageState():
     Robo* roboComponent = new Robo(*robo, this, ROBO_SP1);
     robo->AddComponent(roboComponent);
 
-    /*
+
     GameObject* piloto = new GameObject();
     piloto->showOnScreen = false;
     AddObject(piloto);
     piloto->AddComponent(new Piloto(*piloto, this, PILOTO_SP1));
     roboComponent->BoardPilot(piloto);
-    */
+
     DEBUG_CONSTRUCTOR("fim");
 }
 
