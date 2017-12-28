@@ -24,14 +24,14 @@ class PlayerUnityMenu: public Component
         void Update(float dt);
         void LateUpdate(float dt);
         void Render() const;
-        bool Is(ComponentType type) const;
+        bool Is(uint type) const;
         void OnClick();
         void Toogle();
         void Reposition();
         GameObject* GetButton(int i);
         int GetButtons();
-        //O menu adiciona botões de acordo com interesses de outras classes
-        //no caso, para andar, robopath adiciona o botão Andar.
+        //O menu adiciona botï¿½es de acordo com interesses de outras classes
+        //no caso, para andar, robopath adiciona o botï¿½o Andar.
         int AddButton(string buttonSpritePath, Component* observer);
         void ButtonObserver(Component* btn);
 

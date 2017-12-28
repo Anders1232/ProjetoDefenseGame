@@ -42,7 +42,7 @@ public:
     ~PlayerUnity();
     void Update(float dt);
     void Render() const;
-    bool Is(ComponentType type) const;
+    bool Is(uint type) const;
     void onClick();
     void TryMove();
     void SetPosition(float x, float y);

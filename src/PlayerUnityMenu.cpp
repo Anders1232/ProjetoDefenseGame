@@ -1,5 +1,6 @@
 #include "PlayerUnityMenu.h"
-#define CLASS "PlayerUnityMenu"
+#include "GameComponentType.h"
+//#include CLASS "PlayerUnityMenu"
 
 PlayerUnityMenu::PlayerUnityMenu(GameObject& associated, State* stage):
     Component(associated),
@@ -39,14 +40,14 @@ void PlayerUnityMenu::OnClick(){
 void PlayerUnityMenu::Render() const{
 }
 
-bool PlayerUnityMenu::Is(ComponentType type) const{
-    return (type == PLAYER_UNITY_MENU);
+bool PlayerUnityMenu::Is(uint type) const{
+    return (type == GameComponentType::PLAYER_UNITY_MENU);
 }
 
 void PlayerUnityMenu::Toogle(){
     DEBUG_UPDATE("inicio");
     if(associated.parent->Released()){
-        for(int i = 0; i < buttons.size(); i++){
+        for(uint i = 0; i < buttons.size(); i++){
             buttons[i]->SetActive(true);
         }
     }
@@ -102,7 +103,7 @@ int PlayerUnityMenu::GetButtons(){
 }
 
 void PlayerUnityMenu::ButtonObserver(Component* btn){
-    for(int i = 0; i < buttons.size(); i++){
+    for(uint i = 0; i < buttons.size(); i++){
             buttons[i]->SetActive(false);
     }
 }

@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "InputManager.h"
 #include "Vec2.h"
+#include "GameComponentType.h"
 
 using std::cout;
 using std::endl;
@@ -18,7 +19,7 @@ class Walkable: public Component
         Walkable(GameObject& associated);
         ~Walkable();
         void Update(float dt);
-		bool Is(ComponentType type) const;
+		bool Is(GameComponentType type) const;
 		void Render(){};
 		void EarlyUpdate(float dt);
 		void LateUpdate(float dt);
