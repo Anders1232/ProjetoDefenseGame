@@ -28,7 +28,7 @@ class PlayerUnityMenu: public Component
         void OnClick();
         void Toogle();
         void Reposition();
-        GameObject* GetButton(int i);
+        GameObject* GetButton(unsigned int i);
         int GetButtons();
         //O menu adiciona botões de acordo com interesses de outras classes
         //no caso, para andar, robopath adiciona o botão Andar.
@@ -43,6 +43,7 @@ class PlayerUnityMenu: public Component
     protected:
 
     private:
+        bool active;
         State* stage;
         vector<GameObject*> buttons;
 };

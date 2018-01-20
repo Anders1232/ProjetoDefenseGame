@@ -13,8 +13,10 @@ Robo::Robo(GameObject& associated, State* stage, string file):
 
     //ctor
     PlayerUnity& playerUnity = (dynamic_cast<PlayerUnity&>(associated.GetComponent(PLAYER_UNITY)));
-    //buttons.push_back((dynamic_cast<PlayerUnityMenu&>(playerUnity.GetMenu()->GetComponent(PLAYER_UNITY_MENU))).AddButton(BOTAO4, this, EjectPilot));
-    //DEBUG_CONSTRUCTOR("indice do botao: " << buttons.back());
+    GameObject* unityMenu = associated.GetChildWithTag("UnityMenu");
+    PlayerUnityMenu& playerUnityMenu = (dynamic_cast<PlayerUnityMenu&>(unityMenu->GetComponent(PLAYER_UNITY_MENU)));
+    playerUnityMenu.AddButton(BOTAO4, this);
+
     DEBUG_CONSTRUCTOR("fim");
 }
 
@@ -40,17 +42,25 @@ void Robo::Render() const{
 }
 
 void Robo::EjectPilot(void* entry){
-    DEBUG_PRINT("HAHA!!");
+    DEBUG_PRINT("inicio");
     if(pilotos.size() > 0){
         GameObject* desembarcado = pilotos[0];
         desembarcado->box.x = associated.box.x + associated.box.w;
         desembarcado->box.y = associated.box.y;
         pilotos.erase(pilotos.begin());
-        desembarcado->showOnScreen = true;
+        desembarcado->SetActive(true);
     }
+    DEBUG_PRINT("fim");
 }
 
 void Robo::BoardPilot(GameObject* piloto){
+    piloto->SetActive(false);
     pilotos.push_back(piloto);
 }
 
+void Robo::ButtonObserver(Component* btn){
+    if(pilotos.size()){
+        pilotos.back()->SetActive(true);
+        pilotos.pop_back();
+    }
+}

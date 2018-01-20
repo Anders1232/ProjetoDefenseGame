@@ -25,6 +25,7 @@ class Robo : public Component
         bool Is(ComponentType) const;
         void EjectPilot(void*);
         void BoardPilot(GameObject* piloto);
+        void ButtonObserver(Component* btn);
 
     protected:
 

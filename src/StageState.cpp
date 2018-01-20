@@ -14,12 +14,13 @@ StageState::StageState():
     /*
         Constroi cenario
     */
-    GameObject* ambient = new GameObject();
+    GameObject* ambient = new GameObject("Ambient");
     ambient->AddComponent(new RectTransform(*ambient, nullptr));
     ambient->AddComponent((Component*)new Sprite(*ambient, STAGE_BACKGROUND_FILE, true));
     (dynamic_cast<RectTransform&>(ambient->GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
     ambient->box.y = 0;
     AddObject(ambient);
+    ambient->AddComponent(new TileMap<BaseTile>(*ambient, STAGE_TILEMAP_FILE, new TileSet(STAGE_TILESET_FILE, *ambient)));
 
     /*
         Coloca a musica
@@ -29,18 +30,23 @@ StageState::StageState():
     /*
         Coloca os personagens
     */
-    GameObject* robo = new GameObject();
+    GameObject* robo = new GameObject("Robo");
     AddObject(robo);
     DEBUG_PRINT("endereco de stageState: " << this);
     Robo* roboComponent = new Robo(*robo, this, ROBO_SP1);
     robo->AddComponent(roboComponent);
 
 
-    GameObject* piloto = new GameObject();
+    GameObject* piloto = new GameObject("Piloto");
     piloto->showOnScreen = false;
     AddObject(piloto);
     piloto->AddComponent(new Piloto(*piloto, this, PILOTO_SP1));
     roboComponent->BoardPilot(piloto);
+
+    GameObject* cursor = new GameObject("Cursor");
+    cursor->AddComponent(new Cursor(*cursor, "resources/img/misc/cursor.png"));
+    AddObject(cursor);
+
 
     DEBUG_CONSTRUCTOR("fim");
 }

@@ -1,9 +1,9 @@
 #include "PlayerUnityMenu.h"
-#define CLASS "PlayerUnityMenu"
 
 PlayerUnityMenu::PlayerUnityMenu(GameObject& associated, State* stage):
     Component(associated),
-    stage(stage)
+    stage(stage),
+    active(false)
 {
     DEBUG_CONSTRUCTOR("inicio");
     Reposition();
@@ -40,14 +40,16 @@ void PlayerUnityMenu::Render() const{
 }
 
 bool PlayerUnityMenu::Is(ComponentType type) const{
+    DEBUG_PRINT("Passou no meu Is");
     return (type == PLAYER_UNITY_MENU);
 }
 
 void PlayerUnityMenu::Toogle(){
     DEBUG_UPDATE("inicio");
     if(associated.parent->Released()){
-        for(int i = 0; i < buttons.size(); i++){
-            buttons[i]->SetActive(true);
+        active = !active;
+        for(unsigned int i = 0; i < buttons.size(); i++){
+            buttons[i]->SetActive(active);
         }
     }
     DEBUG_UPDATE("fim");
@@ -63,11 +65,13 @@ void PlayerUnityMenu::Reposition(){
 int PlayerUnityMenu::AddButton(string buttonSpritePath, Component* observer){
     DEBUG_PRINT("inicio");
     //  GameObject recipiente
-    GameObject* buttonObject = new GameObject();
-    buttonObject->SetParent(associated, 100, 100);
+    GameObject* buttonObject = new GameObject("Button");
+
+    //  TODO: organizar apresentação do menu
+    buttonObject->SetParent(associated, 100, 100 + buttons.size()*30);//distância fora da box do playerUnity; um botao abaixo do outro
+    //
     buttonObject->SetActive(false);
 
-    //buttonObject->AddComponent(new RectTransform(*buttonObject, &associated));
     buttonObject->AddComponent(new Sprite(*buttonObject, buttonSpritePath, true));
 
     //  componente Button
@@ -89,7 +93,7 @@ int PlayerUnityMenu::AddButton(string buttonSpritePath, Component* observer){
     return buttons.size() - 1;
 }
 
-GameObject* PlayerUnityMenu::GetButton(int i){
+GameObject* PlayerUnityMenu::GetButton(unsigned int i){
     if(buttons.size() && i < buttons.size()){
         return buttons[i];
     }else{
@@ -102,7 +106,7 @@ int PlayerUnityMenu::GetButtons(){
 }
 
 void PlayerUnityMenu::ButtonObserver(Component* btn){
-    for(int i = 0; i < buttons.size(); i++){
+    for(unsigned int i = 0; i < buttons.size(); i++){
             buttons[i]->SetActive(false);
     }
 }

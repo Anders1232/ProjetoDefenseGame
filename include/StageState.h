@@ -10,16 +10,19 @@
 #include "Sprite.h"
 #include "Music.h"
 #include "Text.h"
-//#include "TileMap.h"
+#include "TileMap.h"
+#include "Tileset.h"
+#include "BaseTile.h"
 
 #include "PlayerUnity.h"
 #include "resources_path.h"
 #include "Robo.h"
 #include "Piloto.h"
+#include "Cursor.h"
 
 #define STAGE_BACKGROUND_FILE   "resources/img/bg/ocean.jpg"
 
-#define STAGE_TILESET_FILE      "resources/img/tileset/tileset.jpg"
+#define STAGE_TILESET_FILE      "resources/maps/mapSprites.txt"
 #define STAGE_TILE_WIDTH          64
 #define STAGE_TILE_HEIGHT         64
 

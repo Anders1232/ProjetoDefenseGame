@@ -6,8 +6,8 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y)
     stage(stage),
     clicked(false),
     selected(false),
-    barraVida( *(new GameObject()) ),
-    barraCoolDown( *(new GameObject()) ),
+    barraVida( *(new GameObject("BarraVida")) ),
+    barraCoolDown( *(new GameObject("BarraCoolDown")) ),
     direction(DOWN),
     playerUnityState(IDLE),
     playerUnityMenu(nullptr)
@@ -35,14 +35,15 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y)
     (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).SetRefilAuto(10);
     (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).SetPoints(0);
 
-    playerUnityMenu = new GameObject();
+    playerUnityMenu = new GameObject("UnityMenu");
     playerUnityMenu->SetParent(associated);
     PlayerUnityMenu* playerUnityMenuComponent = new PlayerUnityMenu(*playerUnityMenu, stage);
     playerUnityMenu->AddComponent(playerUnityMenuComponent);
+
     stage->AddObject(playerUnityMenu);
     playerUnityMenu->debug = true;
 
-    movingPath = new GameObject();
+    movingPath = new GameObject("Path");
     movingPath->SetParent(associated);
     RoboPath* roboPathComponent = new RoboPath(*movingPath, destination);
     movingPath->AddComponent(roboPathComponent);
