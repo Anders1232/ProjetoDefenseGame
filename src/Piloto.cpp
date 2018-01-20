@@ -24,7 +24,7 @@ Piloto::~Piloto()
     //dtor
 }
 
-bool Piloto::Is(ComponentType comp) const{
+bool Piloto::Is(unsigned int comp) const{
     return (comp == GameComponentType::PILOTO);
 }
 

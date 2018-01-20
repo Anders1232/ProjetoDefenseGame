@@ -26,6 +26,6 @@ void Cursor::LateUpdate(float dt){
 void Cursor::Render(){
 }
 
-bool Cursor::Is(ComponentType type) const{
+bool Cursor::Is(unsigned int type) const{
     return type == CURSOR;
 }

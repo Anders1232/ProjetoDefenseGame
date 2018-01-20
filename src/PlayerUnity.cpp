@@ -80,7 +80,7 @@ void PlayerUnity::Render() const
 {
 }
 
-bool PlayerUnity::Is(ComponentType type)const
+bool PlayerUnity::Is(unsigned int type)const
 {
     return (type == PLAYER_UNITY);
 }

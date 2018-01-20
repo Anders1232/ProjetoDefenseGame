@@ -26,7 +26,7 @@ Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile)
     DEBUG_CONSTRUCTOR("fim");
 }
 
-bool Bar::Is(ComponentType comp) const{
+bool Bar::Is(unsigned int comp) const{
     return (GameComponentType::BAR == comp);
 }
 

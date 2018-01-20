@@ -25,7 +25,7 @@ Robo::~Robo()
     //dtor
 }
 
-bool Robo::Is(uint type) const{
+bool Robo::Is(unsigned int type) const{
     return (type == ROBO);
 }
 

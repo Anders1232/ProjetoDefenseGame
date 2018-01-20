@@ -60,7 +60,7 @@ Vec2 RoboPath::GetNext(){
     return v;
 }
 
-bool RoboPath::Is(uint type) const{
+bool RoboPath::Is(unsigned int type) const{
     return (type == GameComponentType::ROBOPATH);
 }
 

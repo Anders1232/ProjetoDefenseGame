@@ -19,7 +19,7 @@ class Cursor : public Component
         void Update(float dt);
         void LateUpdate(float dt);
         void Render();
-        bool Is(ComponentType type) const;
+        bool Is(unsigned int type) const;
 
     protected:
 

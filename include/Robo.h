@@ -22,7 +22,7 @@ class Robo : public Component
         void LateUpdate(float dt);
         void Update(float dt);
         void Render() const;
-        bool Is(ComponentType) const;
+        bool Is(unsigned int) const;
         void EjectPilot(void*);
         void BoardPilot(GameObject* piloto);
         void ButtonObserver(Component* btn);

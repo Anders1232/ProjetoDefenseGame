@@ -14,7 +14,7 @@ class Bar: public Component
 public:
     Bar(GameObject& associated, int points, string frameFile, string fluidFile);
     ~Bar(){};
-    bool Is(ComponentType comp) const;
+    bool Is(unsigned int comp) const;
     void EarlyUpdate(float dt);
     void Update(float dt);
     void LateUpdate(float dt);

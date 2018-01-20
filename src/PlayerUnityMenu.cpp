@@ -40,27 +40,16 @@ void PlayerUnityMenu::OnClick(){
 void PlayerUnityMenu::Render() const{
 }
 
-<<<<<<< HEAD
-bool PlayerUnityMenu::Is(ComponentType type) const{
-    DEBUG_PRINT("Passou no meu Is");
-    return (type == PLAYER_UNITY_MENU);
-=======
 bool PlayerUnityMenu::Is(uint type) const{
     return (type == GameComponentType::PLAYER_UNITY_MENU);
->>>>>>> 9fd0a328ef073cb59e96f21b62b52f7a90f5ca6a
 }
 
 void PlayerUnityMenu::Toogle(){
     DEBUG_UPDATE("inicio");
     if(associated.parent->Released()){
-<<<<<<< HEAD
         active = !active;
         for(unsigned int i = 0; i < buttons.size(); i++){
             buttons[i]->SetActive(active);
-=======
-        for(uint i = 0; i < buttons.size(); i++){
-            buttons[i]->SetActive(true);
->>>>>>> 9fd0a328ef073cb59e96f21b62b52f7a90f5ca6a
         }
     }
     DEBUG_UPDATE("fim");
@@ -117,11 +106,7 @@ int PlayerUnityMenu::GetButtons(){
 }
 
 void PlayerUnityMenu::ButtonObserver(Component* btn){
-<<<<<<< HEAD
     for(unsigned int i = 0; i < buttons.size(); i++){
-=======
-    for(uint i = 0; i < buttons.size(); i++){
->>>>>>> 9fd0a328ef073cb59e96f21b62b52f7a90f5ca6a
             buttons[i]->SetActive(false);
     }
 }

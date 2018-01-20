@@ -26,7 +26,7 @@ class Piloto: public Component
     public:
         Piloto(GameObject& associated, State* stage, string file);
         virtual ~Piloto();
-        bool Is(ComponentType comp) const;
+        bool Is(unsigned int comp) const;
         void EarlyUpdate(float dt);
         void Update(float dt);
         void LateUpdate(float dt);
