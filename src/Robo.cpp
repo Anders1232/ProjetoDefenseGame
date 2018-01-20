@@ -25,7 +25,7 @@ Robo::~Robo()
     //dtor
 }
 
-bool Robo::Is(ComponentType type) const{
+bool Robo::Is(uint type) const{
     return (type == ROBO);
 }
 

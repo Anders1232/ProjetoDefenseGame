@@ -1,4 +1,5 @@
 #include "../include/Bar.h"
+#include"GameComponentType.h"
 
 //#define DEBUG
 #include "Error.h"
@@ -26,7 +27,7 @@ Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile)
 }
 
 bool Bar::Is(ComponentType comp) const{
-    return (ComponentType::BAR == comp);
+    return (GameComponentType::BAR == comp);
 }
 
 void Bar::EarlyUpdate(float dt){

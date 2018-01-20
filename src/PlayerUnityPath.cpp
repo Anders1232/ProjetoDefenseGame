@@ -1,4 +1,5 @@
 #include "PlayerUnityPath.h"
+#include "GameComponentType.h"
 
 #include "Error.h"
 RoboPath::RoboPath(GameObject& associated, Vec2& destination):
@@ -59,8 +60,8 @@ Vec2 RoboPath::GetNext(){
     return v;
 }
 
-bool RoboPath::Is(ComponentType type) const{
-    return (type == ROBOPATH);
+bool RoboPath::Is(uint type) const{
+    return (type == GameComponentType::ROBOPATH);
 }
 
 void RoboPath::Update(float dt){
