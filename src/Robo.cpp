@@ -1,10 +1,13 @@
 #include "Robo.h"
 
-Robo::Robo(GameObject& associated, State* stage, string file):
-    Component(associated)
+Robo::Robo(GameObject& associated, State* stage, string file, Vec2 position, TileMap<BaseTile>* tileMap):
+    Component(associated),
+    tileMap(tileMap)
 {
     DEBUG_CONSTRUCTOR("inicio");
-    associated.AddComponent(new PlayerUnity(associated, stage, 0, 0));
+    DEBUG_CONSTRUCTOR("position: " << position.x << ", " << position.y);
+    associated.AddComponent(new PlayerUnity(associated, stage, position, tileMap ));
+    DEBUG_CONSTRUCTOR("Player Unity adicionado");
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);

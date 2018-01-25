@@ -1,7 +1,7 @@
 #include "../include/PlayerUnity.h"
 
 #include "Error.h"
-PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y):
+PlayerUnity::PlayerUnity(GameObject& associated, State* stage, Vec2 position, TileMap<BaseTile>* tileMap):
     Component(associated),
     stage(stage),
     clicked(false),
@@ -10,11 +10,13 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, float x, float y)
     barraCoolDown( *(new GameObject("BarraCoolDown")) ),
     direction(DOWN),
     playerUnityState(IDLE),
-    playerUnityMenu(nullptr)
+    playerUnityMenu(nullptr),
+    tileMap(tileMap)
 {
-    associated.box.x = x;
-    associated.box.y = y;
     DEBUG_CONSTRUCTOR("inicio");
+    Vec2 pos = tileMap->MapToPixel(position);
+    associated.box.x = pos.x;
+    associated.box.y = pos.y;
     destination.x = associated.box.x;
     destination.y = associated.box.y;
 

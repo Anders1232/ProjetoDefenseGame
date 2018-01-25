@@ -7,8 +7,10 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "Sprite.h"
+#include "TileMap.h"
 #include "PlayerUnity.h"
 #include "PlayerUnityMenu.h"
+#include "BaseTile.h"
 
 using std::vector;
 using std::string;
@@ -16,7 +18,7 @@ using std::string;
 class Robo : public Component
 {
     public:
-        Robo(GameObject& associated, State* stage, string file);
+        Robo(GameObject& associated, State* stage, string file, Vec2 position, TileMap<BaseTile>* tileMap);
         virtual ~Robo();
         void EarlyUpdate(float dt);
         void LateUpdate(float dt);
@@ -31,6 +33,7 @@ class Robo : public Component
 
     private:
         Sprite* sp;
+        TileMap<BaseTile>* tileMap;
         vector<GameObject*> pilotos;
         vector<int> buttons;
 };

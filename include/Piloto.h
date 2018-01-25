@@ -7,11 +7,14 @@
 #include "Component.h"
 #include "State.h"
 #include "Sprite.h"
+#include "InputManager.h"
+#include "GameObject.h"
+#include "TileMap.h"
+#include "BaseTile.h"
+
 #include "PlayerUnity.h"
 #include "PlayerUnityMenu.h"
 #include "PlayerUnityPath.h"
-#include "InputManager.h"
-#include "GameObject.h"
 
 using std::string;
 using std::vector;
@@ -24,7 +27,7 @@ using std::vector;
 class Piloto: public Component
 {
     public:
-        Piloto(GameObject& associated, State* stage, string file);
+        Piloto(GameObject& associated, State* stage, string file, Vec2 position, TileMap<BaseTile>* tileMap);
         virtual ~Piloto();
         bool Is(unsigned int comp) const;
         void EarlyUpdate(float dt);
@@ -41,6 +44,7 @@ class Piloto: public Component
 
     private:
         Sprite* sp;
+        TileMap<BaseTile>* tileMap;
         vector<int> buttons;
 };
 

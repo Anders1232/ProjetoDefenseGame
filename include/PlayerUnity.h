@@ -10,6 +10,8 @@
 #include "State.h"
 #include "Camera.h"
 #include "Button.h"
+#include "TileMap.h"
+#include "BaseTile.h"
 
 #include "PlayerUnityPath.h"
 #include "PlayerUnityMenu.h"
@@ -38,7 +40,7 @@ private:
     };
 
 public:
-    PlayerUnity(GameObject& associated, State* stage, float x, float y);
+    PlayerUnity(GameObject& associated, State* stage, Vec2 position, TileMap<BaseTile>* tileMap);
     ~PlayerUnity();
     void Update(float dt);
     void Render() const;
@@ -72,6 +74,7 @@ private:
     PlayerUnityState playerUnityState;
     Direction direction;
     Vec2 destination;
+    TileMap<BaseTile>* tileMap;
 };
 
 #endif // PLAYER_UNITY_H

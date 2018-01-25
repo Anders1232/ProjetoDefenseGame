@@ -1,11 +1,11 @@
 #include "Piloto.h"
 #include "GameComponentType.h"
 
-Piloto::Piloto(GameObject& associated, State* stage, string file):
+Piloto::Piloto(GameObject& associated, State* stage, string file, Vec2 position, TileMap<BaseTile>* tileMap):
     Component(associated)
 {
     DEBUG_CONSTRUCTOR("inicio");
-    associated.AddComponent(new PlayerUnity(associated, stage, 30, 80));
+    associated.AddComponent(new PlayerUnity(associated, stage, position, tileMap));
 
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);

@@ -34,17 +34,14 @@ StageState::StageState():
     GameObject* robo = new GameObject("Robo");
     AddObject(robo);
     DEBUG_PRINT("endereco de stageState: " << this);
-    Robo* roboComponent = new Robo(*robo, this, ROBO_SP1);
+    Robo* roboComponent = new Robo(*robo, this, ROBO_SP1, Vec2(3,3), tileMap);
     robo->AddComponent(roboComponent);
-    DEBUG_CONSTRUCTOR("Alterando posicao do robo");
-    robo->SetPosition(tileMap->MapToPixel(3,3));
-    DEBUG_CONSTRUCTOR("Ok");
 
 
     GameObject* piloto = new GameObject("Piloto");
     piloto->showOnScreen = false;
     AddObject(piloto);
-    piloto->AddComponent(new Piloto(*piloto, this, PILOTO_SP1));
+    piloto->AddComponent(new Piloto(*piloto, this, PILOTO_SP1, Vec2(3,4), tileMap));
     //roboComponent->BoardPilot(piloto);
 
     GameObject* cursor = new GameObject("Cursor");

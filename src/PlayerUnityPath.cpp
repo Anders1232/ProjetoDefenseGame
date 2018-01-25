@@ -32,7 +32,7 @@ void RoboPath::CreatePath(){
     if(InputManager::GetInstance().GetMousePos().x > auxX + associated.parent->box.w ||
        InputManager::GetInstance().GetMousePos().x < auxX - associated.parent->box.w){
         DEBUG_PRINT("adicionado ponto(" << auxX + associated.parent->box.w << ", " << auxY << ")");
-        movingPath.push_back(new Vec2(InputManager::GetInstance().GetMousePos().x, auxY) );
+        movingPath.push_back(new Vec2(InputManager::GetInstance().GetMousePos().x - int(InputManager::GetInstance().GetMousePos().x) % 64, auxY) );
 
         pathMarkers.push_back(new Sprite(associated, PATH_MARKER, true));
         pathMarkers.back()->SetPosition(movingPath.back()->x, movingPath.back()->y);
@@ -41,7 +41,7 @@ void RoboPath::CreatePath(){
     if(InputManager::GetInstance().GetMousePos().y > auxY + associated.parent->box.h ||
        InputManager::GetInstance().GetMousePos().y < auxY - associated.parent->box.h ){
         DEBUG_PRINT("adicionado ponto(" << auxX << ", " << InputManager::GetInstance().GetMousePos().y << ")");
-        movingPath.push_back(new Vec2(auxX, InputManager::GetInstance().GetMousePos().y) );
+        movingPath.push_back(new Vec2(auxX, InputManager::GetInstance().GetMousePos().y - int(InputManager::GetInstance().GetMousePos().y) % 64) );
 
         pathMarkers.push_back(new Sprite(associated, PATH_MARKER, true));
         pathMarkers.back()->SetPosition(movingPath.back()->x, movingPath.back()->y);
