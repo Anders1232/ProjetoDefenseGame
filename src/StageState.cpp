@@ -20,6 +20,7 @@ StageState::StageState():
     (dynamic_cast<RectTransform&>(ambient->GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
     ambient->box.y = 0;
     AddObject(ambient);
+
     ambient->AddComponent(new TileMap<BaseTile>(*ambient, STAGE_TILEMAP_FILE, new TileSet(STAGE_TILESET_FILE, *ambient)));
 
     /*
