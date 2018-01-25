@@ -57,6 +57,7 @@ class StageState : public State
         void Input(float dt);
         Music backGroundMusic;
         Timer vitoriaTime;
+        TileMap<BaseTile>* tileMap;
         //Text mousePosition;
         //TileMap* tilemap;//verificar o que significa a warning reorder
 };

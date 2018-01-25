@@ -20,8 +20,8 @@ StageState::StageState():
     (dynamic_cast<RectTransform&>(ambient->GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
     ambient->box.y = 0;
     AddObject(ambient);
-
-    ambient->AddComponent(new TileMap<BaseTile>(*ambient, STAGE_TILEMAP_FILE, new TileSet(STAGE_TILESET_FILE, *ambient)));
+    tileMap = new TileMap<BaseTile>(*ambient, STAGE_TILEMAP_FILE, new TileSet(STAGE_TILESET_FILE, *ambient));
+    ambient->AddComponent(tileMap);
 
     /*
         Coloca a musica
@@ -36,19 +36,22 @@ StageState::StageState():
     DEBUG_PRINT("endereco de stageState: " << this);
     Robo* roboComponent = new Robo(*robo, this, ROBO_SP1);
     robo->AddComponent(roboComponent);
+    DEBUG_CONSTRUCTOR("Alterando posicao do robo");
+    robo->SetPosition(tileMap->MapToPixel(3,3));
+    DEBUG_CONSTRUCTOR("Ok");
 
 
     GameObject* piloto = new GameObject("Piloto");
     piloto->showOnScreen = false;
     AddObject(piloto);
     piloto->AddComponent(new Piloto(*piloto, this, PILOTO_SP1));
-    roboComponent->BoardPilot(piloto);
+    //roboComponent->BoardPilot(piloto);
 
     GameObject* cursor = new GameObject("Cursor");
     cursor->AddComponent(new Cursor(*cursor, "resources/img/misc/cursor.png"));
     AddObject(cursor);
 
-
+    DEBUG_CONSTRUCTOR("CameraPos: " << Camera::pos.x << ", " << Camera::pos.y);
     DEBUG_CONSTRUCTOR("fim");
 }
 

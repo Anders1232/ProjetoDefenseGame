@@ -4,7 +4,7 @@ Robo::Robo(GameObject& associated, State* stage, string file):
     Component(associated)
 {
     DEBUG_CONSTRUCTOR("inicio");
-    associated.AddComponent(new PlayerUnity(associated, stage, 100, 100));
+    associated.AddComponent(new PlayerUnity(associated, stage, 0, 0));
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
