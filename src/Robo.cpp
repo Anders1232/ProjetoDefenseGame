@@ -1,6 +1,6 @@
 #include "Robo.h"
 
-Robo::Robo(GameObject& associated, State* stage, string file, Vec2 position, TileMap<BaseTile>* tileMap):
+Robo::Robo(GameObject& associated, State* stage, string file, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated),
     tileMap(tileMap)
 {

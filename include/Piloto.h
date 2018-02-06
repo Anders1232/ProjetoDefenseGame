@@ -10,7 +10,7 @@
 #include "InputManager.h"
 #include "GameObject.h"
 #include "TileMap.h"
-#include "BaseTile.h"
+#include "TileInfo.h"
 
 #include "PlayerUnity.h"
 #include "PlayerUnityMenu.h"
@@ -27,7 +27,7 @@ using std::vector;
 class Piloto: public Component
 {
     public:
-        Piloto(GameObject& associated, State* stage, string file, Vec2 position, TileMap<BaseTile>* tileMap);
+        Piloto(GameObject& associated, State* stage, string file, Vec2 position, TileMap<TileInfo>* tileMap);
         virtual ~Piloto();
         bool Is(unsigned int comp) const;
         void EarlyUpdate(float dt);

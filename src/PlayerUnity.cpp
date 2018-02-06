@@ -1,7 +1,7 @@
 #include "../include/PlayerUnity.h"
 
 #include "Error.h"
-PlayerUnity::PlayerUnity(GameObject& associated, State* stage, Vec2 position, TileMap<BaseTile>* tileMap):
+PlayerUnity::PlayerUnity(GameObject& associated, State* stage, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated),
     stage(stage),
     clicked(false),
@@ -15,10 +15,9 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, Vec2 position, Ti
 {
     DEBUG_CONSTRUCTOR("inicio");
     Vec2 pos = tileMap->MapToPixel(position);
-    associated.box.x = pos.x;
-    associated.box.y = pos.y;
-    destination.x = associated.box.x;
-    destination.y = associated.box.y;
+    destination.x = associated.box.x = pos.x;
+    destination.y = associated.box.y = pos.y;
+    tileMap->At(position.x, position.y).PutCharacter(&associated);
 
     /*
         Barra de vida
@@ -47,7 +46,7 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, Vec2 position, Ti
 
     movingPath = new GameObject("Path");
     movingPath->SetParent(associated);
-    RoboPath* roboPathComponent = new RoboPath(*movingPath, destination);
+    RoboPath* roboPathComponent = new RoboPath(*movingPath, tileMap, destination);
     movingPath->AddComponent(roboPathComponent);
     stage->AddObject(movingPath);
 

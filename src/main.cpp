@@ -8,7 +8,7 @@
 #endif // GAME_WIDTH
 int main(int argc, char** argv){
     Game novoJogo("Jogo teste", GAME_WIDTH, GAME_HEIGTH);
-    novoJogo.Push(new StageState);
+    novoJogo.Push(new StageState());
     novoJogo.Run();
     return 0;
 }

@@ -2,12 +2,13 @@
 #include "GameComponentType.h"
 
 #include "Error.h"
-RoboPath::RoboPath(GameObject& associated, Vec2& destination):
+RoboPath::RoboPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2& destination):
     Component(associated),
     parentSelected(false),
     destination(destination),
     listenerId(0),
-    pathFinished(this)
+    pathFinished(this),
+    tileMap(tileMap)
 {
     listeners = StartMapping();
     associated.showOnScreen = false;
@@ -20,33 +21,37 @@ RoboPath::~RoboPath()
 }
 
 void RoboPath::CreatePath(){
-    int auxX, auxY;
+    Vec2 lastMarkerPosition;
     if(movingPath.size() > 0){
         associated.showOnScreen = true;
-        auxX = movingPath.back()->x;
-        auxY = movingPath.back()->y;
+        lastMarkerPosition = *movingPath.back();
     }else{
-        auxX = associated.parent->box.x;
-        auxY = associated.parent->box.y;
+        lastMarkerPosition = Vec2(associated.parent->box.x, associated.parent->box.y) ;
     }
-    if(InputManager::GetInstance().GetMousePos().x > auxX + associated.parent->box.w ||
-       InputManager::GetInstance().GetMousePos().x < auxX - associated.parent->box.w){
-        DEBUG_PRINT("adicionado ponto(" << auxX + associated.parent->box.w << ", " << auxY << ")");
-        movingPath.push_back(new Vec2(InputManager::GetInstance().GetMousePos().x - int(InputManager::GetInstance().GetMousePos().x) % 64, auxY) );
+    Vec2 mousePosition = InputManager::GetInstance().GetMousePos();
 
-        pathMarkers.push_back(new Sprite(associated, PATH_MARKER, true));
-        pathMarkers.back()->SetPosition(movingPath.back()->x, movingPath.back()->y);
-        associated.AddComponent(pathMarkers.back());
+    if(mousePosition.x > lastMarkerPosition.x + tileMap->GetTileSize().x){
+        AddMarker(Vec2(mousePosition.x, lastMarkerPosition.y));
+    }else if(mousePosition.x < lastMarkerPosition.x){
+        AddMarker(Vec2(lastMarkerPosition.x - tileMap->GetTileSize().x, lastMarkerPosition.y));
     }
-    if(InputManager::GetInstance().GetMousePos().y > auxY + associated.parent->box.h ||
-       InputManager::GetInstance().GetMousePos().y < auxY - associated.parent->box.h ){
-        DEBUG_PRINT("adicionado ponto(" << auxX << ", " << InputManager::GetInstance().GetMousePos().y << ")");
-        movingPath.push_back(new Vec2(auxX, InputManager::GetInstance().GetMousePos().y - int(InputManager::GetInstance().GetMousePos().y) % 64) );
 
-        pathMarkers.push_back(new Sprite(associated, PATH_MARKER, true));
-        pathMarkers.back()->SetPosition(movingPath.back()->x, movingPath.back()->y);
-        associated.AddComponent(pathMarkers.back());
+    if(mousePosition.y > lastMarkerPosition.y + tileMap->GetTileSize().y){
+        AddMarker(Vec2(lastMarkerPosition.x, mousePosition.y));
+    }else if(mousePosition.y < lastMarkerPosition.y){
+        AddMarker(Vec2(lastMarkerPosition.x, lastMarkerPosition.y - tileMap->GetTileSize().y));
     }
+}
+
+void RoboPath::AddMarker(Vec2 position){
+    Vec2* v = new Vec2();
+    *v = tileMap->AdjustToMap(position);
+    DEBUG_PRINT("position Added: " << v->x << "," << v->y );
+    movingPath.push_back(v);
+
+    pathMarkers.push_back(new Sprite(associated, PATH_MARKER, true));
+    pathMarkers.back()->SetPosition(movingPath.back()->x, movingPath.back()->y);
+    associated.AddComponent(pathMarkers.back());
 }
 
 bool RoboPath::HasPoints(){
@@ -54,9 +59,7 @@ bool RoboPath::HasPoints(){
 }
 
 Vec2 RoboPath::GetNext(){
-    DEBUG_PRINT("pathSize antes: " << movingPath.size());
     Vec2 v = *(movingPath.front());
-    DEBUG_PRINT("pathSize depois: " << movingPath.size());
     return v;
 }
 

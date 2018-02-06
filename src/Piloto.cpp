@@ -1,7 +1,7 @@
 #include "Piloto.h"
 #include "GameComponentType.h"
 
-Piloto::Piloto(GameObject& associated, State* stage, string file, Vec2 position, TileMap<BaseTile>* tileMap):
+Piloto::Piloto(GameObject& associated, State* stage, string file, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated)
 {
     DEBUG_CONSTRUCTOR("inicio");

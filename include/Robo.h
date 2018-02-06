@@ -18,7 +18,7 @@ using std::string;
 class Robo : public Component
 {
     public:
-        Robo(GameObject& associated, State* stage, string file, Vec2 position, TileMap<BaseTile>* tileMap);
+        Robo(GameObject& associated, State* stage, string file, Vec2 position, TileMap<TileInfo>* tileMap);
         virtual ~Robo();
         void EarlyUpdate(float dt);
         void LateUpdate(float dt);
@@ -33,7 +33,7 @@ class Robo : public Component
 
     private:
         Sprite* sp;
-        TileMap<BaseTile>* tileMap;
+        TileMap<TileInfo>* tileMap;
         vector<GameObject*> pilotos;
         vector<int> buttons;
 };

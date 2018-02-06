@@ -8,10 +8,13 @@
 #include "Component.h"
 #include "Vec2.h"
 #include "Sprite.h"
+#include "TileMap.h"
 #include "resources_path.h"
 #include "PlayerUnity.h"
 #include "Handler.h"
 #include "Event.h"
+#include "TileInfo.h"
+//#include "PathMarker.h"
 
 using std::vector;
 using std::multimap;
@@ -19,7 +22,7 @@ using std::multimap;
 class RoboPath: public Component
 {
     public:
-        RoboPath(GameObject& associated, Vec2& destination);
+        RoboPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2& destination);
         virtual ~RoboPath();
         void EarlyUpdate(float dt){};
         void Update(float dt);
@@ -32,6 +35,7 @@ class RoboPath: public Component
         Vec2 GetNext();
         bool HasPoints();
         void OnClick();
+        void AddMarker(Vec2 position);
 
         Event<RoboPath, int&> pathFinished;
 
@@ -59,6 +63,7 @@ class RoboPath: public Component
         vector<Vec2*> movingPath;
         vector<Sprite*> pathMarkers;
         HandlerMap listeners;
+        TileMap<TileInfo>* tileMap;
 };
 
 #endif // ROBOPATH_H

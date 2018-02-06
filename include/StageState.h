@@ -12,7 +12,7 @@
 #include "Text.h"
 #include "TileMap.h"
 #include "Tileset.h"
-#include "BaseTile.h"
+#include "TileInfo.h"
 
 #include "PlayerUnity.h"
 #include "resources_path.h"
@@ -57,7 +57,7 @@ class StageState : public State
         void Input(float dt);
         Music backGroundMusic;
         Timer vitoriaTime;
-        TileMap<BaseTile>* tileMap;
+        TileMap<TileInfo>* tileMap;
         //Text mousePosition;
         //TileMap* tilemap;//verificar o que significa a warning reorder
 };
