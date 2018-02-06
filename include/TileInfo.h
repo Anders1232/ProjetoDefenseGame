@@ -9,13 +9,16 @@ class TileInfo : public BaseTile
     public:
         TileInfo(int index);
         virtual ~TileInfo();
-        void PutCharacter(GameObject* object);
+        void PutCharacter(GameObject& object);
         void RemoveCharacter();
         GameObject* GetCharacter();
+        bool IsFree();
+        bool IsPassable();
     protected:
 
     private:
         bool passable;
+        bool isFree;
         GameObject* characterInside;
 };
 

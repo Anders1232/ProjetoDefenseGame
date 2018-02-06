@@ -13,7 +13,7 @@
 
 #include "resources_path.h"
 
-class RoboPath;
+class PlayerUnityPath;
 using std::vector;
 class PlayerUnityMenu: public Component
 {
@@ -37,8 +37,8 @@ class PlayerUnityMenu: public Component
 
         //Se inscreve no evento de RoboPath, para quando o caminho for completado,
         //o menu abrir
-        void SubscribeToPath(RoboPath& roboPath);
-        static void OnPathFinished(RoboPath* eventSource, int& unused, void* context);
+        void SubscribeToPath(PlayerUnityPath& roboPath);
+        static void OnPathFinished(PlayerUnityPath* eventSource, int& unused, void* context);
 
     protected:
 

@@ -17,7 +17,7 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, Vec2 position, Ti
     Vec2 pos = tileMap->MapToPixel(position);
     destination.x = associated.box.x = pos.x;
     destination.y = associated.box.y = pos.y;
-    tileMap->At(position.x, position.y).PutCharacter(&associated);
+    tileMap->At(position.x, position.y).PutCharacter(associated);
 
     /*
         Barra de vida
@@ -46,7 +46,7 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, Vec2 position, Ti
 
     movingPath = new GameObject("Path");
     movingPath->SetParent(associated);
-    RoboPath* roboPathComponent = new RoboPath(*movingPath, tileMap, destination);
+    PlayerUnityPath* roboPathComponent = new PlayerUnityPath(*movingPath, tileMap, destination);
     movingPath->AddComponent(roboPathComponent);
     stage->AddObject(movingPath);
 
@@ -112,7 +112,7 @@ void PlayerUnity::UpdateState()
     case MOVING:
         //TODO: Condição fraca, melhorar depois
         if(destination.x == associated.box.x &&
-                destination.y == associated.box.y)
+           destination.y == associated.box.y)
         {
             playerUnityState = IDLE;
         }

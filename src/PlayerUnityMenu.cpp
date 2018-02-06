@@ -112,7 +112,7 @@ void PlayerUnityMenu::ButtonObserver(Component* btn){
 }
 
 
-void PlayerUnityMenu::OnPathFinished(RoboPath* eventSource, int& unused, void* context){
+void PlayerUnityMenu::OnPathFinished(PlayerUnityPath* eventSource, int& unused, void* context){
     PlayerUnityMenu* pum = static_cast<PlayerUnityMenu*>(context);
     for(int i = 0; i < pum->GetButtons(); i++){
         (pum->GetButton(i))->SetActive(true);
@@ -120,7 +120,7 @@ void PlayerUnityMenu::OnPathFinished(RoboPath* eventSource, int& unused, void* c
 }
 
 
-void PlayerUnityMenu::SubscribeToPath(RoboPath& roboPath){
+void PlayerUnityMenu::SubscribeToPath(PlayerUnityPath& roboPath){
     roboPath.pathFinished.Subscribe(OnPathFinished, this);
 }
 

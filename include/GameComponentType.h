@@ -8,7 +8,7 @@ enum GameComponentType{
 	BAR,
     ROBO,
     PILOTO,
-    ROBOPATH,
+    PLAYER_UNITY_PATH,
     PLAYER_UNITY_MENU,
     CURSOR
 };

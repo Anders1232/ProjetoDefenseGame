@@ -19,11 +19,11 @@
 using std::vector;
 using std::multimap;
 
-class RoboPath: public Component
+class PlayerUnityPath: public Component
 {
     public:
-        RoboPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2& destination);
-        virtual ~RoboPath();
+        PlayerUnityPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2& destination);
+        virtual ~PlayerUnityPath();
         void EarlyUpdate(float dt){};
         void Update(float dt);
         void LateUpdate(float dt){};
@@ -37,7 +37,7 @@ class RoboPath: public Component
         void OnClick();
         void AddMarker(Vec2 position);
 
-        Event<RoboPath, int&> pathFinished;
+        Event<PlayerUnityPath, int&> pathFinished;
 
         typedef multimap<long, HandlerBase*> HandlerMap;
         HandlerMap StartMapping()
