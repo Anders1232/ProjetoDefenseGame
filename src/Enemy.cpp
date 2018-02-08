@@ -3,7 +3,7 @@
 
 Enemy::Enemy(GameObject& associated, string spritePath, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated),
-    characterStatus(* (new CharacterStatus(associated)) ),
+    characterStatus(* (new CharacterStatus(associated, tileMap)) ),
     tileMap(tileMap),
     nextPointIndex(0)
 {

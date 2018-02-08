@@ -5,7 +5,7 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
     Component(associated),
     clicked(false),
     selected(false),
-    characterStatus(* (new CharacterStatus(associated)) ),
+    characterStatus(* (new CharacterStatus(associated, tileMap)) ),
     barraVida( *(new GameObject("BarraVida", associated.GetContext())) ),
     barraCoolDown( *(new GameObject("BarraCoolDown", associated.GetContext())) ),
     playerUnityMenu(nullptr),
@@ -20,7 +20,7 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
     /*
         CharacterStatus
     */
-    associated.AddComponent(new CharacterStatus(associated));
+    associated.AddComponent(new CharacterStatus(associated, tileMap));
 
     /*
         Barra de vida
@@ -74,7 +74,6 @@ PlayerUnity::~PlayerUnity()
 
 void PlayerUnity::Update(float dt)
 {
-    onClick();
     Vec2 currentPosition(associated.box.x, associated.box.y);
     if(destination != currentPosition){
         characterStatus.Walk(destination);//UpdateState();
@@ -95,16 +94,6 @@ void PlayerUnity::LateUpdate(float dt) {}
 
 void PlayerUnity::onClick()
 {
-    if(InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON))
-    {
-        if(InputManager::GetInstance().GetMousePos().IsInRect(associated.box))
-        {
-            DEBUG_PRINT("Click em PlayerUnity");
-        }
-        else
-        {
-        }
-    }
 }
 
 void PlayerUnity::MenuOpen()

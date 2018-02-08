@@ -33,6 +33,9 @@ bool Robo::Is(unsigned int type) const{
 }
 
 void Robo::Update(float dt){
+    if(InputManager::GetInstance().KeyPress(SDLK_0)){
+        Attack();
+    }
 }
 
 void Robo::EarlyUpdate(float dt){
@@ -65,5 +68,20 @@ void Robo::ButtonObserver(Component* btn){
     if(pilotos.size()){
         pilotos.back()->SetActive(true);
         pilotos.pop_back();
+    }
+}
+
+void Robo::Attack(){
+    //Posição no grid
+    //Component& charStatus = associated.GetComponent(CHARACTER_STATUS);
+    try{
+        CharacterStatus& charStatus = dynamic_cast<CharacterStatus&>(associated.GetComponent(CHARACTER_STATUS));
+        vector<Vec2> range = charStatus.CellsInRange();
+        DEBUG_PRINT("Celulas no alcance:");
+        for(int i = 0; i < range.size(); i++){
+            DEBUG_PRINT("c" << i << ": " << range[i].x << "," << range[i].y);
+        }
+    }catch(std::bad_cast& e){
+        DEBUG_PRINT("Deu merda no dynamic_cast: " << e.what() );
     }
 }

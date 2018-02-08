@@ -28,6 +28,7 @@ class Robo : public Component
         void EjectPilot(void*);
         void BoardPilot(GameObject* piloto);
         void ButtonObserver(Component* btn);
+        void Attack();
 
     protected:
 

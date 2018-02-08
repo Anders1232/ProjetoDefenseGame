@@ -46,7 +46,7 @@ StageState::StageState():
     GameObject* enemy = new GameObject("Enemy", this);
     AddObject(enemy);
     Enemy* enemyComponent = new Enemy(*enemy, ENEMY_1, Vec2(10, 3), tileMap);
-    enemyComponent->AddPatrolPoint(Vec2(10,7));
+    enemyComponent->AddPatrolPoint(Vec2(15,3));
     enemy->AddComponent(enemyComponent);
 
 

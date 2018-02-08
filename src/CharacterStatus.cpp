@@ -1,11 +1,13 @@
 #include "CharacterStatus.h"
 #include "Error.h"
 CharacterStatus::CharacterStatus(GameObject& associated,
+                                 TileMap<TileInfo>* tileMap,
                                  float hp, float mp,
                                  float speed, int range,
                                  float attack, float defense,
                                  float magic, float resistence):
     Component(associated),
+    tileMap(tileMap),
     hp(hp),
     mp(mp),
     speed(speed),
@@ -25,10 +27,15 @@ CharacterStatus::~CharacterStatus()
 }
 
 void CharacterStatus::EarlyUpdate(float dt){}
-void CharacterStatus::Update(float dt){}
+
+void CharacterStatus::Update(float dt){
+}
+
 void CharacterStatus::LateUpdate(float dt){}
 void CharacterStatus::Render(){}
 bool CharacterStatus::Is(unsigned int type) const{
+    DEBUG_PRINT("My type: " << GameComponentType::CHARACTER_STATUS );
+    DEBUG_PRINT("Type: " << type );
     return GameComponentType::CHARACTER_STATUS == type;
 }
 void CharacterStatus::Walk(Vec2 destination){
@@ -36,22 +43,22 @@ void CharacterStatus::Walk(Vec2 destination){
     if(destination.x > currentPosition.x)
     {
         if(direction != RIGHT) ChangeDirection(RIGHT);
-        associated.box.x += 1;
+        associated.box.x += speed;
     }
     else if(destination.x < currentPosition.x)
     {
         if(direction != LEFT) ChangeDirection(LEFT);
-        associated.box.x -= 1;
+        associated.box.x -= speed;
     }
     if(destination.y > currentPosition.y)
     {
         if(direction != DOWN) ChangeDirection(DOWN);
-        associated.box.y += 1;
+        associated.box.y += speed;
     }
     else if(destination.y < currentPosition.y)
     {
         if(direction != UP) ChangeDirection(UP);
-        associated.box.y -= 1;
+        associated.box.y -= speed;
     }
 }
 
@@ -70,11 +77,11 @@ void CharacterStatus::ChangeDirection(Direction dir)
         break;
     case LEFT:
         direction = LEFT;
-        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(2);
+        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(1);
         break;
     case RIGHT:
         direction = RIGHT;
-        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(1);
+        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(2);
         break;
     }
     DEBUG_PRINT("fim");
@@ -107,3 +114,15 @@ void CharacterStatus::debug()
     }
 }
 
+vector<Vec2> CharacterStatus::CellsInRange(){
+    DEBUG_PRINT("inicio");
+    vector<Vec2> cells;// = new vector<Vec2>;
+    Vec2 currentPosition(tileMap->PixelToMap(associated.GetPosition())) ;
+    for(int i = currentPosition.x - range; i < currentPosition.x +1 + range; i++){
+        for(int j = currentPosition.y - range; j < currentPosition.y +1 + range; j++){
+            cells.push_back(Vec2(i, j));
+        }
+    }
+    DEBUG_PRINT("fim");
+    return cells;
+}

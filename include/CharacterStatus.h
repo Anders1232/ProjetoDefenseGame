@@ -1,10 +1,14 @@
 #ifndef CHARACTERSTATUS_H
 #define CHARACTERSTATUS_H
 
+#include <vector>
 #include "Component.h"
 #include "GameObject.h"
 #include "Sprite.h"
+#include "TileMap.h"
 
+#include "TileInfo.h"
+using std::vector;
 
 class CharacterStatus : public Component
 {
@@ -17,10 +21,12 @@ class CharacterStatus : public Component
     enum State{
         IDLE = 0,
         MOVING,
+        ATTAKCING
     };
 
     public:
         CharacterStatus(GameObject& associated,
+                        TileMap<TileInfo>* tileMap,
                         float hp = 10, float mp = 10,
                         float speed = 1, int range = 1,
                         float attack = 1, float defense = 0,
@@ -34,10 +40,15 @@ class CharacterStatus : public Component
         void Walk(Vec2 destination);
         void ChangeDirection(Direction dir);
         void debug();
+        vector<Vec2> CellsInRange();
 
     protected:
 
     private:
+        TileMap<TileInfo>* tileMap;
+        /*
+            Status
+        */
         float hp;
         float mp;
 
