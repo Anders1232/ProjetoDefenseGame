@@ -57,7 +57,7 @@ void PlayerUnityPath::AddMarker(Vec2 position){
     */
     //pathMarker->SetParent(associated);
     pathMarker->SetPosition(movingPath.back()->x, movingPath.back()->y);
-    pathMarker->AddComponent(new PathMarker(*pathMarker, PATH_MARKER));
+    pathMarker->AddComponent(new PathMarker(*pathMarker, MARKER_SPRITE));
     associated.CreateNewObject(pathMarker);
     pathMarkers.push_back(pathMarker);
 }
