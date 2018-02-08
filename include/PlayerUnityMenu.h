@@ -18,7 +18,7 @@ using std::vector;
 class PlayerUnityMenu: public Component
 {
     public:
-        PlayerUnityMenu(GameObject& associated, State* stage);
+        PlayerUnityMenu(GameObject& associated);
         virtual ~PlayerUnityMenu();
         void EarlyUpdate(float dt);
         void Update(float dt);
@@ -44,7 +44,6 @@ class PlayerUnityMenu: public Component
 
     private:
         bool active;
-        State* stage;
         vector<GameObject*> buttons;
 };
 

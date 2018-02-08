@@ -50,10 +50,16 @@ void PlayerUnityPath::AddMarker(Vec2 position){
     Vec2* v = new Vec2();
     *v = tileMap->AdjustToMap(position);
     movingPath.push_back(v);
-
-    pathMarkers.push_back(new Sprite(associated, PATH_MARKER, true));
-    pathMarkers.back()->SetPosition(movingPath.back()->x, movingPath.back()->y);
-    associated.AddComponent(pathMarkers.back());
+    GameObject* pathMarker = new GameObject("PathMarker", associated.GetContext());
+    /*
+        O Path não deve ser colocado como filho do PlayerUnity.
+        Caso contrário, o path (e seus filhos) vão se mover conforme PlayerUnity se movimenta.
+    */
+    //pathMarker->SetParent(associated);
+    pathMarker->SetPosition(movingPath.back()->x, movingPath.back()->y);
+    pathMarker->AddComponent(new PathMarker(*pathMarker, PATH_MARKER));
+    associated.CreateNewObject(pathMarker);
+    pathMarkers.push_back(pathMarker);
 }
 
 bool PlayerUnityPath::HasPoints(){
@@ -73,8 +79,8 @@ void PlayerUnityPath::Update(float dt){
     DEBUG_UPDATE("inicio");
     OnClick();
     if(!parentSelected && movingPath.size() > 0){
-        if(associated.parent->box.x == pathMarkers.front()->GetScreenX() &&
-           associated.parent->box.y == pathMarkers.front()->GetScreenY()){
+        if(associated.parent->box.x == pathMarkers.front()->box.x &&
+           associated.parent->box.y == pathMarkers.front()->box.y){
                delete(movingPath.front());
                movingPath.erase(movingPath.begin());
                associated.RemoveComponent(SPRITE);
@@ -100,6 +106,7 @@ void PlayerUnityPath::Update(float dt){
 }
 
 void PlayerUnityPath::OnClick(){
+    DEBUG_UPDATE("inicio");
     if(InputManager::GetInstance().GetMousePos().IsInRect(associated.parent->box) &&
        !parentSelected &&
        InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)){
@@ -116,6 +123,7 @@ void PlayerUnityPath::OnClick(){
         int i = 0;
         pathFinished.FireEvent(i);
     }
+    DEBUG_UPDATE("fim");
 }
 
 void PlayerUnityPath::ButtonObserver(Component* btn){

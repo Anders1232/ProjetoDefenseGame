@@ -19,6 +19,7 @@
 #include "Robo.h"
 #include "Piloto.h"
 #include "Cursor.h"
+#include "Enemy.h"
 
 #define STAGE_BACKGROUND_FILE   "resources/img/bg/ocean.jpg"
 
@@ -29,6 +30,7 @@
 #define STAGE_TILEMAP_FILE           "resources/maps/tileMap20x20.txt"
 #define STAGE_BACKGROUND_MUSIC_FILE  "resources/audio/Tema_Boss_01.wav"
 
+#define ENEMY_1     "resources/img/enemies/enemy1.png"
 #define CAMERA_SPEED    1
 
 

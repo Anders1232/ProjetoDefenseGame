@@ -1,12 +1,13 @@
 #include "Robo.h"
 
-Robo::Robo(GameObject& associated, State* stage, string file, Vec2 position, TileMap<TileInfo>* tileMap):
+Robo::Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated),
     tileMap(tileMap)
 {
     DEBUG_CONSTRUCTOR("inicio");
     DEBUG_CONSTRUCTOR("position: " << position.x << ", " << position.y);
-    associated.AddComponent(new PlayerUnity(associated, stage, position, tileMap ));
+    PlayerUnity& playerUnity = *(new PlayerUnity(associated, position, tileMap ) );
+    associated.AddComponent(&playerUnity);
     DEBUG_CONSTRUCTOR("Player Unity adicionado");
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
@@ -15,7 +16,6 @@ Robo::Robo(GameObject& associated, State* stage, string file, Vec2 position, Til
     associated.box.h = sp->GetHeight();
 
     //ctor
-    PlayerUnity& playerUnity = (dynamic_cast<PlayerUnity&>(associated.GetComponent(PLAYER_UNITY)));
     GameObject* unityMenu = associated.GetChildWithTag("UnityMenu");
     PlayerUnityMenu& playerUnityMenu = (dynamic_cast<PlayerUnityMenu&>(unityMenu->GetComponent(PLAYER_UNITY_MENU)));
     playerUnityMenu.AddButton(BOTAO4, this);

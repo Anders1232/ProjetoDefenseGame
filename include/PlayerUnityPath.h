@@ -14,7 +14,7 @@
 #include "Handler.h"
 #include "Event.h"
 #include "TileInfo.h"
-//#include "PathMarker.h"
+#include "PathMarker.h"
 
 using std::vector;
 using std::multimap;
@@ -61,7 +61,7 @@ class PlayerUnityPath: public Component
         Vec2& destination;
         bool parentSelected;
         vector<Vec2*> movingPath;
-        vector<Sprite*> pathMarkers;
+        vector<GameObject*> pathMarkers;
         HandlerMap listeners;
         TileMap<TileInfo>* tileMap;
 };

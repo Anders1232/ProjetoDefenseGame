@@ -18,7 +18,7 @@ using std::string;
 class Robo : public Component
 {
     public:
-        Robo(GameObject& associated, State* stage, string file, Vec2 position, TileMap<TileInfo>* tileMap);
+        Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>* tileMap);
         virtual ~Robo();
         void EarlyUpdate(float dt);
         void LateUpdate(float dt);

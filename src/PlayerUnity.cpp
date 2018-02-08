@@ -1,13 +1,13 @@
 #include "../include/PlayerUnity.h"
 
 #include "Error.h"
-PlayerUnity::PlayerUnity(GameObject& associated, State* stage, Vec2 position, TileMap<TileInfo>* tileMap):
+PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated),
-    stage(stage),
     clicked(false),
     selected(false),
-    barraVida( *(new GameObject("BarraVida")) ),
-    barraCoolDown( *(new GameObject("BarraCoolDown")) ),
+    characterStatus(* (new CharacterStatus(associated)) ),
+    barraVida( *(new GameObject("BarraVida", associated.GetContext())) ),
+    barraCoolDown( *(new GameObject("BarraCoolDown", associated.GetContext())) ),
     direction(DOWN),
     playerUnityState(IDLE),
     playerUnityMenu(nullptr),
@@ -20,35 +20,40 @@ PlayerUnity::PlayerUnity(GameObject& associated, State* stage, Vec2 position, Ti
     tileMap->At(position.x, position.y).PutCharacter(associated);
 
     /*
+        CharacterStatus
+    */
+    associated.AddComponent(new CharacterStatus(associated));
+
+    /*
         Barra de vida
     */
     barraVida.SetParent(associated, -16, 64);//Hardcoded = posicionando a barra em relação ao parent
     barraVida.AddComponent(new Bar(barraVida, 200, BARRA_VIDA_MOLDURA, BARRA_VIDA));
-    stage->AddObject(&barraVida);
+    associated.CreateNewObject(&barraVida);
 
     /*
         Barra de cooldown
     */
     barraCoolDown.SetParent(associated, -14, 74);//Hardcoded = posicionando a barra em relação ao parent
     barraCoolDown.AddComponent(new Bar(barraCoolDown, 10, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN));
-    stage->AddObject(&barraCoolDown);
+    associated.CreateNewObject(&barraCoolDown);
 
     (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).SetRefilAuto(10);
     (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).SetPoints(0);
 
-    playerUnityMenu = new GameObject("UnityMenu");
+    playerUnityMenu = new GameObject("UnityMenu", associated.GetContext());
     playerUnityMenu->SetParent(associated);
-    PlayerUnityMenu* playerUnityMenuComponent = new PlayerUnityMenu(*playerUnityMenu, stage);
+    PlayerUnityMenu* playerUnityMenuComponent = new PlayerUnityMenu(*playerUnityMenu);
     playerUnityMenu->AddComponent(playerUnityMenuComponent);
 
-    stage->AddObject(playerUnityMenu);
+    associated.CreateNewObject(playerUnityMenu);
     playerUnityMenu->debug = true;
 
-    movingPath = new GameObject("Path");
+    movingPath = new GameObject("Path", associated.GetContext());
     movingPath->SetParent(associated);
     PlayerUnityPath* roboPathComponent = new PlayerUnityPath(*movingPath, tileMap, destination);
     movingPath->AddComponent(roboPathComponent);
-    stage->AddObject(movingPath);
+    associated.CreateNewObject(movingPath);
 
     //roboPathComponent contem uma função que será atribuida a um botão do menu
     playerUnityMenuComponent->AddButton(BOTAO1, roboPathComponent);
@@ -170,6 +175,7 @@ void PlayerUnity::SetPosition(float x, float y)
 
 void PlayerUnity::ChangeDirection(Direction dir)
 {
+    DEBUG_PRINT("inicio");
     switch(dir)
     {
     case UP:
@@ -189,6 +195,7 @@ void PlayerUnity::ChangeDirection(Direction dir)
         (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(2);
         break;
     }
+    DEBUG_PRINT("fim");
 }
 
 Vec2& PlayerUnity::Destination()

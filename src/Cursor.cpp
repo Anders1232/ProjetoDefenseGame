@@ -1,10 +1,12 @@
 #include "Cursor.h"
-
+#include "Error.h"
 Cursor::Cursor(GameObject& associated, string spriteFile):
     Component(associated)
 {
+    DEBUG_CONSTRUCTOR("inicio");
     associated.AddComponent(new Sprite(associated, spriteFile, true));
     //ctor
+    DEBUG_CONSTRUCTOR("fim");
 }
 
 Cursor::~Cursor()

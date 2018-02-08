@@ -1,9 +1,8 @@
 #include "PlayerUnityMenu.h"
 #include "GameComponentType.h"
 
-PlayerUnityMenu::PlayerUnityMenu(GameObject& associated, State* stage):
+PlayerUnityMenu::PlayerUnityMenu(GameObject& associated):
     Component(associated),
-    stage(stage),
     active(false)
 {
     DEBUG_CONSTRUCTOR("inicio");
@@ -65,7 +64,7 @@ void PlayerUnityMenu::Reposition(){
 int PlayerUnityMenu::AddButton(string buttonSpritePath, Component* observer){
     DEBUG_PRINT("inicio");
     //  GameObject recipiente
-    GameObject* buttonObject = new GameObject("Button");
+    GameObject* buttonObject = new GameObject("Button", associated.GetContext());
 
     //  TODO: organizar apresentação do menu
     buttonObject->SetParent(associated, 100, 100 + buttons.size()*30);//distância fora da box do playerUnity; um botao abaixo do outro
@@ -84,7 +83,7 @@ int PlayerUnityMenu::AddButton(string buttonSpritePath, Component* observer){
     buttonObject->AddComponent(buttonComponent);
 
     //  colocando objeto no vetor do mainGameLoop
-    stage->AddObject(buttonObject);
+    associated.CreateNewObject(buttonObject);
 
     //  colocando no vetor do menu
     buttons.push_back(buttonObject);

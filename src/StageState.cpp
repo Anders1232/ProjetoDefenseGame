@@ -14,7 +14,7 @@ StageState::StageState():
     /*
         Constroi cenario
     */
-    GameObject* ambient = new GameObject("Ambient");
+    GameObject* ambient = new GameObject("Ambient", this);
     ambient->AddComponent(new RectTransform(*ambient, nullptr));
     ambient->AddComponent((Component*)new Sprite(*ambient, STAGE_BACKGROUND_FILE, true));
     (dynamic_cast<RectTransform&>(ambient->GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
@@ -31,20 +31,26 @@ StageState::StageState():
     /*
         Coloca os personagens
     */
-    GameObject* robo = new GameObject("Robo");
+    GameObject* robo = new GameObject("Robo", this);
     AddObject(robo);
-    DEBUG_PRINT("endereco de stageState: " << this);
-    Robo* roboComponent = new Robo(*robo, this, ROBO_SP1, Vec2(3,3), tileMap);
+    Robo* roboComponent = new Robo(*robo, ROBO_SP1, Vec2(3,3), tileMap);
     robo->AddComponent(roboComponent);
 
 
-    GameObject* piloto = new GameObject("Piloto");
+    GameObject* piloto = new GameObject("Piloto", this);
     piloto->showOnScreen = false;
     AddObject(piloto);
-    piloto->AddComponent(new Piloto(*piloto, this, PILOTO_SP1, Vec2(3,4), tileMap));
+    piloto->AddComponent(new Piloto(*piloto, PILOTO_SP1, Vec2(3,4), tileMap));
     //roboComponent->BoardPilot(piloto);
 
-    GameObject* cursor = new GameObject("Cursor");
+    GameObject* enemy = new GameObject("Enemy", this);
+    AddObject(enemy);
+    Enemy* enemyComponent = new Enemy(*enemy, ENEMY_1, Vec2(5, 3), tileMap);
+    //enemyComponent->AddPatrolPoint(Vec2(10,7));
+    enemy->AddComponent(enemyComponent);
+
+
+    GameObject* cursor = new GameObject("Cursor", this);
     cursor->AddComponent(new Cursor(*cursor, "resources/img/misc/cursor.png"));
     AddObject(cursor);
 

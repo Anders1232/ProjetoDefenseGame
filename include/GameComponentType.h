@@ -5,12 +5,15 @@
 
 enum GameComponentType{
 	PLAYER_UNITY= ComponentType::COMPONENT_TYPE_SIZE,
+	CHARACTER_STATUS,
 	BAR,
     ROBO,
     PILOTO,
     PLAYER_UNITY_PATH,
     PLAYER_UNITY_MENU,
-    CURSOR
+    CURSOR,
+    PATH_MARKER,
+    ENEMY
 };
 
 #endif // GAMECOMPONENTTYPE_H

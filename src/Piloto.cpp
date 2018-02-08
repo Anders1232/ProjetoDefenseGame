@@ -1,11 +1,12 @@
 #include "Piloto.h"
 #include "GameComponentType.h"
 
-Piloto::Piloto(GameObject& associated, State* stage, string file, Vec2 position, TileMap<TileInfo>* tileMap):
+Piloto::Piloto(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated)
 {
     DEBUG_CONSTRUCTOR("inicio");
-    associated.AddComponent(new PlayerUnity(associated, stage, position, tileMap));
+    PlayerUnity& playerUnity = *(new PlayerUnity(associated, position, tileMap));
+    associated.AddComponent(&playerUnity);
 
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
@@ -13,7 +14,6 @@ Piloto::Piloto(GameObject& associated, State* stage, string file, Vec2 position,
     associated.box.w = sp->GetWidth();
     associated.box.h = sp->GetHeight();
 
-    PlayerUnity& playerUnity = (dynamic_cast<PlayerUnity&>(associated.GetComponent(PLAYER_UNITY ) ) );
     //buttons.push_back((dynamic_cast<PlayerUnityMenu&>(playerUnity.GetMenu()->GetComponent(PLAYER_UNITY_MENU))).AddButton(BOTAO5, this, BoardPilot));
     //DEBUG_CONSTRUCTOR("indice do botao: " << buttons.back());
     DEBUG_CONSTRUCTOR("fim");

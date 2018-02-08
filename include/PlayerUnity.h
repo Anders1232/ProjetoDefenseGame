@@ -16,6 +16,7 @@
 #include "PlayerUnityPath.h"
 #include "PlayerUnityMenu.h"
 #include "Bar.h"
+#include "CharacterStatus.h"
 #include "resources_path.h"
 
 
@@ -40,7 +41,7 @@ private:
     };
 
 public:
-    PlayerUnity(GameObject& associated, State* stage, Vec2 position, TileMap<TileInfo>* tileMap);
+    PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo>* tileMap);
     ~PlayerUnity();
     void Update(float dt);
     void Render() const;
@@ -63,12 +64,12 @@ protected:
 
 private:
     void UpdateState();
+    Component& characterStatus;
     GameObject& barraVida;
     GameObject& barraCoolDown;
     GameObject* piloto;
     GameObject* movingPath;
     GameObject* playerUnityMenu;
-    State* stage;
     bool clicked;
     bool selected;
     PlayerUnityState playerUnityState;

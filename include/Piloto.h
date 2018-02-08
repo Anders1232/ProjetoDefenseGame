@@ -27,7 +27,7 @@ using std::vector;
 class Piloto: public Component
 {
     public:
-        Piloto(GameObject& associated, State* stage, string file, Vec2 position, TileMap<TileInfo>* tileMap);
+        Piloto(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>* tileMap);
         virtual ~Piloto();
         bool Is(unsigned int comp) const;
         void EarlyUpdate(float dt);
