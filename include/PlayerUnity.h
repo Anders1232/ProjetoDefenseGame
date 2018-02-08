@@ -28,17 +28,6 @@ using std::vector;
 #define ROBO_SHEET_FRAME_TIME   4.0*1.0/24.0
 
 class PlayerUnity: public Component{
-private:
-    enum Direction{
-        UP = 0,
-        DOWN,
-        LEFT,
-        RIGHT
-    };
-    enum PlayerUnityState{
-        IDLE = 0,
-        MOVING,
-    };
 
 public:
     PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo>* tileMap);
@@ -47,24 +36,19 @@ public:
     void Render() const;
     bool Is(uint type) const;
     void onClick();
-    void TryMove();
     void SetPosition(float x, float y);
 
     void EarlyUpdate(float dt);
 	void LateUpdate(float dt);
-	void ChangeDirection(Direction dir);
 	void MenuOpen();
 	void MenuClose();
 	Vec2& Destination();
 	GameObject* GetMenu();
 
-	void debug();
-
 protected:
 
 private:
-    void UpdateState();
-    Component& characterStatus;
+    CharacterStatus& characterStatus;
     GameObject& barraVida;
     GameObject& barraCoolDown;
     GameObject* piloto;
@@ -72,8 +56,6 @@ private:
     GameObject* playerUnityMenu;
     bool clicked;
     bool selected;
-    PlayerUnityState playerUnityState;
-    Direction direction;
     Vec2 destination;
     TileMap<TileInfo>* tileMap;
 };

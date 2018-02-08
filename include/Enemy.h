@@ -20,16 +20,6 @@ using std::vector;
 class Enemy : public Component
 {
 private:
-    enum Direction{
-        UP = 0,
-        DOWN,
-        LEFT,
-        RIGHT
-    };
-    enum EnemyState{
-        IDLE = 0,
-        MOVING,
-    };
     public:
         Enemy(GameObject& associated, string spritePath, Vec2 position, TileMap<TileInfo>* tileMap);
         virtual ~Enemy();
@@ -39,15 +29,13 @@ private:
         void Render();
         bool Is(unsigned int type) const;
         void AddPatrolPoint(Vec2 patrolPoint);
-        void Walk();
-        void ChangeDirection(Direction dir);
+        //void Walk(Vec2 destination);
+        //void ChangeDirection(Direction dir);
 
     protected:
 
     private:
-        Component& characterStatus;
-        EnemyState enemyState;
-        Direction direction;
+        CharacterStatus& characterStatus;
 
         int nextPointIndex;
         TileMap<TileInfo>* tileMap;

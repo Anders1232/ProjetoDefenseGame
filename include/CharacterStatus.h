@@ -3,10 +3,22 @@
 
 #include "Component.h"
 #include "GameObject.h"
+#include "Sprite.h"
 
 
 class CharacterStatus : public Component
 {
+    enum Direction{
+        UP = 0,
+        DOWN,
+        LEFT,
+        RIGHT
+    };
+    enum State{
+        IDLE = 0,
+        MOVING,
+    };
+
     public:
         CharacterStatus(GameObject& associated,
                         float hp = 10, float mp = 10,
@@ -19,6 +31,9 @@ class CharacterStatus : public Component
         void LateUpdate(float dt);
         void Render();
         bool Is(unsigned int type) const;
+        void Walk(Vec2 destination);
+        void ChangeDirection(Direction dir);
+        void debug();
 
     protected:
 
@@ -32,6 +47,9 @@ class CharacterStatus : public Component
         float defense;
         float magic;
         float resistence;
+        State state;
+        Direction direction;
+
 };
 
 #endif // CHARACTERSTATUS_H

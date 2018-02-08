@@ -8,8 +8,6 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
     characterStatus(* (new CharacterStatus(associated)) ),
     barraVida( *(new GameObject("BarraVida", associated.GetContext())) ),
     barraCoolDown( *(new GameObject("BarraCoolDown", associated.GetContext())) ),
-    direction(DOWN),
-    playerUnityState(IDLE),
     playerUnityMenu(nullptr),
     tileMap(tileMap)
 {
@@ -76,10 +74,11 @@ PlayerUnity::~PlayerUnity()
 
 void PlayerUnity::Update(float dt)
 {
-    debug();
-    TryMove();
     onClick();
-    UpdateState();
+    Vec2 currentPosition(associated.box.x, associated.box.y);
+    if(destination != currentPosition){
+        characterStatus.Walk(destination);//UpdateState();
+    }
 }
 
 void PlayerUnity::Render() const
@@ -108,55 +107,6 @@ void PlayerUnity::onClick()
     }
 }
 
-void PlayerUnity::UpdateState()
-{
-    switch(playerUnityState)
-    {
-    case IDLE:
-        break;
-    case MOVING:
-        //TODO: Condição fraca, melhorar depois
-        if(destination.x == associated.box.x &&
-           destination.y == associated.box.y)
-        {
-            playerUnityState = IDLE;
-        }
-        else
-        {
-            if(destination.x > associated.box.x)
-            {
-                if(direction != RIGHT) ChangeDirection(RIGHT);
-                associated.box.x += 1;
-            }
-            else if(destination.x < associated.box.x)
-            {
-                if(direction != LEFT) ChangeDirection(LEFT);
-                associated.box.x -= 1;
-            }
-            if(destination.y > associated.box.y)
-            {
-                if(direction != DOWN) ChangeDirection(DOWN);
-                associated.box.y += 1;
-            }
-            else if(destination.y < associated.box.y)
-            {
-                if(direction != UP) ChangeDirection(UP);
-                associated.box.y -= 1;
-            }
-        }
-        break;
-    }
-}
-
-void PlayerUnity::TryMove()
-{
-    Vec2 aux(associated.box.x, associated.box.y);
-    if(playerUnityState != MOVING && destination.DistanceTo(aux) > 0 )
-    {
-        playerUnityState = MOVING;
-    }
-}
-
 void PlayerUnity::MenuOpen()
 {
 }
@@ -173,61 +123,9 @@ void PlayerUnity::SetPosition(float x, float y)
     associated.box.y = y;
 }
 
-void PlayerUnity::ChangeDirection(Direction dir)
-{
-    DEBUG_PRINT("inicio");
-    switch(dir)
-    {
-    case UP:
-        direction = UP;
-        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(3);
-        break;
-    case DOWN:
-        direction = DOWN;
-        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(0);
-        break;
-    case LEFT:
-        direction = LEFT;
-        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(1);
-        break;
-    case RIGHT:
-        direction = RIGHT;
-        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(2);
-        break;
-    }
-    DEBUG_PRINT("fim");
-}
-
 Vec2& PlayerUnity::Destination()
 {
     return destination;
-}
-
-void PlayerUnity::debug()
-{
-    if(associated.debug)
-    {
-        if(InputManager::GetInstance().KeyPress(SDLK_LEFT))
-        {
-            ChangeDirection(LEFT);
-        }
-        if(InputManager::GetInstance().KeyPress(SDLK_UP))
-        {
-            ChangeDirection(UP);
-        }
-        if(InputManager::GetInstance().KeyPress(SDLK_RIGHT))
-        {
-            ChangeDirection(RIGHT);
-        }
-        if(InputManager::GetInstance().KeyPress(SDLK_DOWN))
-        {
-            ChangeDirection(DOWN);
-        }
-    }
-    if(InputManager::GetInstance().KeyPress(SDLK_0))
-    {
-        associated.debug = !associated.debug;
-    }
 }
 
 GameObject* PlayerUnity::GetMenu(){
