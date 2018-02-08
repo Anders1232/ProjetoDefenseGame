@@ -1,5 +1,7 @@
 #include "Cursor.h"
 #include "Error.h"
+#include "GameComponentType.h"
+
 Cursor::Cursor(GameObject& associated, string spriteFile):
     Component(associated)
 {
@@ -29,5 +31,5 @@ void Cursor::Render(){
 }
 
 bool Cursor::Is(unsigned int type) const{
-    return type == CURSOR;
+    return type == GameComponentType::CURSOR;
 }

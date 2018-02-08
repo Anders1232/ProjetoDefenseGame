@@ -13,7 +13,8 @@ enum GameComponentType{
     PLAYER_UNITY_MENU,
     CURSOR,
     PATH_MARKER,
-    ENEMY
+    ENEMY,
+	WALKABLE
 };
 
 #endif // GAMECOMPONENTTYPE_H

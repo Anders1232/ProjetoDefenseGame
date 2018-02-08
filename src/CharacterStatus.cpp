@@ -1,5 +1,7 @@
 #include "CharacterStatus.h"
 #include "Error.h"
+#include "GameComponentType.h"
+
 CharacterStatus::CharacterStatus(GameObject& associated,
                                  TileMap<TileInfo>* tileMap,
                                  float hp, float mp,
