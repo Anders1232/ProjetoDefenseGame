@@ -42,7 +42,7 @@ private:
     private:
         CharacterStatus& characterStatus;
 
-        int nextPointIndex;
+        unsigned int nextPointIndex;
         TileMap<TileInfo>* tileMap;
         std::vector<Vec2> patrolPoints;
 };

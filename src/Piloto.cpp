@@ -67,6 +67,9 @@ void Piloto::OnClick(){
 }
 
 Vec2& Piloto::Destination(){
+    //TODO
+    Vec2* v = new Vec2(0,0);
+    return *v;
 }
 
 void Piloto::SetPosition(int x, int y){

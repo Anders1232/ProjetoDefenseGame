@@ -92,7 +92,7 @@ void Robo::Attack(){
         CharacterStatus& charStatus = dynamic_cast<CharacterStatus&>(associated.GetComponent(CHARACTER_STATUS));
         vector<Vec2> range = charStatus.CellsInRange();
         DEBUG_PRINT("Celulas no alcance:");
-        for(int i = 0; i < range.size(); i++){
+        for(unsigned int i = 0; i < range.size(); i++){
             DEBUG_PRINT("c" << i << ": " << range[i].x << "," << range[i].y);
         }
     }catch(std::bad_cast& e){

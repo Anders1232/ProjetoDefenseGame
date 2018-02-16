@@ -19,12 +19,14 @@ using std::vector;
 
 PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated),
-    clicked(false),
-    selected(false),
     characterStatus(* (new CharacterStatus(associated, tileMap)) ),
     barraVida( *(new GameObject("BarraVida", associated.GetContext())) ),
     barraCoolDown( *(new GameObject("BarraCoolDown", associated.GetContext())) ),
+    piloto(nullptr),
+    movingPath(nullptr),
     playerUnityMenu(nullptr),
+    clicked(false),
+    selected(false),
     tileMap(tileMap)
 {
     DEBUG_CONSTRUCTOR("inicio");

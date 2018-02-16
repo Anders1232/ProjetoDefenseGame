@@ -31,8 +31,8 @@ using std::to_string;
 #define CAMERA_SPEED    1
 
 StageState::StageState():
+    showDEBUG(false),
     backGroundMusic(STAGE_BACKGROUND_MUSIC_FILE)
-    ,showDEBUG(false)
 {
     DEBUG_CONSTRUCTOR("inicio");
     Camera::pos.x = 0;

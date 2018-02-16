@@ -1,6 +1,8 @@
 #ifndef BAR_H
 #define BAR_H
 
+#include <string>
+
 #include "Component.h" //Base
 #include "Timer.h"
 #include "Vec2.h"

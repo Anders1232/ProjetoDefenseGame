@@ -10,8 +10,8 @@ using std::vector;
 Enemy::Enemy(GameObject& associated, string spritePath, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated),
     characterStatus(* (new CharacterStatus(associated, tileMap)) ),
-    tileMap(tileMap),
-    nextPointIndex(0)
+    nextPointIndex(0),
+    tileMap(tileMap)
 {
     DEBUG_CONSTRUCTOR("inicio");
     Vec2 pixelPosition = tileMap->MapToPixel(position);

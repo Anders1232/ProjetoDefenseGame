@@ -4,8 +4,8 @@
 TileInfo::TileInfo(int index):
     BaseTile(index),
     passable(true),
-    characterInside(nullptr),
-    isFree(true)
+    isFree(true),
+    characterInside(nullptr)
 {
     //ctor
 }

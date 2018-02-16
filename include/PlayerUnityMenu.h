@@ -2,6 +2,7 @@
 #define PLAYER_UNITY_MENU_H
 
 #include <vector>
+#include <string>
 
 #include "Component.h"
 

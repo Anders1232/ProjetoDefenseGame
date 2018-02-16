@@ -20,4 +20,6 @@ void PathMarker::EarlyUpdate(float dt){}
 void PathMarker::Update(float dt){}
 void PathMarker::LateUpdate(float dt){}
 void PathMarker::Render(){}
-bool PathMarker::Is(unsigned int type)const{}
+bool PathMarker::Is(unsigned int type)const{
+    return type == PATH_MARKER;
+}

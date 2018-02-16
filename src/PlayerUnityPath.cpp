@@ -12,10 +12,10 @@ using std::multimap;
 
 PlayerUnityPath::PlayerUnityPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2& destination):
     Component(associated),
-    parentSelected(false),
-    destination(destination),
-    listenerId(0),
     pathFinished(this),
+    listenerId(0),
+    destination(destination),
+    parentSelected(false),
     tileMap(tileMap)
 {
     listeners = StartMapping();
