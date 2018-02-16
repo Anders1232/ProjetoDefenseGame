@@ -1,5 +1,6 @@
 #include "Cursor.h"
 #include "Error.h"
+
 using std::string;
 
 Cursor::Cursor(GameObject& associated, string spriteFile):

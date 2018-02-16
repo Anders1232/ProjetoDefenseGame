@@ -1,5 +1,7 @@
 #include "../include/PlayerUnity.h"
 
+#include "GameComponentType.h"
+
 #include "Error.h"
 
 using std::string;
@@ -45,8 +47,8 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
     barraCoolDown.AddComponent(new Bar(barraCoolDown, 10, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN));
     associated.CreateNewObject(&barraCoolDown);
 
-    (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).SetRefilAuto(10);
-    (dynamic_cast<Bar&>(barraCoolDown.GetComponent(BAR))).SetPoints(0);
+    (dynamic_cast<Bar&>(barraCoolDown.GetComponent(GameComponentType::BAR))).SetRefilAuto(10);
+    (dynamic_cast<Bar&>(barraCoolDown.GetComponent(GameComponentType::BAR))).SetPoints(0);
 
     playerUnityMenu = new GameObject("UnityMenu", associated.GetContext());
     playerUnityMenu->SetParent(associated);

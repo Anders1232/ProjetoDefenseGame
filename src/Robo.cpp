@@ -1,4 +1,5 @@
 #include "Robo.h"
+#include "GameComponentType.h"
 
 using std::vector;
 using std::string;
@@ -24,7 +25,7 @@ Robo::Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>
 
     //ctor
     GameObject* unityMenu = associated.GetChildWithTag("UnityMenu");
-    PlayerUnityMenu& playerUnityMenu = (dynamic_cast<PlayerUnityMenu&>(unityMenu->GetComponent(PLAYER_UNITY_MENU)));
+    PlayerUnityMenu& playerUnityMenu = (dynamic_cast<PlayerUnityMenu&>(unityMenu->GetComponent(GameComponentType::PLAYER_UNITY_MENU)));
     playerUnityMenu.AddButton(BOTAO4, this);
 
     DEBUG_CONSTRUCTOR("fim");
