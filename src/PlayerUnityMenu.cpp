@@ -1,6 +1,8 @@
 #include "PlayerUnityMenu.h"
 #include "GameComponentType.h"
 
+using std::vector;
+using std::string;
 PlayerUnityMenu::PlayerUnityMenu(GameObject& associated):
     Component(associated),
     active(false)

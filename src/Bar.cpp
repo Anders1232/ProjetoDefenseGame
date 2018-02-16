@@ -1,8 +1,9 @@
 #include "../include/Bar.h"
 #include"GameComponentType.h"
 
-//#define DEBUG
 #include "Error.h"
+using std::string;
+
 Bar::Bar(GameObject &associated, int points, string frameFile, string fluidFile):
     Component(associated),
     fluid(*(new Sprite(associated, fluidFile, true) ) ),

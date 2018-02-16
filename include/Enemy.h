@@ -14,14 +14,11 @@
 #include "TileInfo.h"
 #include "CharacterStatus.h"
 
-using std::string;
-using std::vector;
-
 class Enemy : public Component
 {
 private:
     public:
-        Enemy(GameObject& associated, string spritePath, Vec2 position, TileMap<TileInfo>* tileMap);
+        Enemy(GameObject& associated, std::string spritePath, Vec2 position, TileMap<TileInfo>* tileMap);
         virtual ~Enemy();
         void EarlyUpdate(float dt);
         void Update(float dt);
@@ -39,7 +36,7 @@ private:
 
         int nextPointIndex;
         TileMap<TileInfo>* tileMap;
-        vector<Vec2> patrolPoints;
+        std::vector<Vec2> patrolPoints;
 };
 
 #endif // ENEMY_H

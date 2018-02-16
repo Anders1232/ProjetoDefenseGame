@@ -16,18 +16,10 @@
 #include "PlayerUnityMenu.h"
 #include "PlayerUnityPath.h"
 
-using std::string;
-using std::vector;
-
-#define PILOTO_SHEET_LINES        4
-#define PILOTO_SHEET_FRAMES       4
-#define PILOTO_SHEET_FRAME_TIME   4.0*1.0/24.0
-
-
 class Piloto: public Component
 {
     public:
-        Piloto(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>* tileMap);
+        Piloto(GameObject& associated, std::string file, Vec2 position, TileMap<TileInfo>* tileMap);
         virtual ~Piloto();
         bool Is(unsigned int comp) const;
         void EarlyUpdate(float dt);
@@ -45,7 +37,7 @@ class Piloto: public Component
     private:
         Sprite* sp;
         TileMap<BaseTile>* tileMap;
-        vector<int> buttons;
+        std::vector<int> buttons;
 };
 
 #endif // PILOTO_H

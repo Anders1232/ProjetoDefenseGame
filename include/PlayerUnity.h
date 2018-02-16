@@ -19,14 +19,6 @@
 #include "CharacterStatus.h"
 #include "resources_path.h"
 
-
-using std::string;
-using std::vector;
-
-#define ROBO_SHEET_LINES        4
-#define ROBO_SHEET_FRAMES       4
-#define ROBO_SHEET_FRAME_TIME   4.0*1.0/24.0
-
 class PlayerUnity: public Component{
 
 public:

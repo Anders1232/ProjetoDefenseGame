@@ -2,7 +2,6 @@
 #define CURSOR_H
 
 #include <string>
-using std::string;
 
 #include "Component.h"
 #include "GameObject.h"
@@ -12,7 +11,7 @@ using std::string;
 class Cursor : public Component
 {
     public:
-        Cursor(GameObject& associated, string spriteFile);
+        Cursor(GameObject& associated, std::string spriteFile);
         virtual ~Cursor();
 
         void EarlyUpdate(float dt);

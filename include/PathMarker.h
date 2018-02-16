@@ -7,12 +7,10 @@
 #include "GameObject.h"
 #include "Sprite.h"
 
-using std::string;
-
 class PathMarker : public Component
 {
     public:
-        PathMarker(GameObject& associated, string spritePath);
+        PathMarker(GameObject& associated, std::string spritePath);
         virtual ~PathMarker();
         void EarlyUpdate(float dt);
         void Update(float dt);

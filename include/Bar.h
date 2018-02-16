@@ -12,7 +12,7 @@
 class Bar: public Component
 {
 public:
-    Bar(GameObject& associated, int points, string frameFile, string fluidFile);
+    Bar(GameObject& associated, int points, std::string frameFile, std::string fluidFile);
     ~Bar(){};
     bool Is(unsigned int comp) const;
     void EarlyUpdate(float dt);

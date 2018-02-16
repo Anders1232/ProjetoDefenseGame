@@ -2,6 +2,10 @@
 #include "GameComponentType.h"
 
 #include "Error.h"
+
+using std::vector;
+using std::multimap;
+
 PlayerUnityPath::PlayerUnityPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2& destination):
     Component(associated),
     parentSelected(false),

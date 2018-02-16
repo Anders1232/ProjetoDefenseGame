@@ -1,5 +1,12 @@
 #include "Robo.h"
 
+using std::vector;
+using std::string;
+
+#define ROBO_SHEET_LINES        4
+#define ROBO_SHEET_FRAMES       4
+#define ROBO_SHEET_FRAME_TIME   4.0*1.0/24.0
+
 Robo::Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated),
     tileMap(tileMap)

@@ -8,7 +8,6 @@
 #include "TileMap.h"
 
 #include "TileInfo.h"
-using std::vector;
 
 class CharacterStatus : public Component
 {
@@ -40,7 +39,7 @@ class CharacterStatus : public Component
         void Walk(Vec2 destination);
         void ChangeDirection(Direction dir);
         void debug();
-        vector<Vec2> CellsInRange();
+        std::vector<Vec2> CellsInRange();
 
     protected:
 

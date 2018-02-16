@@ -14,7 +14,6 @@
 #include "resources_path.h"
 
 class PlayerUnityPath;
-using std::vector;
 class PlayerUnityMenu: public Component
 {
     public:
@@ -32,7 +31,7 @@ class PlayerUnityMenu: public Component
         int GetButtons();
         //O menu adiciona bot�es de acordo com interesses de outras classes
         //no caso, para andar, robopath adiciona o bot�o Andar.
-        int AddButton(string buttonSpritePath, Component* observer);
+        int AddButton(std::string buttonSpritePath, Component* observer);
         void ButtonObserver(Component* btn);
 
         //Se inscreve no evento de RoboPath, para quando o caminho for completado,
@@ -44,7 +43,7 @@ class PlayerUnityMenu: public Component
 
     private:
         bool active;
-        vector<GameObject*> buttons;
+        std::vector<GameObject*> buttons;
 };
 
 #endif // PLAYER_UNITY_MENU_H

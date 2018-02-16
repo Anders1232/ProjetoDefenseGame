@@ -1,6 +1,14 @@
 #include "Piloto.h"
 #include "GameComponentType.h"
 
+using std::string;
+using std::vector;
+
+#define PILOTO_SHEET_LINES        4
+#define PILOTO_SHEET_FRAMES       4
+#define PILOTO_SHEET_FRAME_TIME   4.0*1.0/24.0
+
+
 Piloto::Piloto(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated)
 {
@@ -8,7 +16,7 @@ Piloto::Piloto(GameObject& associated, string file, Vec2 position, TileMap<TileI
     PlayerUnity& playerUnity = *(new PlayerUnity(associated, position, tileMap));
     associated.AddComponent(&playerUnity);
 
-    sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
+    sp = new Sprite(associated, file, true, PILOTO_SHEET_FRAME_TIME, PILOTO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
     associated.box.w = sp->GetWidth();

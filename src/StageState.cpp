@@ -1,6 +1,23 @@
 #include "../include/StageState.h"
 
 #include "Error.h"
+
+using std::find;
+using std::stringstream;
+using std::to_string;
+
+#define STAGE_BACKGROUND_FILE   "resources/img/bg/ocean.jpg"
+
+#define STAGE_TILESET_FILE      "resources/maps/mapSprites.txt"
+#define STAGE_TILE_WIDTH          64
+#define STAGE_TILE_HEIGHT         64
+
+#define STAGE_TILEMAP_FILE           "resources/maps/tileMap20x20.txt"
+#define STAGE_BACKGROUND_MUSIC_FILE  "resources/audio/Tema_Boss_01.wav"
+
+#define ENEMY_1     "resources/img/enemies/enemy1.png"
+#define CAMERA_SPEED    1
+
 StageState::StageState():
     backGroundMusic(STAGE_BACKGROUND_MUSIC_FILE)
     ,showDEBUG(false)

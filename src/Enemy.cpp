@@ -1,6 +1,9 @@
 #include "Enemy.h"
 #include "Error.h"
 
+using std::string;
+using std::vector;
+
 Enemy::Enemy(GameObject& associated, string spritePath, Vec2 position, TileMap<TileInfo>* tileMap):
     Component(associated),
     characterStatus(* (new CharacterStatus(associated, tileMap)) ),

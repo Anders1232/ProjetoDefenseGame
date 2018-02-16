@@ -1,5 +1,8 @@
 #include "CharacterStatus.h"
 #include "Error.h"
+
+using std::vector;
+
 CharacterStatus::CharacterStatus(GameObject& associated,
                                  TileMap<TileInfo>* tileMap,
                                  float hp, float mp,

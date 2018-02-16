@@ -16,9 +16,6 @@
 #include "TileInfo.h"
 #include "PathMarker.h"
 
-using std::vector;
-using std::multimap;
-
 class PlayerUnityPath: public Component
 {
     public:
@@ -39,7 +36,7 @@ class PlayerUnityPath: public Component
 
         Event<PlayerUnityPath, int&> pathFinished;
 
-        typedef multimap<long, HandlerBase*> HandlerMap;
+        typedef std::multimap<long, HandlerBase*> HandlerMap;
         HandlerMap StartMapping()
 		{
 			HandlerMap temp;
@@ -60,8 +57,8 @@ class PlayerUnityPath: public Component
         long listenerId;
         Vec2& destination;
         bool parentSelected;
-        vector<Vec2*> movingPath;
-        vector<GameObject*> pathMarkers;
+        std::vector<Vec2*> movingPath;
+        std::vector<GameObject*> pathMarkers;
         HandlerMap listeners;
         TileMap<TileInfo>* tileMap;
 };

@@ -1,5 +1,7 @@
 #include "PathMarker.h"
 
+using std::string;
+
 PathMarker::PathMarker(GameObject& associated, string spritePath):
     Component(associated)
 {

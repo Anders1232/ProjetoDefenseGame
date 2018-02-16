@@ -12,13 +12,10 @@
 #include "PlayerUnityMenu.h"
 #include "BaseTile.h"
 
-using std::vector;
-using std::string;
-
 class Robo : public Component
 {
     public:
-        Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>* tileMap);
+        Robo(GameObject& associated, std::string file, Vec2 position, TileMap<TileInfo>* tileMap);
         virtual ~Robo();
         void EarlyUpdate(float dt);
         void LateUpdate(float dt);
@@ -35,8 +32,8 @@ class Robo : public Component
     private:
         Sprite* sp;
         TileMap<TileInfo>* tileMap;
-        vector<GameObject*> pilotos;
-        vector<int> buttons;
+        std::vector<GameObject*> pilotos;
+        std::vector<int> buttons;
 };
 
 #endif // ROBO_H
