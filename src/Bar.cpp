@@ -1,5 +1,8 @@
 #include "../include/Bar.h"
-#include"GameComponentType.h"
+
+#include "Sprite.h"
+#include "Camera.h"
+#include "RectTransform.h"
 
 #include "Error.h"
 using std::string;

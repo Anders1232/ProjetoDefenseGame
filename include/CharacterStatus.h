@@ -2,12 +2,13 @@
 #define CHARACTERSTATUS_H
 
 #include <vector>
-#include "Component.h"
-#include "GameObject.h"
-#include "Sprite.h"
-#include "TileMap.h"
+#include "Component.h" //Base
+#include "Vec2.h"
 
+#include "TileMap.h"
 #include "TileInfo.h"
+
+class GameObject; //reference only
 
 class CharacterStatus : public Component
 {

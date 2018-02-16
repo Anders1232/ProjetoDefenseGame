@@ -4,8 +4,8 @@
 #include <string>
 
 #include "Component.h"
-#include "GameObject.h"
-#include "Sprite.h"
+
+class GameObject;
 
 class PathMarker : public Component
 {

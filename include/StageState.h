@@ -1,26 +1,15 @@
-//colocar vetor dos personagens
 #ifndef STAGESTATE_H
 #define STAGESTATE_H
 
 #include <sstream>
 
-#include "Game.h"
 #include "State.h"
-#include "RectTransform.h"
-#include "Sprite.h"
 #include "Music.h"
-#include "Text.h"
+#include "Timer.h"
 #include "TileMap.h"
-#include "Tileset.h"
 #include "TileInfo.h"
 
-#include "PlayerUnity.h"
-#include "resources_path.h"
-#include "Robo.h"
-#include "Piloto.h"
-#include "Cursor.h"
-#include "Enemy.h"
-
+class GameObject;
 class StageState : public State
 {
     public:

@@ -5,19 +5,12 @@
 #include <string>
 #include <vector>
 
-#include "GameObject.h"
 #include "Component.h"
-#include "State.h"
-#include "Camera.h"
-#include "Button.h"
 #include "TileMap.h"
 #include "TileInfo.h"
 
-#include "PlayerUnityPath.h"
-#include "PlayerUnityMenu.h"
-#include "Bar.h"
-#include "CharacterStatus.h"
-#include "resources_path.h"
+class GameObject;
+class CharacterStatus;
 
 class PlayerUnity: public Component{
 

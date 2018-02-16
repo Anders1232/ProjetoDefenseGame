@@ -1,4 +1,8 @@
 #include "CharacterStatus.h"
+#include "GameObject.h"
+#include "Sprite.h"
+
+
 #include "Error.h"
 
 using std::vector;

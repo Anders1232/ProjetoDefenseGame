@@ -5,12 +5,11 @@
 #include <vector>
 
 #include "Component.h"
-#include "GameObject.h"
-#include "Sprite.h"
 #include "TileMap.h"
-#include "PlayerUnity.h"
-#include "PlayerUnityMenu.h"
-#include "BaseTile.h"
+#include "TileInfo.h"
+
+class GameObject;
+class Sprite;
 
 class Robo : public Component
 {

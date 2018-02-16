@@ -5,14 +5,22 @@
 #include <vector>
 
 #include "Component.h"
-#include "GameComponentType.h"
-#include "GameObject.h"
-#include "Sprite.h"
 #include "Vec2.h"
-#include "TileMap.h"
 
+#include "TileMap.h"
 #include "TileInfo.h"
+
 #include "CharacterStatus.h"
+/*
+    Engine Classes
+*/
+class GameObject;
+class Sprite;
+
+/*
+    Game Classes
+*/
+class CharacterStatus;
 
 class Enemy : public Component
 {

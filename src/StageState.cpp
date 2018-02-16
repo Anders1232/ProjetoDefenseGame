@@ -1,5 +1,17 @@
 #include "../include/StageState.h"
 
+#include "Game.h"
+#include "RectTransform.h"
+#include "Sprite.h"
+#include "Text.h"
+#include "Tileset.h"
+#include "PlayerUnity.h"
+#include "resources_path.h"
+#include "Robo.h"
+#include "Piloto.h"
+#include "Cursor.h"
+#include "Enemy.h"
+
 #include "Error.h"
 
 using std::find;

@@ -1,4 +1,7 @@
 #include "PathMarker.h"
+#include "GameObject.h"
+#include "Sprite.h"
+
 
 using std::string;
 

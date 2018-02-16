@@ -4,9 +4,8 @@
 #include <string>
 
 #include "Component.h"
-#include "GameObject.h"
-#include "InputManager.h"
-#include "Sprite.h"
+
+class GameObject;//reference only
 
 class Cursor : public Component
 {

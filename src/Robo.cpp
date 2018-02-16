@@ -1,5 +1,11 @@
 #include "Robo.h"
-#include "GameComponentType.h"
+
+#include "GameObject.h"
+#include "Sprite.h"
+
+#include "PlayerUnity.h"
+#include "PlayerUnityMenu.h"
+#include "CharacterStatus.h"
 
 using std::vector;
 using std::string;

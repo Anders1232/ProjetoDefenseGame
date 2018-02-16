@@ -1,13 +1,13 @@
 #ifndef BAR_H
 #define BAR_H
 
-#include "Component.h"
-#include "Sprite.h"
-#include "Camera.h"
+#include "Component.h" //Base
 #include "Timer.h"
-#include "RectTransform.h"
+#include "Vec2.h"
 
 #include "resources_path.h"
+
+class Sprite; //reference only
 
 class Bar: public Component
 {
@@ -42,8 +42,7 @@ public:
 protected:
 
 private:
-    //Sprite fluid;
-    //Sprite frame;
+
     Sprite& fluid;
     Sprite& frame;
 

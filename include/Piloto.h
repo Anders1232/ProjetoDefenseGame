@@ -5,16 +5,12 @@
 #include <vector>
 
 #include "Component.h"
-#include "State.h"
-#include "Sprite.h"
-#include "InputManager.h"
-#include "GameObject.h"
+#include "Vec2.h"
 #include "TileMap.h"
 #include "TileInfo.h"
 
-#include "PlayerUnity.h"
-#include "PlayerUnityMenu.h"
-#include "PlayerUnityPath.h"
+class GameObject;
+
 
 class Piloto: public Component
 {

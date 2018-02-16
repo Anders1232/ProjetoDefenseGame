@@ -7,14 +7,10 @@
 
 #include "Component.h"
 #include "Vec2.h"
-#include "Sprite.h"
-#include "TileMap.h"
-#include "resources_path.h"
-#include "PlayerUnity.h"
 #include "Handler.h"
 #include "Event.h"
+#include "TileMap.h"
 #include "TileInfo.h"
-#include "PathMarker.h"
 
 class PlayerUnityPath: public Component
 {

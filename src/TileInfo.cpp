@@ -1,4 +1,5 @@
 #include "TileInfo.h"
+//#include "GameObject.h"
 
 TileInfo::TileInfo(int index):
     BaseTile(index),

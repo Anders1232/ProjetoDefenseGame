@@ -1,5 +1,13 @@
 #include "Piloto.h"
-#include "GameComponentType.h"
+#include "State.h"
+#include "Sprite.h"
+#include "InputManager.h"
+#include "GameObject.h"
+
+#include "PlayerUnity.h"
+#include "PlayerUnityMenu.h"
+#include "PlayerUnityPath.h"
+
 
 using std::string;
 using std::vector;

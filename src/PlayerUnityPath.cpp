@@ -1,5 +1,9 @@
 #include "PlayerUnityPath.h"
-#include "GameComponentType.h"
+
+#include "Sprite.h"
+#include "PlayerUnity.h"
+#include "PathMarker.h"
+#include "resources_path.h"
 
 #include "Error.h"
 

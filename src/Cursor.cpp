@@ -1,4 +1,8 @@
 #include "Cursor.h"
+#include "GameObject.h"
+#include "InputManager.h"
+#include "Sprite.h"
+
 #include "Error.h"
 
 using std::string;

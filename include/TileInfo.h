@@ -1,9 +1,9 @@
 #ifndef TILEINFO_H
 #define TILEINFO_H
 
-#include "GameObject.h"
 #include "BaseTile.h"
 
+class GameObject;
 class TileInfo : public BaseTile
 {
     public:

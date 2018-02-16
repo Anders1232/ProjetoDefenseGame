@@ -1,5 +1,11 @@
 #include "PlayerUnityMenu.h"
-#include "GameComponentType.h"
+
+#include "RectTransform.h"
+#include "Button.h"
+#include "Sprite.h"
+#include "State.h"
+
+#include "PlayerUnityPath.h"
 
 using std::vector;
 using std::string;

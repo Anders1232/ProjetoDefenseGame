@@ -4,16 +4,11 @@
 #include <vector>
 
 #include "Component.h"
-#include "RectTransform.h"
-#include "Button.h"
-#include "Sprite.h"
-#include "State.h"
-
-#include "PlayerUnityPath.h"
 
 #include "resources_path.h"
-
+class GameObject;
 class PlayerUnityPath;
+
 class PlayerUnityMenu: public Component
 {
     public:
@@ -23,7 +18,7 @@ class PlayerUnityMenu: public Component
         void Update(float dt);
         void LateUpdate(float dt);
         void Render() const;
-        bool Is(uint type) const;
+        bool Is(unsigned int type) const;
         void OnClick();
         void Toogle();
         void Reposition();
