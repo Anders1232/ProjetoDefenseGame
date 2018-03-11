@@ -31,7 +31,8 @@ Robo::Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>
 
     //ctor
     GameObject* unityMenu = associated.GetChildWithTag("UnityMenu");
-    PlayerUnityMenu& playerUnityMenu = (dynamic_cast<PlayerUnityMenu&>(unityMenu->GetComponent(GameComponentType::PLAYER_UNITY_MENU)));
+    //PlayerUnityMenu& playerUnityMenu = (dynamic_cast<PlayerUnityMenu&>(unityMenu->GetComponent(GameComponentType::PLAYER_UNITY_MENU)));
+    PlayerUnityMenu& playerUnityMenu = unityMenu->GetComponent<PlayerUnityMenu>();
     playerUnityMenu.AddButton(BOTAO4, this);
 
     DEBUG_CONSTRUCTOR("fim");
@@ -89,7 +90,8 @@ void Robo::Attack(){
     //Posição no grid
     //Component& charStatus = associated.GetComponent(CHARACTER_STATUS);
     try{
-        CharacterStatus& charStatus = dynamic_cast<CharacterStatus&>(associated.GetComponent(CHARACTER_STATUS));
+        //CharacterStatus& charStatus = dynamic_cast<CharacterStatus&>(associated.GetComponent(CHARACTER_STATUS));
+        CharacterStatus& charStatus = associated.GetComponent<CharacterStatus>();
         vector<Vec2> range = charStatus.CellsInRange();
         DEBUG_PRINT("Celulas no alcance:");
         for(unsigned int i = 0; i < range.size(); i++){

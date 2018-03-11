@@ -54,8 +54,10 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
     barraCoolDown.AddComponent(new Bar(barraCoolDown, 10, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN));
     associated.CreateNewObject(&barraCoolDown);
 
-    (dynamic_cast<Bar&>(barraCoolDown.GetComponent(GameComponentType::BAR))).SetRefilAuto(10);
-    (dynamic_cast<Bar&>(barraCoolDown.GetComponent(GameComponentType::BAR))).SetPoints(0);
+    //(dynamic_cast<Bar&>(barraCoolDown.GetComponent(GameComponentType::BAR))).SetRefilAuto(10);
+    barraCoolDown.GetComponent<Bar>().SetRefilAuto(10);
+    //(dynamic_cast<Bar&>(barraCoolDown.GetComponent(GameComponentType::BAR))).SetPoints(0);
+    barraCoolDown.GetComponent<Bar>().SetPoints(0);
 
     playerUnityMenu = new GameObject("UnityMenu", associated.GetContext());
     playerUnityMenu->SetParent(associated);

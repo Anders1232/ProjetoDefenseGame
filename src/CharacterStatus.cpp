@@ -47,6 +47,17 @@ bool CharacterStatus::Is(unsigned int type) const{
 }
 void CharacterStatus::Walk(Vec2 destination){
     Vec2 currentPosition(associated.box.x, associated.box.y);
+    Vec2 destinationGridPosition = tileMap->PixelToMap(destination);
+
+    /*
+    *   Sempre que o personagem for andar, ele deve checar antes se
+    *   a posição pra onde ele pretende ir está vazia.
+    */
+    currentGridPosition = tileMap->PixelToMap(currentPosition);
+    if(currentGridPosition != lastGridPosition){
+
+    }
+
     if(destination.x > currentPosition.x)
     {
         if(direction != RIGHT) ChangeDirection(RIGHT);
@@ -76,19 +87,23 @@ void CharacterStatus::ChangeDirection(Direction dir)
     {
     case UP:
         direction = UP;
-        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(3);
+        //(dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(3);
+        associated.GetComponent<Sprite>().SetAnimationLine(3);
         break;
     case DOWN:
         direction = DOWN;
-        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(0);
+        //(dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(0);
+        associated.GetComponent<Sprite>().SetAnimationLine(0);
         break;
     case LEFT:
         direction = LEFT;
-        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(1);
+        //(dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(1);
+        associated.GetComponent<Sprite>().SetAnimationLine(1);
         break;
     case RIGHT:
         direction = RIGHT;
-        (dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(2);
+        //(dynamic_cast<Sprite&>(associated.GetComponent(SPRITE))).SetAnimationLine(2);
+        associated.GetComponent<Sprite>().SetAnimationLine(2);
         break;
     }
     DEBUG_PRINT("fim");

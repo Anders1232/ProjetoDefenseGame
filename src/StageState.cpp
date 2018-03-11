@@ -45,8 +45,8 @@ StageState::StageState():
     */
     GameObject* ambient = new GameObject("Ambient", this);
     ambient->AddComponent(new RectTransform(*ambient, nullptr));
-    ambient->AddComponent((Component*)new Sprite(*ambient, STAGE_BACKGROUND_FILE, true));
-    (dynamic_cast<RectTransform&>(ambient->GetComponent(RECT_TRANSFORM))).SetAnchors(0,0,1,1);
+    ambient->AddComponent(new Sprite(*ambient, STAGE_BACKGROUND_FILE, true));
+    ambient->GetComponent<RectTransform>().SetAnchors(0,0,1,1);
     ambient->box.y = 0;
     AddObject(ambient);
     tileMap = new TileMap<TileInfo>(*ambient, STAGE_TILEMAP_FILE, new TileSet(STAGE_TILESET_FILE, *ambient));

@@ -46,6 +46,8 @@ class CharacterStatus : public Component
 
     private:
         TileMap<TileInfo>* tileMap;
+        Vec2 lastGridPosition;
+        Vec2 currentGridPosition;
         /*
             Status
         */
