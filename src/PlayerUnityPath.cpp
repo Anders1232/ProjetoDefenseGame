@@ -30,9 +30,9 @@ PlayerUnityPath::~PlayerUnityPath()
 
 void PlayerUnityPath::CreatePath(){
     Vec2 lastMarkerPosition;
-    if(movingPath.size() > 0){
+    if(pathMarkers.size() > 0){
         associated.showOnScreen = true;
-        lastMarkerPosition = *movingPath.back();
+        lastMarkerPosition = Vec2( (*pathMarkers.back()).box.x, (*pathMarkers.back()).box.y );
     }else{
         lastMarkerPosition = Vec2(associated.parent->box.x, associated.parent->box.y) ;
     }
@@ -57,25 +57,23 @@ void PlayerUnityPath::CreatePath(){
 void PlayerUnityPath::AddMarker(Vec2 position){
     Vec2* v = new Vec2();
     *v = tileMap->AdjustToMap(position);
-    movingPath.push_back(v);
     GameObject* pathMarker = new GameObject("PathMarker", associated.GetContext());
     /*
         O Path não deve ser colocado como filho do PlayerUnity.
         Caso contrário, o path (e seus filhos) vão se mover conforme PlayerUnity se movimenta.
     */
-    //pathMarker->SetParent(associated);
-    pathMarker->SetPosition(movingPath.back()->x, movingPath.back()->y);
+    pathMarker->SetPosition(v->x, v->y);
     pathMarker->AddComponent(new PathMarker(*pathMarker, MARKER_SPRITE));
     associated.CreateNewObject(pathMarker);
     pathMarkers.push_back(pathMarker);
 }
 
 bool PlayerUnityPath::HasPoints(){
-    return (movingPath.size() > 0);
+    return (pathMarkers.size() > 0);
 }
 
 Vec2 PlayerUnityPath::GetNext(){
-    Vec2 v = *(movingPath.front());
+    Vec2 v( (*(pathMarkers.front())).box.x, (*(pathMarkers.front())).box.y);
     return v;
 }
 
@@ -86,11 +84,10 @@ bool PlayerUnityPath::Is(unsigned int type) const{
 void PlayerUnityPath::Update(float dt){
     DEBUG_UPDATE("inicio");
     OnClick();
-    if(!parentSelected && movingPath.size() > 0){
+    if(!parentSelected && pathMarkers.size() > 0){
         if(associated.parent->box.x == pathMarkers.front()->box.x &&
            associated.parent->box.y == pathMarkers.front()->box.y){
-               delete(movingPath.front());
-               movingPath.erase(movingPath.begin());
+               delete(pathMarkers.front());
                pathMarkers.erase(pathMarkers.begin());
 
                Vec2 pos = GetNext();
@@ -134,7 +131,7 @@ void PlayerUnityPath::OnClick(){
 }
 
 void PlayerUnityPath::ButtonObserver(Component* btn){
-    if(movingPath.size() > 0){
+    if(pathMarkers.size() > 0){
         destination = GetNext();
     }
 }

@@ -53,7 +53,6 @@ class PlayerUnityPath: public Component
         long listenerId;
         Vec2& destination;
         bool parentSelected;
-        std::vector<Vec2*> movingPath;
         std::vector<GameObject*> pathMarkers;
         HandlerMap listeners;
         TileMap<TileInfo>* tileMap;
