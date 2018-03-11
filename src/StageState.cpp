@@ -38,19 +38,21 @@ StageState::StageState():
     Camera::pos.x = 0;
     Camera::pos.y = 0;
 
-    //mousePosition(new Text(FONT2, 10, Text::BLENDED, {0, 0, 0, 0} );
-
     /*
         Constroi cenario
     */
-    GameObject* ambient = new GameObject("Ambient", this);
-    ambient->AddComponent(new RectTransform(*ambient, nullptr));
-    ambient->AddComponent(new Sprite(*ambient, STAGE_BACKGROUND_FILE, true));
-    ambient->GetComponent<RectTransform>().SetAnchors(0,0,1,1);
-    ambient->box.y = 0;
-    AddObject(ambient);
-    tileMap = new TileMap<TileInfo>(*ambient, STAGE_TILEMAP_FILE, new TileSet(STAGE_TILESET_FILE, *ambient));
-    ambient->AddComponent(tileMap);
+    GameObject* backGround = new GameObject("BackGround", this);
+    backGround->box.x = 0;
+    backGround->box.y = 0;
+    backGround->box.w = 1024;
+    backGround->box.h = 600;
+    backGround->AddComponent(new Sprite(*backGround, STAGE_BACKGROUND_FILE, true));
+    AddObject(backGround);
+
+    GameObject* tileMapObject = new GameObject("TileMap", this);
+    tileMap = new TileMap<TileInfo>(*tileMapObject, STAGE_TILEMAP_FILE, new TileSet(STAGE_TILESET_FILE, *tileMapObject));
+    tileMapObject->AddComponent(tileMap);
+    AddObject(tileMapObject);
 
     /*
         Coloca a musica
@@ -60,6 +62,7 @@ StageState::StageState():
     /*
         Coloca os personagens
     */
+
     GameObject* robo = new GameObject("Robo", this);
     AddObject(robo);
     Robo* roboComponent = new Robo(*robo, ROBO_SP1, Vec2(3,3), tileMap);
@@ -83,6 +86,7 @@ StageState::StageState():
     cursor->AddComponent(new Cursor(*cursor, "resources/img/misc/cursor.png"));
     AddObject(cursor);
 
+
     DEBUG_CONSTRUCTOR("CameraPos: " << Camera::pos.x << ", " << Camera::pos.y);
     DEBUG_CONSTRUCTOR("fim");
 }
@@ -91,7 +95,6 @@ StageState::~StageState()
 {
     backGroundMusic.Stop();
     objectArray.clear();
-    //Sprite::Clear();
 }
 
 void StageState::Update(float dt)
@@ -100,12 +103,6 @@ void StageState::Update(float dt)
     Input(dt);
     State::Update(dt);
 
-    /*
-    if(showDEBUG){
-        mousePosition.SetText(to_string((int)(InputManager::GetInstance().GetMouseX() + Camera::pos.x))+"x"
-                             +to_string((int)(InputManager::GetInstance().GetMouseY() + Camera::pos.y)));
-    }
-    */
     Camera::Update(Game::GetInstance().GetDeltaTime());
     DEBUG_UPDATE("StageState::Update()- fim");
 }
@@ -114,12 +111,7 @@ void StageState::Render() const
 {
     DEBUG_RENDER("inicio");
     State::Render();
-    /*
-    if(showDEBUG){
-        mousePosition.Render(0, 0);
-    }
-    */
-	DEBUG_RENDER("fim");
+    DEBUG_RENDER("fim");
 }
 
 void StageState::Input(float dt) {

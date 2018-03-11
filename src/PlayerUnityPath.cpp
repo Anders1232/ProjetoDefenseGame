@@ -91,8 +91,6 @@ void PlayerUnityPath::Update(float dt){
            associated.parent->box.y == pathMarkers.front()->box.y){
                delete(movingPath.front());
                movingPath.erase(movingPath.begin());
-               //associated.RemoveComponent(SPRITE);
-               associated.RemoveComponent<Sprite>();
                pathMarkers.erase(pathMarkers.begin());
 
                Vec2 pos = GetNext();
