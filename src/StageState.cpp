@@ -75,12 +75,13 @@ StageState::StageState():
     piloto->AddComponent(new Piloto(*piloto, PILOTO_SP1, Vec2(3,4), tileMap));
     //roboComponent->BoardPilot(piloto);
 
+/*
     GameObject* enemy = new GameObject("Enemy", this);
     AddObject(enemy);
-    Enemy* enemyComponent = new Enemy(*enemy, ENEMY_1, Vec2(10, 3), tileMap);
+    Enemy* enemyComponent = new Enemy(*enemy, ENEMY_1, Vec2(10,3), tileMap);
     enemyComponent->AddPatrolPoint(Vec2(15,3));
     enemy->AddComponent(enemyComponent);
-
+*/
 
     GameObject* cursor = new GameObject("Cursor", this);
     cursor->AddComponent(new Cursor(*cursor, "resources/img/misc/cursor.png"));
@@ -99,12 +100,12 @@ StageState::~StageState()
 
 void StageState::Update(float dt)
 {
-    DEBUG_UPDATE("StageState::Update()- inicio");
+    DEBUG_UPDATE("inicio");
     Input(dt);
     State::Update(dt);
 
     Camera::Update(Game::GetInstance().GetDeltaTime());
-    DEBUG_UPDATE("StageState::Update()- fim");
+    DEBUG_UPDATE("fim");
 }
 
 void StageState::Render() const
@@ -115,6 +116,12 @@ void StageState::Render() const
 }
 
 void StageState::Input(float dt) {
+    //Debug
+    Vec2 mouseOnGrid = tileMap->PixelToMap(InputManager::GetInstance().GetMousePos());
+    if(InputManager::GetInstance().KeyPress(SDLK_SPACE)){
+        DEBUG_PRINT( tileMap->At(mouseOnGrid.x, mouseOnGrid.y).IsFree() );
+    }
+
     if( InputManager::GetInstance().QuitRequested() == true ){
             quitRequested = true;
     }

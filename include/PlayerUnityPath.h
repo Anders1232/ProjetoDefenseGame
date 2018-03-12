@@ -15,14 +15,13 @@
 class PlayerUnityPath: public Component
 {
     public:
-        PlayerUnityPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2& destination);
+        PlayerUnityPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2* destination);
         virtual ~PlayerUnityPath();
         void EarlyUpdate(float dt){};
         void Update(float dt);
         void LateUpdate(float dt){};
         void Render() const {};
         bool Is(unsigned int type)const;
-        void ButtonObserver(Component* btn);
 
         void CreatePath();
         Vec2 GetNext();
@@ -51,11 +50,11 @@ class PlayerUnityPath: public Component
 
     private:
         long listenerId;
-        Vec2& destination;
         bool parentSelected;
         std::vector<GameObject*> pathMarkers;
         HandlerMap listeners;
         TileMap<TileInfo>* tileMap;
+        Vec2** destination;
 };
 
 #endif // ROBOPATH_H

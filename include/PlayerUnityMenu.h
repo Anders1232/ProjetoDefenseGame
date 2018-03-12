@@ -27,7 +27,7 @@ class PlayerUnityMenu: public Component
         int GetButtons();
         //O menu adiciona bot�es de acordo com interesses de outras classes
         //no caso, para andar, robopath adiciona o bot�o Andar.
-        int AddButton(std::string buttonSpritePath, Component* observer);
+        int AddButton(std::string buttonSpritePath, std::string name, Component* observer);
         void ButtonObserver(Component* btn);
 
         //Se inscreve no evento de RoboPath, para quando o caminho for completado,

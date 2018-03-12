@@ -8,19 +8,17 @@ using std::string;
 using std::vector;
 
 Enemy::Enemy(GameObject& associated, string spritePath, Vec2 position, TileMap<TileInfo>* tileMap):
-    Component(associated),
-    characterStatus(* (new CharacterStatus(associated, tileMap)) ),
+    CharacterStatus(associated, position, tileMap),
     nextPointIndex(0),
     tileMap(tileMap)
 {
     DEBUG_CONSTRUCTOR("inicio");
-    Vec2 pixelPosition = tileMap->MapToPixel(position);
-    tileMap->At(position.x, position.y).PutCharacter(associated);
-    associated.SetPosition(pixelPosition);
+    CharacterStatus::charState = CharacterState::WALKING;
+
     Sprite* sp = new Sprite(associated, spritePath, true, 0.2, 2);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
-    patrolPoints.push_back(pixelPosition);
+    patrolPoints.push_back( tileMap->MapToPixel(position) );
     DEBUG_CONSTRUCTOR("fim");
     //ctor
 }
@@ -32,16 +30,26 @@ Enemy::~Enemy()
 
 void Enemy::EarlyUpdate(float dt){}
 void Enemy::Update(float dt){
-    if(patrolPoints.size() > 1){
-        Vec2 destination(patrolPoints[nextPointIndex]);
-        Vec2 currentPosition(associated.box.x, associated.box.y);
-        if(currentPosition == destination){
+    CharacterStatus::Update(dt);
+    switch(charState){
+    case CharacterState::IDLE:
+        if(patrolPoints.size() > 1){
+            destination = new Vec2(patrolPoints[nextPointIndex]);
             nextPointIndex++;
             if(nextPointIndex == patrolPoints.size()) nextPointIndex = 0;
-            destination = patrolPoints[nextPointIndex];
+            charState = CharacterState::WALKING;
         }
-        characterStatus.Walk(destination);
+        break;
+    case CharacterState::WALKING:
+        if(destination == nullptr){
+            charState = IDLE;
+        }else{
+            Walk();
+        }
+        break;
     }
+
+
 }
 void Enemy::LateUpdate(float dt){}
 void Enemy::Render(){}

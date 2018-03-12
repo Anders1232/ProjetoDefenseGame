@@ -22,7 +22,7 @@ class Sprite;
 */
 class CharacterStatus;
 
-class Enemy : public Component
+class Enemy : public CharacterStatus
 {
 private:
     public:
@@ -34,14 +34,10 @@ private:
         void Render();
         bool Is(unsigned int type) const;
         void AddPatrolPoint(Vec2 patrolPoint);
-        //void Walk(Vec2 destination);
-        //void ChangeDirection(Direction dir);
 
     protected:
 
     private:
-        CharacterStatus& characterStatus;
-
         unsigned int nextPointIndex;
         TileMap<TileInfo>* tileMap;
         std::vector<Vec2> patrolPoints;

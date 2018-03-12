@@ -69,7 +69,7 @@ void PlayerUnityMenu::Reposition(){
     associated.box.h = 100;
 }
 
-int PlayerUnityMenu::AddButton(string buttonSpritePath, Component* observer){
+int PlayerUnityMenu::AddButton(string buttonSpritePath, string buttonName, Component* observer){
     DEBUG_PRINT("inicio");
     //  GameObject recipiente
     GameObject* buttonObject = new GameObject("Button", associated.GetContext());
@@ -82,7 +82,7 @@ int PlayerUnityMenu::AddButton(string buttonSpritePath, Component* observer){
     buttonObject->AddComponent(new Sprite(*buttonObject, buttonSpritePath, true));
 
     //  componente Button
-    Button* buttonComponent = new Button(*buttonObject);
+    Button* buttonComponent = new Button(*buttonObject, buttonName);
     buttonComponent->AddObserver(this);
     buttonComponent->AddObserver(observer);
 
@@ -113,9 +113,11 @@ int PlayerUnityMenu::GetButtons(){
 }
 
 void PlayerUnityMenu::ButtonObserver(Component* btn){
+    DEBUG_PRINT("inicio");
     for(unsigned int i = 0; i < buttons.size(); i++){
             buttons[i]->SetActive(false);
     }
+    DEBUG_PRINT("fim");
 }
 
 

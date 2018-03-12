@@ -10,13 +10,13 @@
 using std::vector;
 using std::multimap;
 
-PlayerUnityPath::PlayerUnityPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2& destination):
+PlayerUnityPath::PlayerUnityPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2* destination):
     Component(associated),
     pathFinished(this),
     listenerId(0),
-    destination(destination),
     parentSelected(false),
-    tileMap(tileMap)
+    tileMap(tileMap),
+    destination(&destination)
 {
     listeners = StartMapping();
     associated.showOnScreen = false;
@@ -34,12 +34,13 @@ void PlayerUnityPath::CreatePath(){
         associated.showOnScreen = true;
         lastMarkerPosition = Vec2( (*pathMarkers.back()).box.x, (*pathMarkers.back()).box.y );
     }else{
-        lastMarkerPosition = Vec2(associated.parent->box.x, associated.parent->box.y) ;
+        lastMarkerPosition = Vec2(associated.box.x, associated.box.y) ;
     }
     Vec2 mousePosition = InputManager::GetInstance().GetMousePos();
     Vec2 mouseOnGrid = tileMap->PixelToMap(mousePosition);
     if(tileMap->At(mouseOnGrid.x, mouseOnGrid.y).IsPassable() &&
        tileMap->At(mouseOnGrid.x, mouseOnGrid.y).IsFree() ){
+
         if(mousePosition.x > lastMarkerPosition.x + tileMap->GetTileSize().x){
             AddMarker(Vec2(mousePosition.x, lastMarkerPosition.y));
         }else if(mousePosition.x < lastMarkerPosition.x){
@@ -73,7 +74,7 @@ bool PlayerUnityPath::HasPoints(){
 }
 
 Vec2 PlayerUnityPath::GetNext(){
-    Vec2 v( (*(pathMarkers.front())).box.x, (*(pathMarkers.front())).box.y);
+    Vec2 v( (*pathMarkers.front()).box );
     return v;
 }
 
@@ -83,28 +84,19 @@ bool PlayerUnityPath::Is(unsigned int type) const{
 
 void PlayerUnityPath::Update(float dt){
     DEBUG_UPDATE("inicio");
+
     OnClick();
     if(!parentSelected && pathMarkers.size() > 0){
         if(associated.parent->box.x == pathMarkers.front()->box.x &&
            associated.parent->box.y == pathMarkers.front()->box.y){
-               delete(pathMarkers.front());
-               pathMarkers.erase(pathMarkers.begin());
-
-               Vec2 pos = GetNext();
-               Vec2 onGrid = tileMap->PixelToMap(pos);
-               if(tileMap->At(onGrid.x, onGrid.y).IsPassable() &&
-                  tileMap->At(onGrid.x, onGrid.y).IsFree() ){
-                    tileMap->At(onGrid.x, onGrid.y).PutCharacter(*(associated.parent));
-                    destination = pos;
-                    DEBUG_PRINT("Novo destination: " << onGrid.x << "," << onGrid.y);
-                }else{
-                    //tem alguma coisa no lugar que era pra ir
-                }
-
-        }else{
-
+            delete(pathMarkers.front());
+            pathMarkers.erase(pathMarkers.begin());
+            /*
+            if(pathMarkers.size() > 0){
+                destination = GetNext();
+            }
+            */
         }
-    }else{
     }
     DEBUG_UPDATE("fim");
 }
@@ -129,11 +121,4 @@ void PlayerUnityPath::OnClick(){
     }
     DEBUG_UPDATE("fim");
 }
-
-void PlayerUnityPath::ButtonObserver(Component* btn){
-    if(pathMarkers.size() > 0){
-        destination = GetNext();
-    }
-}
-
 #include "Error_footer.h"

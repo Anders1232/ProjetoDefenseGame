@@ -6,6 +6,7 @@
 #include "PlayerUnity.h"
 #include "PlayerUnityMenu.h"
 #include "CharacterStatus.h"
+#include "Button.h"
 
 using std::vector;
 using std::string;
@@ -15,14 +16,10 @@ using std::string;
 #define ROBO_SHEET_FRAME_TIME   4.0*1.0/24.0
 
 Robo::Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>* tileMap):
-    Component(associated),
-    tileMap(tileMap)
+    PlayerUnity(associated, position, tileMap)
 {
     DEBUG_CONSTRUCTOR("inicio");
     DEBUG_CONSTRUCTOR("position: " << position.x << ", " << position.y);
-    PlayerUnity& playerUnity = *(new PlayerUnity(associated, position, tileMap ) );
-    associated.AddComponent(&playerUnity);
-    DEBUG_CONSTRUCTOR("Player Unity adicionado");
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
@@ -31,9 +28,8 @@ Robo::Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>
 
     //ctor
     GameObject* unityMenu = associated.GetChildWithTag("UnityMenu");
-    //PlayerUnityMenu& playerUnityMenu = (dynamic_cast<PlayerUnityMenu&>(unityMenu->GetComponent(GameComponentType::PLAYER_UNITY_MENU)));
     PlayerUnityMenu& playerUnityMenu = unityMenu->GetComponent<PlayerUnityMenu>();
-    playerUnityMenu.AddButton(BOTAO4, this);
+    playerUnityMenu.AddButton(BOTAO4, "Ejetar", this);
 
     DEBUG_CONSTRUCTOR("fim");
 }
@@ -48,15 +44,17 @@ bool Robo::Is(unsigned int type) const{
 }
 
 void Robo::Update(float dt){
-    if(InputManager::GetInstance().KeyPress(SDLK_0)){
-        Attack();
-    }
+    DEBUG_UPDATE("inicio");
+    PlayerUnity::Update(dt);
+    DEBUG_UPDATE("fim");
 }
 
 void Robo::EarlyUpdate(float dt){
+    PlayerUnity::EarlyUpdate(dt);
 }
 
 void Robo::LateUpdate(float dt){
+    PlayerUnity::LateUpdate(dt);
 }
 
 void Robo::Render() const{
@@ -80,19 +78,21 @@ void Robo::BoardPilot(GameObject* piloto){
 }
 
 void Robo::ButtonObserver(Component* btn){
-    if(pilotos.size()){
-        pilotos.back()->SetActive(true);
-        pilotos.pop_back();
+    DEBUG_PRINT("inicio");
+    PlayerUnity::ButtonObserver(btn);
+    if((dynamic_cast<Button&>(*btn)).name == "Ejetar"){
+        if(pilotos.size()){
+            pilotos.back()->SetActive(true);
+            pilotos.pop_back();
+        }
     }
+    DEBUG_PRINT("fim");
 }
 
 void Robo::Attack(){
     //Posição no grid
-    //Component& charStatus = associated.GetComponent(CHARACTER_STATUS);
     try{
-        //CharacterStatus& charStatus = dynamic_cast<CharacterStatus&>(associated.GetComponent(CHARACTER_STATUS));
-        CharacterStatus& charStatus = associated.GetComponent<CharacterStatus>();
-        vector<Vec2> range = charStatus.CellsInRange();
+        vector<Vec2> range = CharacterStatus::CellsInRange();
         DEBUG_PRINT("Celulas no alcance:");
         for(unsigned int i = 0; i < range.size(); i++){
             DEBUG_PRINT("c" << i << ": " << range[i].x << "," << range[i].y);

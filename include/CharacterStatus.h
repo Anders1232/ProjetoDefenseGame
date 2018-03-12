@@ -12,20 +12,22 @@ class GameObject; //reference only
 
 class CharacterStatus : public Component
 {
-    enum Direction{
-        UP = 0,
-        DOWN,
-        LEFT,
-        RIGHT
-    };
-    enum State{
-        IDLE = 0,
-        MOVING,
-        ATTAKCING
-    };
+    protected:
+        enum Direction{
+            UP = 0,
+            DOWN,
+            LEFT,
+            RIGHT
+        };
+        enum CharacterState{
+            IDLE = 0,
+            WALKING,
+            ATTAKCING
+        };
 
     public:
         CharacterStatus(GameObject& associated,
+                        Vec2 position,
                         TileMap<TileInfo>* tileMap,
                         float hp = 10, float mp = 10,
                         float speed = 1, int range = 1,
@@ -37,15 +39,14 @@ class CharacterStatus : public Component
         void LateUpdate(float dt);
         void Render();
         bool Is(unsigned int type) const;
-        void Walk(Vec2 destination);
+        void Walk();
         void ChangeDirection(Direction dir);
         void debug();
         std::vector<Vec2> CellsInRange();
 
     protected:
-
-    private:
         TileMap<TileInfo>* tileMap;
+        Vec2* destination;
         Vec2 lastGridPosition;
         Vec2 currentGridPosition;
         /*
@@ -60,9 +61,9 @@ class CharacterStatus : public Component
         float defense;
         float magic;
         float resistence;
-        State state;
+        CharacterState charState;
         Direction direction;
-
+        bool pathVerifyed;
 };
 
 #endif // CHARACTERSTATUS_H

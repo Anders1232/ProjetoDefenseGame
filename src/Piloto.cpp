@@ -18,12 +18,9 @@ using std::vector;
 
 
 Piloto::Piloto(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>* tileMap):
-    Component(associated)
+    PlayerUnity(associated, position, tileMap)
 {
     DEBUG_CONSTRUCTOR("inicio");
-    PlayerUnity& playerUnity = *(new PlayerUnity(associated, position, tileMap));
-    associated.AddComponent(&playerUnity);
-
     sp = new Sprite(associated, file, true, PILOTO_SHEET_FRAME_TIME, PILOTO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
@@ -48,8 +45,7 @@ void Piloto::EarlyUpdate(float dt){
 }
 
 void Piloto::Update(float dt){
-    OnClick();
-
+    PlayerUnity::Update(dt);
 }
 
 void Piloto::LateUpdate(float dt){
@@ -64,17 +60,6 @@ void Piloto::OnClick(){
        }else{
        }
     }
-}
-
-Vec2& Piloto::Destination(){
-    //TODO
-    Vec2* v = new Vec2(0,0);
-    return *v;
-}
-
-void Piloto::SetPosition(int x, int y){
-    associated.box.x = x;
-    associated.box.y = y;
 }
 
 void Piloto::ShowOnScreen(){

@@ -8,10 +8,11 @@
 #include "TileMap.h"
 #include "TileInfo.h"
 
+#include "PlayerUnity.h"
 class GameObject;
 class Sprite;
 
-class Robo : public Component
+class Robo : public PlayerUnity
 {
     public:
         Robo(GameObject& associated, std::string file, Vec2 position, TileMap<TileInfo>* tileMap);
@@ -30,7 +31,6 @@ class Robo : public Component
 
     private:
         Sprite* sp;
-        TileMap<TileInfo>* tileMap;
         std::vector<GameObject*> pilotos;
         std::vector<int> buttons;
 };

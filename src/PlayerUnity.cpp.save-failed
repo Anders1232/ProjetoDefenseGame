@@ -18,7 +18,7 @@ using std::string;
 using std::vector;
 
 PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo>* tileMap):
-    CharacterStatus(associated, position, tileMap),
+    CharacterStatus(associated, tileMap),
     barraVida( *(new GameObject("BarraVida", associated.GetContext())) ),
     barraCoolDown( *(new GameObject("BarraCoolDown", associated.GetContext())) ),
     piloto(nullptr),
@@ -26,10 +26,12 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
     playerUnityMenu(nullptr),
     clicked(false),
     selected(false),
-    walkPressed(false),
     tileMap(tileMap)
 {
-    DEBUG_CONSTRUCTOR("inicio: [ " << this << "]");
+    DEBUG_CONSTRUCTOR("inicio");
+    Vec2 pos = tileMap->MapToPixel(position);
+    tileMap->At(position.x, position.y).PutCharacter(associated);
+
     /*
         Barra de vida
     */
@@ -55,26 +57,25 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
     associated.CreateNewObject(playerUnityMenu);
     playerUnityMenu->debug = true;
 
-    GameObject* movingPathObject = new GameObject("Path", associated.GetContext());
-    movingPathObject->SetParent(associated);
+    movingPath = new GameObject("Path", associated.GetContext());
+    movingPath->SetParent(associated);
+    PlayerUnityPath* roboPathComponent = new PlayerUnityPath(*movingPath, tileMap);
+    movingPath->AddComponent(roboPathComponent);
+    associated.CreateNewObject(movingPath);
 
-    movingPath = new PlayerUnityPath(*movingPathObject, tileMap, destination);
-    movingPathObject->AddComponent(movingPath);
-    associated.CreateNewObject(movingPathObject);
+    //roboPathComponent contem uma função que será atribuida a um botão do menu
+    playerUnityMenuComponent->AddButton(BOTAO1, roboPathComponent);
 
-    //playerUnity contem uma função que será atribuida a um botão do menu
-    playerUnityMenuComponent->AddButton(BOTAO1, "Andar", this);
-
-    //O menu reage a um evento do movingPath:
+    //O menu reage a um evento do roboPath:
     //Quando terminar de criar o caminho, os listeners serão chamados
-    playerUnityMenuComponent->SubscribeToPath(*movingPath);
+    playerUnityMenuComponent->SubscribeToPath(*roboPathComponent);
 
     DEBUG_CONSTRUCTOR("box:{" <<
                       associated.box.x << ", " <<
                       associated.box.y << ", " <<
                       associated.box.w << ", " <<
                       associated.box.h << "}");
-    DEBUG_CONSTRUCTOR("fim: [ " << this << "]");
+    DEBUG_CONSTRUCTOR("fim");
 }
 
 PlayerUnity::~PlayerUnity()
@@ -83,28 +84,11 @@ PlayerUnity::~PlayerUnity()
 
 void PlayerUnity::Update(float dt)
 {
-    DEBUG_UPDATE("inicio");
     CharacterStatus::Update(dt);
-    switch(charState){
-    case CharacterState::IDLE:
-        if(walkPressed){
-            if(movingPath->HasPoints()){
-                destination = new Vec2(movingPath->GetNext());
-                charState = CharacterState::WALKING;
-            }else{
-                walkPressed = false;
-            }
-        }
-        break;
-    case CharacterState::WALKING:
-        if(destination == nullptr){
-            charState = IDLE;
-        }else{
-            Walk();
-        }
-        break;
+    Vec2 currentPosition(associated.box.x, associated.box.y);
+    if(*destination != currentPosition){
+        CharacterStatus::Walk(new Vec2(*destination) );
     }
-    DEBUG_UPDATE("fim");
 }
 
 void PlayerUnity::Render() const
@@ -145,20 +129,11 @@ void PlayerUnity::SetPosition(float x, float y)
 
 Vec2& PlayerUnity::Destination()
 {
-    return *destination;
+    return destination;
 }
 
 GameObject* PlayerUnity::GetMenu(){
     return playerUnityMenu;
 }
-
-void PlayerUnity::ButtonObserver(Component* btn){
-    DEBUG_PRINT("inicio");
-    if(dynamic_cast<Button&>(*btn).name == "Andar"){
-        walkPressed = true;
-    }
-    DEBUG_PRINT("fim");
-}
-
 
 #include "Error_footer.h"

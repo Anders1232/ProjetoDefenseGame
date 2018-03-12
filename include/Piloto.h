@@ -9,10 +9,12 @@
 #include "TileMap.h"
 #include "TileInfo.h"
 
+#include "PlayerUnity.h"
+
 class GameObject;
 
 
-class Piloto: public Component
+class Piloto: public PlayerUnity
 {
     public:
         Piloto(GameObject& associated, std::string file, Vec2 position, TileMap<TileInfo>* tileMap);
@@ -23,8 +25,6 @@ class Piloto: public Component
         void LateUpdate(float dt);
         void Render() const;
         void OnClick();
-        Vec2& Destination();
-        void SetPosition(int x, int y);
         void ShowOnScreen();
         void BoardPilot(void*);
 

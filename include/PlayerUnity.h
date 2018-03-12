@@ -8,11 +8,11 @@
 #include "Component.h"
 #include "TileMap.h"
 #include "TileInfo.h"
+#include "CharacterStatus.h"
 
 class GameObject;
-class CharacterStatus;
-
-class PlayerUnity: public Component{
+class PlayerUnityPath;
+class PlayerUnity: public CharacterStatus{
 
 public:
     PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo>* tileMap);
@@ -29,19 +29,19 @@ public:
 	void MenuClose();
 	Vec2& Destination();
 	GameObject* GetMenu();
+	void ButtonObserver(Component* btn);
 
 protected:
 
 private:
-    CharacterStatus& characterStatus;
     GameObject& barraVida;
     GameObject& barraCoolDown;
     GameObject* piloto;
-    GameObject* movingPath;
+    PlayerUnityPath* movingPath;
     GameObject* playerUnityMenu;
     bool clicked;
     bool selected;
-    Vec2 destination;
+    bool walkPressed;
     TileMap<TileInfo>* tileMap;
 };
 
