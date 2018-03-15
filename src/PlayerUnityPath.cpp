@@ -32,38 +32,34 @@ void PlayerUnityPath::CreatePath(){
     Vec2 lastMarkerPosition;
     if(pathMarkers.size() > 0){
         associated.showOnScreen = true;
-        lastMarkerPosition = Vec2( (*pathMarkers.back()).box.x, (*pathMarkers.back()).box.y );
+        lastMarkerPosition = tileMap->PixelToMap( (*pathMarkers.back()).box);
     }else{
-        lastMarkerPosition = Vec2(associated.box.x, associated.box.y) ;
+        lastMarkerPosition = tileMap->PixelToMap(associated.box) ;
     }
-    Vec2 mousePosition = InputManager::GetInstance().GetMousePos();
-    Vec2 mouseOnGrid = tileMap->PixelToMap(mousePosition);
+    Vec2 mouseOnGrid = tileMap->PixelToMap(InputManager::GetInstance().GetMousePos());
     if(tileMap->At(mouseOnGrid.x, mouseOnGrid.y).IsPassable() &&
        tileMap->At(mouseOnGrid.x, mouseOnGrid.y).IsFree() ){
 
-        if(mousePosition.x > lastMarkerPosition.x + tileMap->GetTileSize().x){
-            AddMarker(Vec2(mousePosition.x, lastMarkerPosition.y));
-        }else if(mousePosition.x < lastMarkerPosition.x){
-            AddMarker(Vec2(lastMarkerPosition.x - tileMap->GetTileSize().x, lastMarkerPosition.y));
+        if(mouseOnGrid.x > lastMarkerPosition.x){
+            AddMarker(Vec2(mouseOnGrid.x, lastMarkerPosition.y));
+        }else if(mouseOnGrid.x < lastMarkerPosition.x){
+            AddMarker(Vec2(mouseOnGrid.x, lastMarkerPosition.y));
         }
-
-        if(mousePosition.y > lastMarkerPosition.y + tileMap->GetTileSize().y){
-            AddMarker(Vec2(lastMarkerPosition.x, mousePosition.y));
-        }else if(mousePosition.y < lastMarkerPosition.y){
-            AddMarker(Vec2(lastMarkerPosition.x, lastMarkerPosition.y - tileMap->GetTileSize().y));
+        if(mouseOnGrid.y > lastMarkerPosition.y){
+            AddMarker(Vec2(lastMarkerPosition.x, mouseOnGrid.y));
+        }else if(mouseOnGrid.y < lastMarkerPosition.y){
+            AddMarker(Vec2(lastMarkerPosition.x, mouseOnGrid.y));
         }
     }
 }
 
 void PlayerUnityPath::AddMarker(Vec2 position){
-    Vec2* v = new Vec2();
-    *v = tileMap->AdjustToMap(position);
     GameObject* pathMarker = new GameObject("PathMarker", associated.GetContext());
     /*
         O Path não deve ser colocado como filho do PlayerUnity.
         Caso contrário, o path (e seus filhos) vão se mover conforme PlayerUnity se movimenta.
     */
-    pathMarker->SetPosition(v->x, v->y);
+    pathMarker->SetPosition(tileMap->MapToPixel(position));
     pathMarker->AddComponent(new PathMarker(*pathMarker, MARKER_SPRITE));
     associated.CreateNewObject(pathMarker);
     pathMarkers.push_back(pathMarker);
@@ -74,7 +70,7 @@ bool PlayerUnityPath::HasPoints(){
 }
 
 Vec2 PlayerUnityPath::GetNext(){
-    Vec2 v( (*pathMarkers.front()).box );
+    Vec2 v( tileMap->PixelToMap( (*pathMarkers.front()).box) );
     return v;
 }
 
@@ -91,11 +87,6 @@ void PlayerUnityPath::Update(float dt){
            associated.parent->box.y == pathMarkers.front()->box.y){
             delete(pathMarkers.front());
             pathMarkers.erase(pathMarkers.begin());
-            /*
-            if(pathMarkers.size() > 0){
-                destination = GetNext();
-            }
-            */
         }
     }
     DEBUG_UPDATE("fim");

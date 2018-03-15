@@ -12,8 +12,6 @@
 #include "PlayerUnity.h"
 
 class GameObject;
-
-
 class Piloto: public PlayerUnity
 {
     public:

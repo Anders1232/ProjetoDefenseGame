@@ -17,6 +17,8 @@ CharacterStatus::CharacterStatus(GameObject& associated,
     Component(associated),
     tileMap(tileMap),
     destination(nullptr),
+    lastPosition(nullptr),
+    walkDirection(nullptr),
     hp(hp),
     mp(mp),
     speed(speed),
@@ -52,48 +54,68 @@ bool CharacterStatus::Is(unsigned int type) const{
     DEBUG_PRINT("Type: " << type );
     return GameComponentType::CHARACTER_STATUS == type;
 }
+
 void CharacterStatus::Walk(){
-    if( *destination == associated.box){
-        DEBUG_PRINT("Cheguei no destino.");
+    if(destination == nullptr) return;
+
+    Vec2 currentGridPosition(tileMap->PixelToMap(associated.box));
+
+    if( *destination == currentGridPosition){//se chegou ao destino
+        //associated.SetPosition(tileMap->MapToPixel())
+        if(walkDirection->x < 0){
+            destination->x += 1;
+        }else if(walkDirection->y < 0){
+            destination->y += 1;
+        }
+        associated.SetPosition(tileMap->MapToPixel(*destination));
+
+        tileMap->At(lastPosition->x, lastPosition->y).RemoveCharacter();//remove o personagem da posição anterior
+        delete(lastPosition);
+        lastPosition = nullptr;
+
         delete(destination);
         destination = nullptr;
         pathVerifyed = false;
-    }else{
-        Vec2 currentPosition(associated.box);
-        Vec2 currentGridPosition(tileMap->PixelToMap(associated.box));
-        Vec2 destinationGridPosition = tileMap->PixelToMap(*destination);
+        delete(walkDirection);
+        walkDirection = nullptr;
+    }else{//se não chegou ao destino
+        Vec2 negativeDirection( walkDirection->x == -1, walkDirection->y == -1);
+        if(lastPosition == nullptr){//e está rodando pela primeira vez
+            lastPosition = new Vec2(currentGridPosition);//consider-se a posição atual como "ultima posição"
+        }else if(*lastPosition != currentGridPosition + negativeDirection){//se last e current forem diferentes, o personagem ja andou um quadrado
+            *lastPosition = currentGridPosition + negativeDirection;
+            pathVerifyed = false;//deve verificar novamente se o caminho está livre
+        }
 
-        /*
-            *   Sempre que o personagem for andar, ele deve checar antes se
-            *   a posição pra onde ele pretende ir está vazia.
-            */
-        if(!pathVerifyed){
-            if(tileMap->At(destinationGridPosition.x, destinationGridPosition.y).IsPassable() &&
-               tileMap->At(destinationGridPosition.x, destinationGridPosition.y).IsFree() ){
-                tileMap->At(destinationGridPosition.x, destinationGridPosition.y).PutCharacter(associated);
-                tileMap->At(currentGridPosition.x, currentGridPosition.y).RemoveCharacter();
+        Vec2 nextGridPosition = currentGridPosition + *walkDirection + negativeDirection;
+        if(!pathVerifyed &&
+           tileMap->At(nextGridPosition.x, nextGridPosition.y).IsPassable() &&
+           tileMap->At(nextGridPosition.x, nextGridPosition.y).IsFree() ){
+                tileMap->At(nextGridPosition.x, nextGridPosition.y).PutCharacter(associated);//reserva a posição
+                tileMap->At(lastPosition->x, lastPosition->y).RemoveCharacter();
                 pathVerifyed = true;
-                DEBUG_PRINT("Celula de destino " << destinationGridPosition.x << " ," << destinationGridPosition.y << " reservada.");
-                DEBUG_PRINT("Celula que ocupava " << currentGridPosition.x << " ," << currentGridPosition.y << " liberada.");
-            }
+                //DEBUG_PRINT("Celula que ocupava " << lastPosition->x << " ," << lastPosition->y << " liberada.");
+                //DEBUG_PRINT("Celula de destino " << nextGridPosition.x << " ," << nextGridPosition.y << " reservada.");
         }else{
-            DEBUG_PRINT("Andando");
-            if(destination->x > currentPosition.x)
+            //DEBUG_PRINT("Andando");
+            Vec2 currentPosition(associated.box);
+            Vec2 pixelDestination = tileMap->MapToPixel(*destination);
+            if(pixelDestination.x > associated.box.x)
             {
                 if(direction != RIGHT) ChangeDirection(RIGHT);
                 associated.box.x += speed;
             }
-            else if(destination->x < currentPosition.x)
+            else if(pixelDestination.x < associated.box.x)
             {
                 if(direction != LEFT) ChangeDirection(LEFT);
                 associated.box.x -= speed;
             }
-            if(destination->y > currentPosition.y)
+            if(pixelDestination.y > associated.box.y)
             {
                 if(direction != DOWN) ChangeDirection(DOWN);
                 associated.box.y += speed;
             }
-            else if(destination->y < currentPosition.y)
+            else if(pixelDestination.y < associated.box.y)
             {
                 if(direction != UP) ChangeDirection(UP);
                 associated.box.y -= speed;
@@ -169,4 +191,21 @@ vector<Vec2> CharacterStatus::CellsInRange(){
     }
     DEBUG_PRINT("fim");
     return cells;
+}
+
+void CharacterStatus::SetDestination(Vec2 destination){
+    DEBUG_PRINT("inicio");
+    Vec2 currentPosition = tileMap->PixelToMap(associated.box);
+    walkDirection = new Vec2( destination - currentPosition);
+    walkDirection->Normalize();
+    if(walkDirection->x + walkDirection->y > 0){
+        this->destination = new Vec2(destination);
+    }else if(walkDirection->x + walkDirection->y < 0){
+        this->destination = new Vec2(destination);
+        *(this->destination) += *walkDirection;
+    }else{
+        delete(walkDirection);
+        walkDirection = nullptr;
+    }
+    DEBUG_PRINT("fim");
 }

@@ -75,13 +75,13 @@ StageState::StageState():
     piloto->AddComponent(new Piloto(*piloto, PILOTO_SP1, Vec2(3,4), tileMap));
     //roboComponent->BoardPilot(piloto);
 
-/*
+
     GameObject* enemy = new GameObject("Enemy", this);
     AddObject(enemy);
     Enemy* enemyComponent = new Enemy(*enemy, ENEMY_1, Vec2(10,3), tileMap);
     enemyComponent->AddPatrolPoint(Vec2(15,3));
     enemy->AddComponent(enemyComponent);
-*/
+
 
     GameObject* cursor = new GameObject("Cursor", this);
     cursor->AddComponent(new Cursor(*cursor, "resources/img/misc/cursor.png"));

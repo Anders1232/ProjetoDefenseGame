@@ -89,7 +89,7 @@ void PlayerUnity::Update(float dt)
     case CharacterState::IDLE:
         if(walkPressed){
             if(movingPath->HasPoints()){
-                destination = new Vec2(movingPath->GetNext());
+                SetDestination(movingPath->GetNext() );
                 charState = CharacterState::WALKING;
             }else{
                 walkPressed = false;
