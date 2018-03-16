@@ -44,6 +44,17 @@ void CharacterStatus::EarlyUpdate(float dt){}
 
 void CharacterStatus::Update(float dt){
     DEBUG_UPDATE("inicio");
+    vector<Vec2>cells = CellsInRange();
+    for(auto it = cells.begin(); it != cells.end(); it++){
+        GameObject* someChar = tileMap->At(it->x, it->y).GetCharacter();
+        if( someChar && someChar != &associated &&
+           *it != tileMap->PixelToMap(associated.box)){
+            DEBUG_PRINT("cell: " << it->x << ", " << it->y);
+            DEBUG_PRINT("SOMEONE HERE!");
+        }else{
+            //DEBUG_PRINT("no one here...!");
+        }
+    }
     DEBUG_UPDATE("fim");
 }
 
@@ -61,23 +72,7 @@ void CharacterStatus::Walk(){
     Vec2 currentGridPosition(tileMap->PixelToMap(associated.box));
 
     if( *destination == currentGridPosition){//se chegou ao destino
-        //associated.SetPosition(tileMap->MapToPixel())
-        if(walkDirection->x < 0){
-            destination->x += 1;
-        }else if(walkDirection->y < 0){
-            destination->y += 1;
-        }
-        associated.SetPosition(tileMap->MapToPixel(*destination));
-
-        tileMap->At(lastPosition->x, lastPosition->y).RemoveCharacter();//remove o personagem da posição anterior
-        delete(lastPosition);
-        lastPosition = nullptr;
-
-        delete(destination);
-        destination = nullptr;
-        pathVerifyed = false;
-        delete(walkDirection);
-        walkDirection = nullptr;
+        StopWalking(*destination);
     }else{//se não chegou ao destino
         Vec2 negativeDirection( walkDirection->x == -1, walkDirection->y == -1);
         if(lastPosition == nullptr){//e está rodando pela primeira vez
@@ -88,12 +83,20 @@ void CharacterStatus::Walk(){
         }
 
         Vec2 nextGridPosition = currentGridPosition + *walkDirection + negativeDirection;
-        if(!pathVerifyed &&
-           tileMap->At(nextGridPosition.x, nextGridPosition.y).IsPassable() &&
-           tileMap->At(nextGridPosition.x, nextGridPosition.y).IsFree() ){
+        if(!pathVerifyed){
+           if(tileMap->At(nextGridPosition.x, nextGridPosition.y).IsPassable()){
+              if(tileMap->At(nextGridPosition.x, nextGridPosition.y).IsFree() ){
                 tileMap->At(nextGridPosition.x, nextGridPosition.y).PutCharacter(associated);//reserva a posição
                 tileMap->At(lastPosition->x, lastPosition->y).RemoveCharacter();
                 pathVerifyed = true;
+              }else{
+                  //Non-Empty
+                  charState = ATTAKCING;
+                  StopWalking(currentGridPosition);
+              }
+           }else{
+               //Non-Passable
+           }
                 //DEBUG_PRINT("Celula que ocupava " << lastPosition->x << " ," << lastPosition->y << " liberada.");
                 //DEBUG_PRINT("Celula de destino " << nextGridPosition.x << " ," << nextGridPosition.y << " reservada.");
         }else{
@@ -122,6 +125,25 @@ void CharacterStatus::Walk(){
             }
         }
     }
+}
+
+void CharacterStatus::StopWalking(Vec2 position){
+    if(walkDirection->x < 0){
+        destination->x += 1;
+    }else if(walkDirection->y < 0){
+        destination->y += 1;
+    }
+    associated.SetPosition(tileMap->MapToPixel(position));
+
+    tileMap->At(lastPosition->x, lastPosition->y).RemoveCharacter();//remove o personagem da posição anterior
+    delete(lastPosition);
+    lastPosition = nullptr;
+
+    delete(destination);
+    destination = nullptr;
+    pathVerifyed = false;
+    delete(walkDirection);
+    walkDirection = nullptr;
 }
 
 void CharacterStatus::ChangeDirection(Direction dir)
@@ -181,7 +203,7 @@ void CharacterStatus::debug()
 }
 
 vector<Vec2> CharacterStatus::CellsInRange(){
-    DEBUG_PRINT("inicio");
+    //DEBUG_PRINT("inicio");
     vector<Vec2> cells;
     Vec2 currentPosition(tileMap->PixelToMap(associated.GetPosition())) ;
     for(int i = currentPosition.x - range; i < currentPosition.x +1 + range; i++){
@@ -189,7 +211,7 @@ vector<Vec2> CharacterStatus::CellsInRange(){
             cells.push_back(Vec2(i, j));
         }
     }
-    DEBUG_PRINT("fim");
+    //DEBUG_PRINT("fim");
     return cells;
 }
 

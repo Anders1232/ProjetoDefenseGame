@@ -65,6 +65,7 @@ class CharacterStatus : public Component
         Direction direction;
         bool pathVerifyed;
         void SetDestination(Vec2 destination);
+        void StopWalking(Vec2 position);
     private:
 };
 
