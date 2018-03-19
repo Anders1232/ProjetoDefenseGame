@@ -32,7 +32,7 @@ void PlayerUnityPath::CreatePath(){
     Vec2 lastMarkerPosition;
     if(pathMarkers.size() > 0){
         associated.showOnScreen = true;
-        lastMarkerPosition = tileMap->PixelToMap( (*pathMarkers.back()).box);
+        lastMarkerPosition = tileMap->PixelToMap( (*pathMarkers.back()).box.Center());
     }else{
         lastMarkerPosition = tileMap->PixelToMap(associated.box) ;
     }
@@ -59,7 +59,7 @@ void PlayerUnityPath::AddMarker(Vec2 position){
         O Path não deve ser colocado como filho do PlayerUnity.
         Caso contrário, o path (e seus filhos) vão se mover conforme PlayerUnity se movimenta.
     */
-    pathMarker->SetPosition(tileMap->MapToPixel(position));
+    pathMarker->SetCenterPosition(tileMap->CellCenterToPixel(position));
     pathMarker->AddComponent(new PathMarker(*pathMarker, MARKER_SPRITE));
     associated.CreateNewObject(pathMarker);
     pathMarkers.push_back(pathMarker);
@@ -70,7 +70,7 @@ bool PlayerUnityPath::HasPoints(){
 }
 
 Vec2 PlayerUnityPath::GetNext(){
-    Vec2 v( tileMap->PixelToMap( (*pathMarkers.front()).box) );
+    Vec2 v( tileMap->PixelToMap( (*pathMarkers.front()).box.Center()) );
     return v;
 }
 
@@ -83,8 +83,8 @@ void PlayerUnityPath::Update(float dt){
 
     OnClick();
     if(!parentSelected && pathMarkers.size() > 0){
-        if(associated.parent->box.x == pathMarkers.front()->box.x &&
-           associated.parent->box.y == pathMarkers.front()->box.y){
+        if(associated.parent->box.Center().x == pathMarkers.front()->box.Center().x &&
+           associated.parent->box.Center().y == pathMarkers.front()->box.Center().y){
             delete(pathMarkers.front());
             pathMarkers.erase(pathMarkers.begin());
         }

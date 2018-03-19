@@ -62,10 +62,10 @@ StageState::StageState():
     /*
         Coloca os personagens
     */
-
+/*
     GameObject* robo = new GameObject("Robo", this);
     AddObject(robo);
-    Robo* roboComponent = new Robo(*robo, ROBO_SP1, Vec2(12,3), tileMap);
+    Robo* roboComponent = new Robo(*robo, ROBO_SP1, Vec2(3,3), tileMap);
     robo->AddComponent(roboComponent);
 
 
@@ -74,12 +74,12 @@ StageState::StageState():
     AddObject(piloto);
     piloto->AddComponent(new Piloto(*piloto, PILOTO_SP1, Vec2(3,4), tileMap));
     //roboComponent->BoardPilot(piloto);
-
+*/
 
     GameObject* enemy = new GameObject("Enemy", this);
     AddObject(enemy);
-    Enemy* enemyComponent = new Enemy(*enemy, ENEMY_1, Vec2(10,3), tileMap);
-    enemyComponent->AddPatrolPoint(Vec2(15,3));
+    Enemy* enemyComponent = new Enemy(*enemy, ENEMY_1, Vec2(0,0), tileMap);
+    enemyComponent->AddPatrolPoint(Vec2(0,3));
     enemy->AddComponent(enemyComponent);
 
 

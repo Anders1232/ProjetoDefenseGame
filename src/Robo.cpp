@@ -23,8 +23,9 @@ Robo::Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
-    associated.box.w = sp->GetWidth();
-    associated.box.h = sp->GetHeight();
+    associated.SetCenterPosition(tileMap->CellCenterToPixel(position));
+    //associated.box.w = sp->GetWidth();
+    //associated.box.h = sp->GetHeight();
 
     //ctor
     GameObject* unityMenu = associated.GetChildWithTag("UnityMenu");

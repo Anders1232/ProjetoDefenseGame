@@ -18,6 +18,7 @@ Enemy::Enemy(GameObject& associated, string spritePath, Vec2 position, TileMap<T
     Sprite* sp = new Sprite(associated, spritePath, true, 0.2, 2);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
+    associated.SetCenterPosition(tileMap->CellCenterToPixel(position));
     patrolPoints.push_back( position );
     DEBUG_CONSTRUCTOR("fim");
     //ctor
@@ -30,29 +31,31 @@ Enemy::~Enemy()
 
 void Enemy::EarlyUpdate(float dt){}
 void Enemy::Update(float dt){
+    DEBUG_UPDATE("inicio");
     CharacterStatus::Update(dt);
     switch(charState){
-    case CharacterState::IDLE:
-        if(patrolPoints.size() > 1){
-            SetDestination(patrolPoints[nextPointIndex]);
-            if(destination){
-                DEBUG_PRINT("Novo destination: " << destination->x << ", " << destination->y);
+        case CharacterState::IDLE:
+            //DEBUG_PRINT("enemy: IDLE");
+            if(patrolPoints.size() > 1){
+                SetDestination(patrolPoints[nextPointIndex]);
+                if(destination){
+                    DEBUG_PRINT("Novo destination: " << destination->x << ", " << destination->y);
+                }
+                nextPointIndex++;
+                if(nextPointIndex == patrolPoints.size()) nextPointIndex = 0;
+                charState = CharacterState::WALKING;
             }
-            nextPointIndex++;
-            if(nextPointIndex == patrolPoints.size()) nextPointIndex = 0;
-            charState = CharacterState::WALKING;
-        }
-        break;
-    case CharacterState::WALKING:
-        if(destination == nullptr){
-            charState = IDLE;
-        }else{
-            Walk();
-        }
-        break;
+            break;
+        case CharacterState::WALKING:
+            //DEBUG_PRINT("enemy: WALKING");
+            if(destination == nullptr){
+                charState = IDLE;
+            }else{
+                Walk();
+            }
+            break;
     }
-
-
+    DEBUG_UPDATE("fim");
 }
 void Enemy::LateUpdate(float dt){}
 void Enemy::Render(){}

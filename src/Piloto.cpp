@@ -24,8 +24,9 @@ Piloto::Piloto(GameObject& associated, string file, Vec2 position, TileMap<TileI
     sp = new Sprite(associated, file, true, PILOTO_SHEET_FRAME_TIME, PILOTO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
-    associated.box.w = sp->GetWidth();
-    associated.box.h = sp->GetHeight();
+    associated.SetCenterPosition(tileMap->CellCenterToPixel(position));
+    //associated.box.w = sp->GetWidth();
+    //associated.box.h = sp->GetHeight();
 
     //buttons.push_back((dynamic_cast<PlayerUnityMenu&>(playerUnity.GetMenu()->GetComponent(PLAYER_UNITY_MENU))).AddButton(BOTAO5, this, BoardPilot));
     //DEBUG_CONSTRUCTOR("indice do botao: " << buttons.back());

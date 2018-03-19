@@ -47,8 +47,8 @@ class CharacterStatus : public Component
     protected:
         TileMap<TileInfo>* tileMap;
         Vec2* destination;
-        Vec2* lastPosition;
         Vec2* walkDirection;
+        Vec2* lastGridPosition;
         /*
             Status
         */
@@ -65,8 +65,9 @@ class CharacterStatus : public Component
         Direction direction;
         bool pathVerifyed;
         void SetDestination(Vec2 destination);
-        void StopWalking(Vec2 position);
+        void StopWalking();
     private:
+        float delta;
 };
 
 #endif // CHARACTERSTATUS_H
