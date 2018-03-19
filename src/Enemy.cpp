@@ -30,6 +30,7 @@ Enemy::~Enemy()
 }
 
 void Enemy::EarlyUpdate(float dt){}
+
 void Enemy::Update(float dt){
     DEBUG_UPDATE("inicio");
     CharacterStatus::Update(dt);
@@ -53,6 +54,10 @@ void Enemy::Update(float dt){
             }else{
                 Walk();
             }
+            break;
+        case CharacterState::ATTAKCING:
+            //if no enemies on range
+            charState = CharacterState::IDLE;
             break;
     }
     DEBUG_UPDATE("fim");

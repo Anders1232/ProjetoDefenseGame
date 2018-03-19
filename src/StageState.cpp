@@ -62,13 +62,13 @@ StageState::StageState():
     /*
         Coloca os personagens
     */
-/*
+
     GameObject* robo = new GameObject("Robo", this);
     AddObject(robo);
-    Robo* roboComponent = new Robo(*robo, ROBO_SP1, Vec2(3,3), tileMap);
+    Robo* roboComponent = new Robo(*robo, ROBO_SP1, Vec2(0,2), tileMap);
     robo->AddComponent(roboComponent);
 
-
+/*
     GameObject* piloto = new GameObject("Piloto", this);
     piloto->showOnScreen = false;
     AddObject(piloto);

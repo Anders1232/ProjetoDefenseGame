@@ -18,6 +18,7 @@ CharacterStatus::CharacterStatus(GameObject& associated,
     tileMap(tileMap),
     destination(nullptr),
     walkDirection(nullptr),
+    lastGridPosition(nullptr),
     hp(hp),
     mp(mp),
     speed(speed),
@@ -66,33 +67,35 @@ bool CharacterStatus::Is(unsigned int type) const{
 
 void CharacterStatus::Walk(){
     DEBUG_UPDATE("inicio");
-    /*
     if(destination){
-        DEBUG_PRINT("destination: " << destination->x << ", " << destination->y);
+        //DEBUG_PRINT("destination: " << destination->x << ", " << destination->y);
     }
-    */
     if(destination == nullptr) return;
+    if(tileMap->PixelToMap(associated.box.Center()) != *lastGridPosition){
+        DEBUG_PRINT("Mudou de celula: " <<
+                    lastGridPosition->x << ", " << lastGridPosition->y << " -> " <<
+                    tileMap->PixelToMap(associated.box.Center()).x << ", " <<
+                    tileMap->PixelToMap(associated.box.Center()).y);
+        pathVerifyed = false;
+        *lastGridPosition = tileMap->PixelToMap(associated.box.Center());
+    }
 
-    Vec2 currentPosition(associated.box.Center());
-    //DEBUG_PRINT("currentPosition: " << currentPosition.x << ", " << currentPosition.y);
-    Vec2 destinationOnWorld = tileMap->CellCenterToPixel(*destination);
-    if( destinationOnWorld.x - delta <= currentPosition.x && currentPosition.x <= destinationOnWorld.x + delta &&
-        destinationOnWorld.y - delta <= currentPosition.y && currentPosition.y <= destinationOnWorld.y + delta){//se chegou ao destino
-        StopWalking();
-    }else{//se não chegou ao destino
-        Vec2 currentGridPosition(tileMap->PixelToMap(associated.box.Center()));
-        if(*lastGridPosition != currentGridPosition &&
-           *destination != currentGridPosition){
-            pathVerifyed = false;
-            *lastGridPosition = currentGridPosition;
-        }
-
-        if(!pathVerifyed){
-            //DEBUG_PRINT("pathNotVerifyed");
+    Vec2 currentWorldPosition(associated.box.Center());
+    //DEBUG_PRINT("currentWorldPosition: " << currentWorldPosition.x << ", " << currentWorldPosition.y);
+    //se não foi verificado e chegou perto do centro
+    if(!pathVerifyed && tileMap->NearCellCenter(currentWorldPosition, delta)){
+        //DEBUG_PRINT("Caminho a frente nao verificado");
+        //DEBUG_PRINT("perto do centro da celula");
+        if(tileMap->PixelToMap(currentWorldPosition) == *destination){
+            //DEBUG_PRINT("Chegou na celula destino");
+            StopWalking();
+        }else{
+            //DEBUG_PRINT("Nao chegou na celula de destino");
+            //caso contrário, verifica o proximo
+            Vec2 currentGridPosition(tileMap->PixelToMap(associated.box.Center()));
             Vec2 nextGridPosition = currentGridPosition + *walkDirection;
             //DEBUG_PRINT("currentGridPosition: " << currentGridPosition.x << ", " << currentGridPosition.y);
             //DEBUG_PRINT("nextGridPosition: " << nextGridPosition.x << ", " << nextGridPosition.y);
-
             if(tileMap->At(nextGridPosition.x, nextGridPosition.y).IsPassable()){
                 //DEBUG_PRINT("is passable");
                 if(tileMap->At(nextGridPosition.x, nextGridPosition.y).IsFree()){
@@ -104,36 +107,34 @@ void CharacterStatus::Walk(){
                     //Non-Empty
                     //DEBUG_PRINT("is not free");
                     StopWalking();
-                    //charState = ATTAKCING;
+                    charState = ATTAKCING;
                 }
             }else{
                 //DEBUG_PRINT("is not passable");
                 //Non-Passable
             }
-        }else{ // Caminho já verificado e livre
-            //DEBUG_PRINT("pathVerifyed");
-            Vec2 currentPosition(associated.box.Center());
-            Vec2 pixelDestination = tileMap->CellCenterToPixel(*destination);
-            if(pixelDestination.x > associated.box.Center().x)
-            {
-                if(direction != RIGHT) ChangeDirection(RIGHT);
-                associated.box.x += speed;
-            }
-            else if(pixelDestination.x < associated.box.Center().x)
-            {
-                if(direction != LEFT) ChangeDirection(LEFT);
-                associated.box.x -= speed;
-            }
-            if(pixelDestination.y > associated.box.Center().y)
-            {
-                if(direction != DOWN) ChangeDirection(DOWN);
-                associated.box.y += speed;
-            }
-            else if(pixelDestination.y < associated.box.Center().y)
-            {
-                if(direction != UP) ChangeDirection(UP);
-                associated.box.y -= speed;
-            }
+        }
+    }else{
+        Vec2 pixelDestination = tileMap->CellCenterToPixel(*destination);
+        if(pixelDestination.x > associated.box.Center().x)
+        {
+            if(direction != RIGHT) ChangeDirection(RIGHT);
+            associated.box.x += speed;
+        }
+        else if(pixelDestination.x < associated.box.Center().x)
+        {
+            if(direction != LEFT) ChangeDirection(LEFT);
+            associated.box.x -= speed;
+        }
+        if(pixelDestination.y > associated.box.Center().y)
+        {
+            if(direction != DOWN) ChangeDirection(DOWN);
+            associated.box.y += speed;
+        }
+        else if(pixelDestination.y < associated.box.Center().y)
+        {
+            if(direction != UP) ChangeDirection(UP);
+            associated.box.y -= speed;
         }
     }
     DEBUG_UPDATE("fim");
@@ -142,7 +143,6 @@ void CharacterStatus::Walk(){
 void CharacterStatus::StopWalking(){
     DEBUG_PRINT("inicio");
     associated.SetCenterPosition(tileMap->CellCenterToPixel(tileMap->PixelToMap(associated.box.Center())));
-
     delete(lastGridPosition);
     lastGridPosition = nullptr;
     delete(destination);
@@ -224,14 +224,14 @@ vector<Vec2> CharacterStatus::CellsInRange(){
 
 void CharacterStatus::SetDestination(Vec2 destination){
     DEBUG_PRINT("inicio");
-    Vec2 currentPosition = tileMap->PixelToMap(associated.box.Center());
-    walkDirection = new Vec2( destination - currentPosition);
+    Vec2 currentWorldPosition = tileMap->PixelToMap(associated.box.Center());
+    walkDirection = new Vec2( destination - currentWorldPosition);
     walkDirection->Normalize();
-    lastGridPosition = new Vec2(currentPosition);
 
     if(walkDirection->x + walkDirection->y > 0 ||
        walkDirection->x + walkDirection->y < 0){
         this->destination = new Vec2(destination);
+        lastGridPosition = new Vec2(tileMap->PixelToMap(associated.box.Center()));
     }else{
         delete(walkDirection);
         walkDirection = nullptr;
