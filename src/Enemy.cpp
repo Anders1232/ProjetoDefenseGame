@@ -42,8 +42,12 @@ void Enemy::Update(float dt){
                 for(unsigned int i = 0; i < charactersInRange.size(); i++){
                     DEBUG_UPDATE("[" << charactersInRange[i] << "] Esta proximo!");
                     if(charactersInRange[i]->is == "PlayerUnity"){
-                       charState = CharacterState::ATTAKCING;
-                       Attack(charactersInRange[i]);
+                       attackTimer.Update(dt);
+                       if(attackTimer.Get() > 3 ){
+                           attackTimer.Restart();
+                           charState = CharacterState::ATTAKCING;
+                           //Attack(charactersInRange[i]);
+                       }
                     }
                 }
             }else if(patrolPoints.size() > 1){
@@ -64,12 +68,16 @@ void Enemy::Update(float dt){
             }
             break;
         case CharacterState::ATTAKCING:
-            charState = CharacterState::IDLE;
-            if(charactersInRange.size() > 0){
-                for(unsigned int i = 0; i < charactersInRange.size(); i++){
-                    if(charactersInRange[i]->is == "PlayerUnity"){
-                       charState = CharacterState::ATTAKCING;
-                       Attack(charactersInRange[i]);
+            attackTimer.Update(dt);
+            if(attackTimer.Get() > 3){
+                attackTimer.Restart();
+                charState = CharacterState::IDLE;
+                if( charactersInRange.size() > 0){
+                    for(unsigned int i = 0; i < charactersInRange.size(); i++){
+                        if(charactersInRange[i]->is == "PlayerUnity"){
+                           charState = CharacterState::ATTAKCING;
+                           Attack(charactersInRange[i]);
+                        }
                     }
                 }
             }

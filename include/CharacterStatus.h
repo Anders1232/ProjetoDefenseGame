@@ -8,6 +8,7 @@
 
 #include "TileMap.h"
 #include "TileInfo.h"
+#include "Timer.h"
 
 class GameObject; //reference only
 
@@ -69,6 +70,7 @@ class CharacterStatus : public Component
         float speed;
         int range;
         float attack;
+        Timer attackTimer;
         float defense;
         float magic;
         float resistence;
