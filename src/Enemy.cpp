@@ -13,6 +13,7 @@ Enemy::Enemy(GameObject& associated, string spritePath, Vec2 position, TileMap<T
     tileMap(tileMap)
 {
     DEBUG_CONSTRUCTOR("inicio");
+    is = "Enemy";
     CharacterStatus::charState = CharacterState::WALKING;
 
     Sprite* sp = new Sprite(associated, spritePath, true, 0.2, 2);
@@ -37,10 +38,18 @@ void Enemy::Update(float dt){
     switch(charState){
         case CharacterState::IDLE:
             //DEBUG_PRINT("enemy: IDLE");
-            if(patrolPoints.size() > 1){
+            if(charactersInRange.size() > 0){
+                for(unsigned int i = 0; i < charactersInRange.size(); i++){
+                    DEBUG_UPDATE("[" << charactersInRange[i] << "] Esta proximo!");
+                    if(charactersInRange[i]->is == "PlayerUnity"){
+                       charState = CharacterState::ATTAKCING;
+                       Attack(charactersInRange[i]);
+                    }
+                }
+            }else if(patrolPoints.size() > 1){
                 SetDestination(patrolPoints[nextPointIndex]);
                 if(destination){
-                    DEBUG_PRINT("Novo destination: " << destination->x << ", " << destination->y);
+                    DEBUG_UPDATE("Novo destination: " << destination->x << ", " << destination->y);
                 }
                 nextPointIndex++;
                 if(nextPointIndex == patrolPoints.size()) nextPointIndex = 0;
@@ -48,7 +57,6 @@ void Enemy::Update(float dt){
             }
             break;
         case CharacterState::WALKING:
-            //DEBUG_PRINT("enemy: WALKING");
             if(destination == nullptr){
                 charState = IDLE;
             }else{
@@ -56,8 +64,19 @@ void Enemy::Update(float dt){
             }
             break;
         case CharacterState::ATTAKCING:
-            //if no enemies on range
             charState = CharacterState::IDLE;
+            if(charactersInRange.size() > 0){
+                for(unsigned int i = 0; i < charactersInRange.size(); i++){
+                    if(charactersInRange[i]->is == "PlayerUnity"){
+                       charState = CharacterState::ATTAKCING;
+                       Attack(charactersInRange[i]);
+                    }
+                }
+            }
+            break;
+        case CharacterState::DEAD:
+            break;
+        default:
             break;
     }
     DEBUG_UPDATE("fim");

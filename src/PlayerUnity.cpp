@@ -30,6 +30,7 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
     tileMap(tileMap)
 {
     DEBUG_CONSTRUCTOR("inicio: [ " << this << "]");
+    is = "PlayerUnity";
     /*
         Barra de vida
     */
@@ -67,7 +68,7 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
 
     //O menu reage a um evento do movingPath:
     //Quando terminar de criar o caminho, os listeners serão chamados
-    playerUnityMenuComponent->SubscribeToPath(*movingPath);
+    movingPath->pathFinished.Subscribe(playerUnityMenuComponent->OnPathFinished, playerUnityMenuComponent);
 
     DEBUG_CONSTRUCTOR("box:{" <<
                       associated.box.x << ", " <<
@@ -83,29 +84,51 @@ PlayerUnity::~PlayerUnity()
 
 void PlayerUnity::Update(float dt)
 {
-    DEBUG_UPDATE("inicio");
+    DEBUG_UPDATE("PlayerUnity::inicio");
     CharacterStatus::Update(dt);
     switch(charState){
-    case CharacterState::IDLE:
-    case CharacterState::ATTAKCING:
-        if(walkPressed){
-            if(movingPath->HasPoints()){
-                SetDestination( movingPath->GetNext() );
-                charState = CharacterState::WALKING;
-            }else{
-                walkPressed = false;
+        case CharacterState::IDLE:
+            if(charactersInRange.size()>0){
+                for(unsigned int i = 0; i < charactersInRange.size(); i++){
+                    if(charactersInRange[i]->is == "Enemy"){
+                        //charState = CharacterState::ATTAKCING;
+                        //Attack(charactersInRange[i]);
+                    }
+                }
             }
-        }
-        break;
-    case CharacterState::WALKING:
-        if(destination == nullptr){
-            charState = IDLE;
-        }else{
-            Walk();
-        }
-        break;
+            break;
+        case CharacterState::ATTAKCING:
+            if(walkPressed){
+                if(movingPath->HasPoints()){
+                    SetDestination( movingPath->GetNext() );
+                    charState = CharacterState::WALKING;
+                }else{
+                    walkPressed = false;
+                }
+            }else{
+                if(charactersInRange.size()>0){
+                    for(unsigned int i = 0; i < charactersInRange.size(); i++){
+                        if(charactersInRange[i]->is == "Enemy"){
+                            charState = CharacterState::ATTAKCING;
+                            Attack(charactersInRange[i]);
+                        }
+                    }
+                }else{
+                    charState = CharacterState::IDLE;
+                }
+            }
+            break;
+        case CharacterState::WALKING:
+            if(destination == nullptr){
+                charState = IDLE;
+            }else{
+                Walk();
+            }
+            break;
+        case CharacterState::DEAD:
+            break;
     }
-    DEBUG_UPDATE("fim");
+    DEBUG_UPDATE("PlayerUnity::fim");
 }
 
 void PlayerUnity::Render() const

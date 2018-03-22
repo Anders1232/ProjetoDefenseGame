@@ -127,9 +127,3 @@ void PlayerUnityMenu::OnPathFinished(PlayerUnityPath* eventSource, int& unused, 
         (pum->GetButton(i))->SetActive(true);
     }
 }
-
-
-void PlayerUnityMenu::SubscribeToPath(PlayerUnityPath& roboPath){
-    roboPath.pathFinished.Subscribe(OnPathFinished, this);
-}
-

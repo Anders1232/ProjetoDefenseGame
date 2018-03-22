@@ -43,20 +43,9 @@ CharacterStatus::~CharacterStatus()
 void CharacterStatus::EarlyUpdate(float dt){}
 
 void CharacterStatus::Update(float dt){
-    DEBUG_UPDATE("inicio");
-    /*
-    vector<Vec2>cells = CellsInRange();
-    for(auto it = cells.begin(); it != cells.end(); it++){
-        GameObject* someChar = tileMap->At(it->x, it->y).GetCharacter();
-        if( someChar && someChar != &associated &&
-           *it != tileMap->PixelToMap(associated.box.Center())){
-            //DEBUG_PRINT("cell: " << it->x << ", " << it->y);
-            //DEBUG_PRINT("SOMEONE HERE!");
-        }else{
-            //DEBUG_PRINT("no one here...!");
-        }
-    }*/
-    DEBUG_UPDATE("fim");
+    DEBUG_UPDATE("Character::inicio");
+    charactersInRange = CharactersInRange();
+    DEBUG_UPDATE("Character::fim");
 }
 
 void CharacterStatus::LateUpdate(float dt){}
@@ -77,7 +66,10 @@ void CharacterStatus::Walk(){
                     tileMap->PixelToMap(associated.box.Center()).x << ", " <<
                     tileMap->PixelToMap(associated.box.Center()).y);
         pathVerifyed = false;
+        tileMap->At(lastGridPosition->x, lastGridPosition->y).RemoveCharacter();
         *lastGridPosition = tileMap->PixelToMap(associated.box.Center());
+        tileMap->At(lastGridPosition->x, lastGridPosition->y).PutCharacter(associated);
+
     }
 
     Vec2 currentWorldPosition(associated.box.Center());
@@ -98,10 +90,11 @@ void CharacterStatus::Walk(){
             //DEBUG_PRINT("nextGridPosition: " << nextGridPosition.x << ", " << nextGridPosition.y);
             if(tileMap->At(nextGridPosition.x, nextGridPosition.y).IsPassable()){
                 //DEBUG_PRINT("is passable");
-                if(tileMap->At(nextGridPosition.x, nextGridPosition.y).IsFree()){
+                if(tileMap->At(nextGridPosition.x, nextGridPosition.y).IsFree(associated)){
                     //DEBUG_PRINT("is free");
-                    tileMap->At(nextGridPosition.x, nextGridPosition.y).PutCharacter(associated);//reserva a posição
-                    tileMap->At(currentGridPosition.x, currentGridPosition.y).RemoveCharacter();
+                    tileMap->At(nextGridPosition.x, nextGridPosition.y).ReserveTo(associated);
+                    //tileMap->At(nextGridPosition.x, nextGridPosition.y).PutCharacter(associated);//reserva a posição
+                    //tileMap->At(currentGridPosition.x, currentGridPosition.y).RemoveCharacter();
                     pathVerifyed = true;
                 }else{
                     //Non-Empty
@@ -215,11 +208,31 @@ vector<Vec2> CharacterStatus::CellsInRange(){
     Vec2 currentPosition(tileMap->PixelToMap(associated.GetPosition())) ;
     for(int i = currentPosition.x - range; i < currentPosition.x +1 + range; i++){
         for(int j = currentPosition.y - range; j < currentPosition.y +1 + range; j++){
-            cells.push_back(Vec2(i, j));
+            if(i >= 0 && j >= 0 ){
+                cells.push_back(Vec2(i, j));
+            }
         }
     }
     //DEBUG_PRINT("fim");
     return cells;
+}
+
+vector<CharacterStatus*> CharacterStatus::CharactersInRange(){
+    DEBUG_UPDATE("inicio");
+    vector<CharacterStatus*> characters;
+    Vec2 currentPosition(tileMap->PixelToMap(associated.GetPosition())) ;
+    for(int i = currentPosition.x - range; i < currentPosition.x +1 + range; i++){
+        if(i < 0) continue;
+        for(int j = currentPosition.y - range; j < currentPosition.y +1 + range; j++){
+            if(j < 0) continue;
+            GameObject* character = tileMap->At(i, j).GetCharacter();
+            if(character && character != &associated){
+                characters.push_back(&character->GetComponent<CharacterStatus>());
+            }
+        }
+    }
+    DEBUG_UPDATE("fim");
+    return characters;
 }
 
 void CharacterStatus::SetDestination(Vec2 destination){
@@ -238,4 +251,30 @@ void CharacterStatus::SetDestination(Vec2 destination){
     }
 
     DEBUG_PRINT("fim");
+}
+
+void CharacterStatus::Attack(CharacterStatus* character){
+    DEBUG_PRINT("inicio");
+    DEBUG_PRINT("[ " << this << " ] attacking [ " << character <<" ]" );
+    character->ReceiveDamage(attack);
+    DEBUG_PRINT("fim");
+}
+
+void CharacterStatus::ReceiveDamage(int damage){
+    DEBUG_PRINT("inicio");
+    hp -= damage - defense;
+    if(hp <= 0){
+        Die();
+    }
+    DEBUG_PRINT("fim");
+}
+
+void CharacterStatus::Die(){
+    DEBUG_PRINT("Dead");
+    charState = CharacterState::DEAD;
+    Vec2 currentPosition = Vec2(tileMap->PixelToMap(associated.box.Center()));
+    tileMap->At(currentPosition.x, currentPosition.y).RemoveCharacter();
+
+    //associated.RequestDelete();
+    DEBUG_PRINT("Dead");
 }

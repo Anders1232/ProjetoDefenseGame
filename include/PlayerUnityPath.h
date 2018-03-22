@@ -31,28 +31,11 @@ class PlayerUnityPath: public Component
 
         Event<PlayerUnityPath, int&> pathFinished;
 
-        typedef std::multimap<long, HandlerBase*> HandlerMap;
-        HandlerMap StartMapping()
-		{
-			HandlerMap temp;
-			return temp;
-		}
-
-        //registra o objeto e qual seu método deve ser chamado, associando o id
-        template<typename TargetT>
-        void RegisterPathFinishedListener(TargetT* object)
-        {
-            listeners.insert(std::make_pair(++listenerId, new Handler<TargetT>(object, object->OnPathFinished)));
-        }
-
-
     protected:
 
     private:
-        long listenerId;
         bool parentSelected;
         std::vector<GameObject*> pathMarkers;
-        HandlerMap listeners;
         TileMap<TileInfo>* tileMap;
         Vec2** destination;
 };

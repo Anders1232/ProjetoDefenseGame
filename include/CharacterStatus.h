@@ -2,6 +2,7 @@
 #define CHARACTERSTATUS_H
 
 #include <vector>
+#include <string>
 #include "Component.h" //Base
 #include "Vec2.h"
 
@@ -22,7 +23,8 @@ class CharacterStatus : public Component
         enum CharacterState{
             IDLE = 0,
             WALKING,
-            ATTAKCING
+            ATTAKCING,
+            DEAD
         };
 
     public:
@@ -43,12 +45,21 @@ class CharacterStatus : public Component
         void ChangeDirection(Direction dir);
         void debug();
         std::vector<Vec2> CellsInRange();
+        std::vector<CharacterStatus*> CharactersInRange();
+
+        void Attack(CharacterStatus* character);
+        void ReceiveDamage(int damage);
+        void Die();
+        std::string is;
+
 
     protected:
         TileMap<TileInfo>* tileMap;
         Vec2* destination;
         Vec2* walkDirection;
         Vec2* lastGridPosition;
+        std::vector<CharacterStatus*> charactersInRange;
+
         /*
             Status
         */

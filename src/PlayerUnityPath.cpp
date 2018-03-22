@@ -13,12 +13,10 @@ using std::multimap;
 PlayerUnityPath::PlayerUnityPath(GameObject& associated, TileMap<TileInfo>* tileMap, Vec2* destination):
     Component(associated),
     pathFinished(this),
-    listenerId(0),
     parentSelected(false),
     tileMap(tileMap),
     destination(&destination)
 {
-    listeners = StartMapping();
     associated.showOnScreen = false;
     //ctor
 }
@@ -38,7 +36,7 @@ void PlayerUnityPath::CreatePath(){
     }
     Vec2 mouseOnGrid = tileMap->PixelToMap(InputManager::GetInstance().GetMousePos());
     if(tileMap->At(mouseOnGrid.x, mouseOnGrid.y).IsPassable() &&
-       tileMap->At(mouseOnGrid.x, mouseOnGrid.y).IsFree() ){
+       tileMap->At(mouseOnGrid.x, mouseOnGrid.y).IsFree(associated) ){
 
         if(mouseOnGrid.x > lastMarkerPosition.x){
             AddMarker(Vec2(mouseOnGrid.x, lastMarkerPosition.y));

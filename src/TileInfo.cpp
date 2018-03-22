@@ -5,7 +5,8 @@ TileInfo::TileInfo(int index):
     BaseTile(index),
     passable(true),
     isFree(true),
-    characterInside(nullptr)
+    characterInside(nullptr),
+    reservedTo(nullptr)
 {
     //ctor
 }
@@ -22,6 +23,7 @@ void TileInfo::PutCharacter(GameObject& object){
 
 void TileInfo::RemoveCharacter(){
     characterInside = nullptr;
+    reservedTo = nullptr;
     isFree = true;
 }
 
@@ -30,10 +32,14 @@ GameObject* TileInfo::GetCharacter(){
     return characterInside;
 }
 
-bool TileInfo::IsFree(){
-    return isFree;
+bool TileInfo::IsFree(GameObject& obj){
+    return (isFree && reservedTo == nullptr) || (!isFree && reservedTo == &obj);
 }
 
 bool TileInfo::IsPassable(){
     return passable;
+}
+
+void TileInfo::ReserveTo(GameObject& object){
+    reservedTo = &object;
 }

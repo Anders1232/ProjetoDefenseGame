@@ -119,7 +119,7 @@ void StageState::Input(float dt) {
     //Debug
     Vec2 mouseOnGrid = tileMap->PixelToMap(InputManager::GetInstance().GetMousePos());
     if(InputManager::GetInstance().KeyPress(SDLK_SPACE)){
-        DEBUG_PRINT( tileMap->At(mouseOnGrid.x, mouseOnGrid.y).IsFree() );
+        //DEBUG_PRINT( tileMap->At(mouseOnGrid.x, mouseOnGrid.y).IsFree() );
     }
 
     if( InputManager::GetInstance().QuitRequested() == true ){
