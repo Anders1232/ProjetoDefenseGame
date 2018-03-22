@@ -70,8 +70,12 @@ bool PlayerUnityPath::HasPoints(){
 }
 
 Vec2 PlayerUnityPath::GetNext(){
-    Vec2 v( tileMap->PixelToMap( (*pathMarkers.front()).box.Center()) );
-    return v;
+    if(pathMarkers.size() > 0){
+        Vec2 v( tileMap->PixelToMap( (*pathMarkers.front()).box.Center()) );
+        return v;
+    }else{
+        return Vec2(-1,-1);
+    }
 }
 
 bool PlayerUnityPath::Is(unsigned int type) const{

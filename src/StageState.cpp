@@ -65,7 +65,7 @@ StageState::StageState():
 
     GameObject* robo = new GameObject("Robo", this);
     AddObject(robo);
-    Robo* roboComponent = new Robo(*robo, ROBO_SP1, Vec2(0,2), tileMap);
+    Robo* roboComponent = new Robo(*robo, ROBO_SP1, Vec2(0,3), tileMap);
     robo->AddComponent(roboComponent);
 
 /*

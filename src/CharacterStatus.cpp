@@ -24,6 +24,7 @@ CharacterStatus::CharacterStatus(GameObject& associated,
     speed(speed),
     range(range),
     attack(attack),
+    attackCoolDown(3),
     defense(defense),
     magic(magic),
     resistence(resistence),
@@ -56,9 +57,10 @@ bool CharacterStatus::Is(unsigned int type) const{
 
 void CharacterStatus::Walk(){
     DEBUG_UPDATE("inicio");
+    /*
     if(destination){
-        //DEBUG_PRINT("destination: " << destination->x << ", " << destination->y);
-    }
+        DEBUG_PRINT("destination: " << destination->x << ", " << destination->y);
+    }*/
     if(destination == nullptr) return;
     if(tileMap->PixelToMap(associated.box.Center()) != *lastGridPosition){
         DEBUG_PRINT("Mudou de celula: " <<
@@ -249,7 +251,6 @@ void CharacterStatus::SetDestination(Vec2 destination){
         delete(walkDirection);
         walkDirection = nullptr;
     }
-
     DEBUG_PRINT("fim");
 }
 

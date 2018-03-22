@@ -6,6 +6,7 @@
 
 #include "Component.h"
 #include "Vec2.h"
+#include "Sound.h"
 
 #include "TileMap.h"
 #include "TileInfo.h"
@@ -34,12 +35,14 @@ private:
         void Render();
         bool Is(unsigned int type) const;
         void AddPatrolPoint(Vec2 patrolPoint);
+        void Attack(CharacterType other);
+        void Walk() override;
 
     protected:
+        Sound attackSound;
 
     private:
         unsigned int nextPointIndex;
-        TileMap<TileInfo>* tileMap;
         std::vector<Vec2> patrolPoints;
 };
 

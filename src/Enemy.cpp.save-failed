@@ -13,7 +13,7 @@ Enemy::Enemy(GameObject& associated, string spritePath, Vec2 position, TileMap<T
     attackSound("resources/audio/boom.wav")
 {
     DEBUG_CONSTRUCTOR("inicio");
-    charType = CharacterType::ENEMY;
+    is = "Enemy";
     CharacterStatus::charState = CharacterState::WALKING;
 
     Sprite* sp = new Sprite(associated, spritePath, true, 0.2, 2);
@@ -37,11 +37,17 @@ void Enemy::Update(float dt){
     CharacterStatus::Update(dt);
     switch(charState){
         case CharacterState::IDLE:
+            //DEBUG_PRINT("enemy: IDLE");
             if(charactersInRange.size() > 0){
                 for(unsigned int i = 0; i < charactersInRange.size(); i++){
                     DEBUG_UPDATE("[" << charactersInRange[i] << "] Esta proximo!");
-                    if(charactersInRange[i]->charType == CharacterType::PLAYER_UNITY){
-                        charState = CharacterState::ATTAKCING;
+                    if(charactersInRange[i]->is == "PlayerUnity"){
+                       attackTimer.Update(dt);
+                       if(attackTimer.Get() > 3 ){
+                           attackTimer.Restart();
+                           charState = CharacterState::ATTAKCING;
+                           //Attack(charactersInRange[i]);
+                       }
                     }
                 }
             }else if(patrolPoints.size() > 1){
@@ -55,11 +61,26 @@ void Enemy::Update(float dt){
             }
             break;
         case CharacterState::WALKING:
-            Walk();
+            if(destination == nullptr){
+                charState = IDLE;
+            }else{
+                Walk();
+            }
             break;
         case CharacterState::ATTAKCING:
             attackTimer.Update(dt);
-            Attack(CharacterType::PLAYER_UNITY);
+            if(attackTimer.Get() > 3){
+                attackTimer.Restart();
+                charState = CharacterState::IDLE;
+                if( charactersInRange.size() > 0){
+                    for(unsigned int i = 0; i < charactersInRange.size(); i++){
+                        if(charactersInRange[i]->is == "PlayerUnity"){
+                           charState = CharacterState::ATTAKCING;
+                           Attack(charactersInRange[i]);
+                        }
+                    }
+                }
+            }
             break;
         case CharacterState::DEAD:
             break;
@@ -78,32 +99,9 @@ void Enemy::AddPatrolPoint(Vec2 patrolPoint){
     patrolPoints.push_back(patrolPoint);
 }
 
-void Enemy::Attack(CharacterType other){
-    //DEBUG_PRINT("inicio");
-    if(attackTimer.Get() > attackCoolDown){
-        attackTimer.Restart();
-        if( charactersInRange.size() > 0){
-            for(unsigned int i = 0; i < charactersInRange.size(); i++){
-                if(charactersInRange[i]->charType == other){
-                   charState = CharacterState::ATTAKCING;
-                   CharacterStatus::Attack(charactersInRange[i]);
-                }
-            }
-        }else{
-            charState = CharacterState::IDLE;
-        }
-    }
+void Enemy::Attack(CharacterStatus* character){
+    DEBUG_PRINT("inicio");
+    CharacterStatus::Attack(character);
     attackSound.Play(1);
-    //DEBUG_PRINT("fim");
-}
-
-void Enemy::Walk(){
-    //DEBUG_PRINT("inicio");
-    if(destination == nullptr){
-        charState = CharacterState::IDLE;
-    }else{
-        CharacterStatus::Walk();
-    }
-    //DEBUG_PRINT("fim");
-
+    DEBUG_PRINT("fim");
 }

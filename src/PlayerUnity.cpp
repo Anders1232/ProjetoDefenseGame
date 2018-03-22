@@ -30,7 +30,7 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
     tileMap(tileMap)
 {
     DEBUG_CONSTRUCTOR("inicio: [ " << this << "]");
-    is = "PlayerUnity";
+    charType = CharacterType::PLAYER_UNITY;
     /*
         Barra de vida
     */
@@ -90,40 +90,19 @@ void PlayerUnity::Update(float dt)
         case CharacterState::IDLE:
             if(charactersInRange.size()>0){
                 for(unsigned int i = 0; i < charactersInRange.size(); i++){
-                    if(charactersInRange[i]->is == "Enemy"){
-                        //charState = CharacterState::ATTAKCING;
-                        //Attack(charactersInRange[i]);
+                    if(charactersInRange[i]->charType == CharacterType::ENEMY){
+                        charState = CharacterState::ATTAKCING;
+                        CharacterStatus::Attack(charactersInRange[i]);
                     }
                 }
             }
             break;
         case CharacterState::ATTAKCING:
-            if(walkPressed){
-                if(movingPath->HasPoints()){
-                    SetDestination( movingPath->GetNext() );
-                    charState = CharacterState::WALKING;
-                }else{
-                    walkPressed = false;
-                }
-            }else{
-                if(charactersInRange.size()>0){
-                    for(unsigned int i = 0; i < charactersInRange.size(); i++){
-                        if(charactersInRange[i]->is == "Enemy"){
-                            charState = CharacterState::ATTAKCING;
-                            Attack(charactersInRange[i]);
-                        }
-                    }
-                }else{
-                    charState = CharacterState::IDLE;
-                }
-            }
+            attackTimer.Update(dt);
+            Attack(CharacterType::ENEMY);
             break;
         case CharacterState::WALKING:
-            if(destination == nullptr){
-                charState = IDLE;
-            }else{
-                Walk();
-            }
+            Walk();
             break;
         case CharacterState::DEAD:
             break;
@@ -149,6 +128,7 @@ void PlayerUnity::LateUpdate(float dt) {
 
 void PlayerUnity::onClick()
 {
+
 }
 
 void PlayerUnity::MenuOpen()
@@ -178,11 +158,51 @@ GameObject* PlayerUnity::GetMenu(){
 
 void PlayerUnity::ButtonObserver(Component* btn){
     DEBUG_PRINT("inicio");
+    DEBUG_PRINT("button clicked: " << (dynamic_cast<Button&>(*btn)).name );
     if(dynamic_cast<Button&>(*btn).name == "Andar"){
-        walkPressed = true;
+        DEBUG_PRINT("Mudando estado para WALKING");
+        charState = CharacterState::WALKING;
+        SetDestination(movingPath->GetNext());
     }
     DEBUG_PRINT("fim");
 }
 
+void PlayerUnity::ReceiveDamage(int damage){
+    DEBUG_PRINT("inicio");
+    CharacterStatus::ReceiveDamage(damage);
+    DEBUG_PRINT("fim");
+}
+
+void PlayerUnity::Walk(){
+    DEBUG_UPDATE("inicio");
+    if(destination == nullptr){
+        if(movingPath->HasPoints()){
+            SetDestination(movingPath->GetNext());
+        }else{
+            charState = CharacterState::IDLE;
+        }
+    }else{
+        CharacterStatus::Walk();
+    }
+    DEBUG_UPDATE("fim");
+}
+
+void PlayerUnity::Attack(CharacterType other){
+    DEBUG_UPDATE("inicio");
+    if(attackTimer.Get() > attackCoolDown){
+        attackTimer.Restart();
+        if(charactersInRange.size()>0){
+            for(unsigned int i = 0; i < charactersInRange.size(); i++){
+                if(charactersInRange[i]->charType == other){
+                    charState = CharacterState::ATTAKCING;
+                    CharacterStatus::Attack(charactersInRange[i]);
+                }
+            }
+        }else{
+            charState = CharacterState::IDLE;
+        }
+    }
+    DEBUG_UPDATE("fim");
+}
 
 #include "Error_footer.h"

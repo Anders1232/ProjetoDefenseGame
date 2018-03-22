@@ -30,6 +30,9 @@ public:
 	Vec2& Destination();
 	GameObject* GetMenu();
 	void ButtonObserver(Component* btn);
+	void ReceiveDamage(int damage) override;
+	void Walk()override;
+	void Attack(CharacterType other);
 
 protected:
 

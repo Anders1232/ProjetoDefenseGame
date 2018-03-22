@@ -27,8 +27,13 @@ class CharacterStatus : public Component
             ATTAKCING,
             DEAD
         };
+        enum CharacterType{
+            PLAYER_UNITY,
+            ENEMY
+        };
 
     public:
+        CharacterType charType;
         CharacterStatus(GameObject& associated,
                         Vec2 position,
                         TileMap<TileInfo>* tileMap,
@@ -42,17 +47,15 @@ class CharacterStatus : public Component
         void LateUpdate(float dt);
         void Render();
         bool Is(unsigned int type) const;
-        void Walk();
+        virtual void Walk();
         void ChangeDirection(Direction dir);
         void debug();
         std::vector<Vec2> CellsInRange();
         std::vector<CharacterStatus*> CharactersInRange();
 
-        void Attack(CharacterStatus* character);
-        void ReceiveDamage(int damage);
+        virtual void Attack(CharacterStatus* character);
+        virtual void ReceiveDamage(int damage);
         void Die();
-        std::string is;
-
 
     protected:
         TileMap<TileInfo>* tileMap;
@@ -71,6 +74,7 @@ class CharacterStatus : public Component
         int range;
         float attack;
         Timer attackTimer;
+        float attackCoolDown;
         float defense;
         float magic;
         float resistence;

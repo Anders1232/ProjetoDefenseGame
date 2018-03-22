@@ -80,6 +80,7 @@ void Robo::BoardPilot(GameObject* piloto){
 
 void Robo::ButtonObserver(Component* btn){
     DEBUG_PRINT("inicio");
+    DEBUG_PRINT("button clicked: " << (dynamic_cast<Button&>(*btn)).name );
     PlayerUnity::ButtonObserver(btn);
     if((dynamic_cast<Button&>(*btn)).name == "Ejetar"){
         if(pilotos.size()){
