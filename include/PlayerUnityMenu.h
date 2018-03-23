@@ -5,6 +5,7 @@
 #include <string>
 
 #include "Component.h"
+#include "Sound.h"
 
 #include "resources_path.h"
 class GameObject;
@@ -35,6 +36,7 @@ class PlayerUnityMenu: public Component
     protected:
 
     private:
+        Sound buttonClick;
         bool active;
         std::vector<GameObject*> buttons;
 };

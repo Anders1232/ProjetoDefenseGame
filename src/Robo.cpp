@@ -20,6 +20,7 @@ Robo::Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>
 {
     DEBUG_CONSTRUCTOR("inicio");
     DEBUG_CONSTRUCTOR("position: " << position.x << ", " << position.y);
+    attackSound.Open("resources/audio/TIRO_04.wav");
     sp = new Sprite(associated, file, true, ROBO_SHEET_FRAME_TIME, ROBO_SHEET_FRAMES);
     sp->SetAnimationLines(4);
     associated.AddComponent(sp);
@@ -27,7 +28,6 @@ Robo::Robo(GameObject& associated, string file, Vec2 position, TileMap<TileInfo>
     //associated.box.w = sp->GetWidth();
     //associated.box.h = sp->GetHeight();
 
-    //ctor
     GameObject* unityMenu = associated.GetChildWithTag("UnityMenu");
     PlayerUnityMenu& playerUnityMenu = unityMenu->GetComponent<PlayerUnityMenu>();
     playerUnityMenu.AddButton(BOTAO4, "Ejetar", this);
@@ -91,15 +91,12 @@ void Robo::ButtonObserver(Component* btn){
     DEBUG_PRINT("fim");
 }
 
-void Robo::Attack(){
+bool Robo::Attack(CharacterType other){
     //Posição no grid
-    try{
-        vector<Vec2> range = CharacterStatus::CellsInRange();
-        DEBUG_PRINT("Celulas no alcance:");
-        for(unsigned int i = 0; i < range.size(); i++){
-            DEBUG_PRINT("c" << i << ": " << range[i].x << "," << range[i].y);
-        }
-    }catch(std::bad_cast& e){
-        DEBUG_PRINT("Deu merda no dynamic_cast: " << e.what() );
+    if(PlayerUnity::Attack(other)){
+        attackSound.Play(1);
+        return true;
+    }else{
+        return false;
     }
 }

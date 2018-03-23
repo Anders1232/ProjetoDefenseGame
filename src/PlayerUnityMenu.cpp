@@ -14,6 +14,7 @@ PlayerUnityMenu::PlayerUnityMenu(GameObject& associated):
     active(false)
 {
     DEBUG_CONSTRUCTOR("inicio");
+    buttonClick.Open("resources/audio/botao02.mp3");
     Reposition();
     associated.showOnScreen = false;
     DEBUG_CONSTRUCTOR("fim");
@@ -117,6 +118,7 @@ void PlayerUnityMenu::ButtonObserver(Component* btn){
     for(unsigned int i = 0; i < buttons.size(); i++){
             buttons[i]->SetActive(false);
     }
+    buttonClick.Play(1);
     DEBUG_PRINT("fim");
 }
 

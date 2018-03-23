@@ -9,9 +9,12 @@
 #include "TileMap.h"
 #include "TileInfo.h"
 #include "CharacterStatus.h"
+#include "Timer.h"
+
 
 class GameObject;
 class PlayerUnityPath;
+class Bar;
 class PlayerUnity: public CharacterStatus{
 
 public:
@@ -31,15 +34,16 @@ public:
 	GameObject* GetMenu();
 	void ButtonObserver(Component* btn);
 	void ReceiveDamage(int damage) override;
-	void Walk()override;
-	void Attack(CharacterType other);
+	void Walk(float dt)override;
+	virtual bool Attack(CharacterType other);
 
 protected:
 
 private:
-    GameObject& barraVida;
-    GameObject& barraCoolDown;
+    Bar* barraVida;
+    Bar* barraCoolDown;
     GameObject* piloto;
+    Timer coolDown;
     PlayerUnityPath* movingPath;
     GameObject* playerUnityMenu;
     bool clicked;

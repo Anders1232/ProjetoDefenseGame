@@ -19,8 +19,6 @@ using std::vector;
 
 PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo>* tileMap):
     CharacterStatus(associated, position, tileMap),
-    barraVida( *(new GameObject("BarraVida", associated.GetContext())) ),
-    barraCoolDown( *(new GameObject("BarraCoolDown", associated.GetContext())) ),
     piloto(nullptr),
     movingPath(nullptr),
     playerUnityMenu(nullptr),
@@ -31,23 +29,31 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
 {
     DEBUG_CONSTRUCTOR("inicio: [ " << this << "]");
     charType = CharacterType::PLAYER_UNITY;
+    SetStatus(50, 10, 30, 1, 3, 2, 1 ,0, 5, 3);
     /*
         Barra de vida
     */
-    barraVida.SetParent(associated, -16, 64);//Hardcoded = posicionando a barra em relação ao parent
-    barraVida.AddComponent(new Bar(barraVida, 200, BARRA_VIDA_MOLDURA, BARRA_VIDA));
-    associated.CreateNewObject(&barraVida);
+    GameObject* barraVidaObject = new GameObject("BarraVida", associated.GetContext());
+    barraVida = new Bar(*barraVidaObject, status.hp, BARRA_VIDA_MOLDURA, BARRA_VIDA);
+    barraVidaObject->SetParent(associated, -16, 64);//Hardcoded = posicionando a barra em relação ao parent
+    barraVidaObject->AddComponent(barraVida);
+    associated.CreateNewObject(barraVidaObject);
 
     /*
         Barra de cooldown
     */
-    barraCoolDown.SetParent(associated, -14, 74);//Hardcoded = posicionando a barra em relação ao parent
-    barraCoolDown.AddComponent(new Bar(barraCoolDown, 10, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN));
-    associated.CreateNewObject(&barraCoolDown);
+    GameObject* barraCoolDownObject = new GameObject("BarraCoolDown", associated.GetContext());
+    barraCoolDown = new Bar(*barraCoolDownObject, status.coolDown, BARRA_COOLDDOWN_MOLDURA, BARRA_COOLDOWN);
+    barraCoolDownObject->SetParent(associated, -14, 74);//Hardcoded = posicionando a barra em relação ao parent
+    barraCoolDownObject->AddComponent(barraCoolDown);
+    associated.CreateNewObject(barraCoolDownObject);
 
-    barraCoolDown.GetComponent<Bar>().SetRefilAuto(10);
-    barraCoolDown.GetComponent<Bar>().SetPoints(0);
+    barraCoolDown->SetRefilAuto(status.coolDown);
+    barraCoolDown->SetPoints(0);
 
+    /*
+        Player Menu
+    */
     playerUnityMenu = new GameObject("UnityMenu", associated.GetContext());
     playerUnityMenu->SetParent(associated);
     PlayerUnityMenu* playerUnityMenuComponent = new PlayerUnityMenu(*playerUnityMenu);
@@ -56,6 +62,9 @@ PlayerUnity::PlayerUnity(GameObject& associated, Vec2 position, TileMap<TileInfo
     associated.CreateNewObject(playerUnityMenu);
     playerUnityMenu->debug = true;
 
+    /*
+        Player Path
+    */
     GameObject* movingPathObject = new GameObject("Path", associated.GetContext());
     movingPathObject->SetParent(associated);
 
@@ -102,7 +111,7 @@ void PlayerUnity::Update(float dt)
             Attack(CharacterType::ENEMY);
             break;
         case CharacterState::WALKING:
-            Walk();
+            Walk(dt);
             break;
         case CharacterState::DEAD:
             break;
@@ -161,8 +170,12 @@ void PlayerUnity::ButtonObserver(Component* btn){
     DEBUG_PRINT("button clicked: " << (dynamic_cast<Button&>(*btn)).name );
     if(dynamic_cast<Button&>(*btn).name == "Andar"){
         DEBUG_PRINT("Mudando estado para WALKING");
-        charState = CharacterState::WALKING;
-        SetDestination(movingPath->GetNext());
+        if(barraCoolDown->GetPercentPoints() == Bar_FULL){
+            barraCoolDown->SetPoints(0);
+            barraCoolDown->refilAuto = false;
+            charState = CharacterState::WALKING;
+            SetDestination(movingPath->GetNext());
+        }
     }
     DEBUG_PRINT("fim");
 }
@@ -170,30 +183,35 @@ void PlayerUnity::ButtonObserver(Component* btn){
 void PlayerUnity::ReceiveDamage(int damage){
     DEBUG_PRINT("inicio");
     CharacterStatus::ReceiveDamage(damage);
+    barraVida->SetPoints(status.hp);
+    DEBUG_PRINT("hp: " << status.hp);
     DEBUG_PRINT("fim");
 }
 
-void PlayerUnity::Walk(){
+void PlayerUnity::Walk(float dt){
     DEBUG_UPDATE("inicio");
     if(destination == nullptr){
         if(movingPath->HasPoints()){
             SetDestination(movingPath->GetNext());
         }else{
             charState = CharacterState::IDLE;
+            barraCoolDown->refilAuto = true;
         }
     }else{
-        CharacterStatus::Walk();
+        CharacterStatus::Walk(dt);
     }
     DEBUG_UPDATE("fim");
 }
 
-void PlayerUnity::Attack(CharacterType other){
+bool PlayerUnity::Attack(CharacterType other){
     DEBUG_UPDATE("inicio");
-    if(attackTimer.Get() > attackCoolDown){
+    bool attacked = false;
+    if(attackTimer.Get() > status.attackCoolDown){
         attackTimer.Restart();
         if(charactersInRange.size()>0){
             for(unsigned int i = 0; i < charactersInRange.size(); i++){
                 if(charactersInRange[i]->charType == other){
+                    attacked = true;
                     charState = CharacterState::ATTAKCING;
                     CharacterStatus::Attack(charactersInRange[i]);
                 }
@@ -202,6 +220,7 @@ void PlayerUnity::Attack(CharacterType other){
             charState = CharacterState::IDLE;
         }
     }
+    return attacked;
     DEBUG_UPDATE("fim");
 }
 

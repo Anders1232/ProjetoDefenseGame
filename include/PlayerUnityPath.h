@@ -28,16 +28,17 @@ class PlayerUnityPath: public Component
         bool HasPoints();
         void OnClick();
         void AddMarker(Vec2 position);
+        void SetLength(int length);
 
         Event<PlayerUnityPath, int&> pathFinished;
 
     protected:
 
     private:
+        int maxLength;
         bool parentSelected;
         std::vector<GameObject*> pathMarkers;
         TileMap<TileInfo>* tileMap;
-        Vec2** destination;
 };
 
 #endif // ROBOPATH_H

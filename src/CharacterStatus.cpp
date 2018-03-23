@@ -9,25 +9,12 @@ using std::vector;
 
 CharacterStatus::CharacterStatus(GameObject& associated,
                                  Vec2 position,
-                                 TileMap<TileInfo>* tileMap,
-                                 float hp, float mp,
-                                 float speed, int range,
-                                 float attack, float defense,
-                                 float magic, float resistence):
+                                 TileMap<TileInfo>* tileMap):
     Component(associated),
     tileMap(tileMap),
     destination(nullptr),
     walkDirection(nullptr),
     lastGridPosition(nullptr),
-    hp(hp),
-    mp(mp),
-    speed(speed),
-    range(range),
-    attack(attack),
-    attackCoolDown(3),
-    defense(defense),
-    magic(magic),
-    resistence(resistence),
     pathVerifyed(false),
     charState(IDLE),
     delta(0.5)
@@ -55,7 +42,7 @@ bool CharacterStatus::Is(unsigned int type) const{
     return GameComponentType::CHARACTER_STATUS == type;
 }
 
-void CharacterStatus::Walk(){
+void CharacterStatus::Walk(float dt){
     DEBUG_UPDATE("inicio");
     /*
     if(destination){
@@ -114,22 +101,22 @@ void CharacterStatus::Walk(){
         if(pixelDestination.x > associated.box.Center().x)
         {
             if(direction != RIGHT) ChangeDirection(RIGHT);
-            associated.box.x += speed;
+            associated.box.x += status.speed * dt;
         }
         else if(pixelDestination.x < associated.box.Center().x)
         {
             if(direction != LEFT) ChangeDirection(LEFT);
-            associated.box.x -= speed;
+            associated.box.x -= status.speed * dt;
         }
         if(pixelDestination.y > associated.box.Center().y)
         {
             if(direction != DOWN) ChangeDirection(DOWN);
-            associated.box.y += speed;
+            associated.box.y += status.speed * dt;
         }
         else if(pixelDestination.y < associated.box.Center().y)
         {
             if(direction != UP) ChangeDirection(UP);
-            associated.box.y -= speed;
+            associated.box.y -= status.speed * dt;
         }
     }
     DEBUG_UPDATE("fim");
@@ -208,11 +195,11 @@ vector<Vec2> CharacterStatus::CellsInRange(){
     //DEBUG_PRINT("inicio");
     vector<Vec2> cells;
     Vec2 currentPosition(tileMap->PixelToMap(associated.GetPosition())) ;
-    for(int i = currentPosition.x - range; i < currentPosition.x +1 + range; i++){
-        for(int j = currentPosition.y - range; j < currentPosition.y +1 + range; j++){
-            if(i >= 0 && j >= 0 ){
-                cells.push_back(Vec2(i, j));
-            }
+    for(int i = currentPosition.x - status.range; i < currentPosition.x +1 + status.range; i++){
+        if(i < 0) continue;
+        for(int j = currentPosition.y - status.range; j < currentPosition.y +1 + status.range; j++){
+            if(j < 0) continue;
+            cells.push_back(Vec2(i, j));
         }
     }
     //DEBUG_PRINT("fim");
@@ -223,9 +210,9 @@ vector<CharacterStatus*> CharacterStatus::CharactersInRange(){
     DEBUG_UPDATE("inicio");
     vector<CharacterStatus*> characters;
     Vec2 currentPosition(tileMap->PixelToMap(associated.GetPosition())) ;
-    for(int i = currentPosition.x - range; i < currentPosition.x +1 + range; i++){
+    for(int i = currentPosition.x - status.range; i < currentPosition.x +1 + status.range; i++){
         if(i < 0) continue;
-        for(int j = currentPosition.y - range; j < currentPosition.y +1 + range; j++){
+        for(int j = currentPosition.y - status.range; j < currentPosition.y +1 + status.range; j++){
             if(j < 0) continue;
             GameObject* character = tileMap->At(i, j).GetCharacter();
             if(character && character != &associated){
@@ -254,17 +241,20 @@ void CharacterStatus::SetDestination(Vec2 destination){
     DEBUG_PRINT("fim");
 }
 
-void CharacterStatus::Attack(CharacterStatus* character){
+bool CharacterStatus::Attack(CharacterStatus* character){
     DEBUG_PRINT("inicio");
     DEBUG_PRINT("[ " << this << " ] attacking [ " << character <<" ]" );
-    character->ReceiveDamage(attack);
+    character->ReceiveDamage(status.attack);
+    return true;
     DEBUG_PRINT("fim");
 }
 
 void CharacterStatus::ReceiveDamage(int damage){
     DEBUG_PRINT("inicio");
-    hp -= damage - defense;
-    if(hp <= 0){
+    DEBUG_PRINT("damage: " << damage);
+    DEBUG_PRINT("defense: " << status.defense);
+    status.hp -= damage - status.defense;
+    if(status.hp <= 0){
         Die();
     }
     DEBUG_PRINT("fim");
@@ -278,4 +268,19 @@ void CharacterStatus::Die(){
 
     //associated.RequestDelete();
     DEBUG_PRINT("Dead");
+}
+
+void CharacterStatus::SetStatus(float hp, float mp, float speed, int range,
+                          float attack, float defense, float magic, float resistence,
+                          float coolDown, float attackCoolDown){
+    status.hp = hp;
+    status.mp = mp;
+    status.speed = speed;
+    status.range = range;
+    status.attack = attack;
+    status.defense = defense;
+    status.magic = magic;
+    status.resistence = resistence;
+    status.coolDown = coolDown;
+    status.attackCoolDown = attackCoolDown;
 }

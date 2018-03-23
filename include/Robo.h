@@ -25,7 +25,7 @@ class Robo : public PlayerUnity
         void EjectPilot(void*);
         void BoardPilot(GameObject* piloto);
         void ButtonObserver(Component* btn);
-        void Attack();
+        bool Attack(CharacterType other)override;
 
     protected:
 

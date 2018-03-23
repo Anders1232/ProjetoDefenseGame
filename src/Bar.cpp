@@ -51,6 +51,8 @@ void Bar::Update(float dt)
             if(currPoints > maxPoints) currPoints = maxPoints;
             fluid.SetScreenRect(0, 0, associated.box.w * (currPoints/maxPoints), associated.box.h); //SetClip(0, 0, associated.box.w * (currPoints/maxPoints), associated.box.h);
         }
+    }else{
+        fluid.SetScreenRect(0, 0, associated.box.w * (currPoints/maxPoints), associated.box.h);
     }
     DEBUG_UPDATE("fim");
 }

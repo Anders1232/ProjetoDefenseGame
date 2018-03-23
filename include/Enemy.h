@@ -36,11 +36,10 @@ private:
         bool Is(unsigned int type) const;
         void AddPatrolPoint(Vec2 patrolPoint);
         void Attack(CharacterType other);
-        void Walk() override;
+        void Walk(float dt) override;
+        void Die()override;
 
     protected:
-        Sound attackSound;
-
     private:
         unsigned int nextPointIndex;
         std::vector<Vec2> patrolPoints;

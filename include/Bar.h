@@ -9,6 +9,7 @@
 
 #include "resources_path.h"
 
+#define Bar_FULL 100
 class Sprite; //reference only
 
 class Bar: public Component
@@ -40,6 +41,7 @@ public:
 //    int GetVida();
 //    float GetPorcentagemVida();
 //    bool IsFull();
+    bool refilAuto;
 
 protected:
 
@@ -50,7 +52,6 @@ private:
 
     int maxPoints;
     float currPoints;
-    bool refilAuto;
     float refilPace;
     Timer timer;
     Vec2 relative;

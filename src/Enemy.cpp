@@ -9,10 +9,12 @@ using std::vector;
 
 Enemy::Enemy(GameObject& associated, string spritePath, Vec2 position, TileMap<TileInfo>* tileMap):
     CharacterStatus(associated, position, tileMap),
-    nextPointIndex(0),
-    attackSound("resources/audio/boom.wav")
+    nextPointIndex(0)
 {
     DEBUG_CONSTRUCTOR("inicio");
+    attackSound.Open("resources/audio/cartoon-punch-04.ogg");
+    dieSound.Open("resources/audio/boom.wav");
+    SetStatus(20, 10, 10, 1, 5, 1, 0, 0, 1);
     charType = CharacterType::ENEMY;
     CharacterStatus::charState = CharacterState::WALKING;
 
@@ -55,7 +57,7 @@ void Enemy::Update(float dt){
             }
             break;
         case CharacterState::WALKING:
-            Walk();
+            Walk(dt);
             break;
         case CharacterState::ATTAKCING:
             attackTimer.Update(dt);
@@ -80,30 +82,35 @@ void Enemy::AddPatrolPoint(Vec2 patrolPoint){
 
 void Enemy::Attack(CharacterType other){
     //DEBUG_PRINT("inicio");
-    if(attackTimer.Get() > attackCoolDown){
+    if(attackTimer.Get() > status.attackCoolDown){
         attackTimer.Restart();
         if( charactersInRange.size() > 0){
             for(unsigned int i = 0; i < charactersInRange.size(); i++){
                 if(charactersInRange[i]->charType == other){
                    charState = CharacterState::ATTAKCING;
                    CharacterStatus::Attack(charactersInRange[i]);
+                   attackSound.Play(1);
                 }
             }
         }else{
             charState = CharacterState::IDLE;
         }
     }
-    attackSound.Play(1);
     //DEBUG_PRINT("fim");
 }
 
-void Enemy::Walk(){
+void Enemy::Walk(float dt){
     //DEBUG_PRINT("inicio");
     if(destination == nullptr){
         charState = CharacterState::IDLE;
     }else{
-        CharacterStatus::Walk();
+        CharacterStatus::Walk(dt);
     }
     //DEBUG_PRINT("fim");
+}
 
+void Enemy::Die(){
+    CharacterStatus::Die();
+    dieSound.Play(1);
+    associated.RequestDelete();
 }

@@ -15,7 +15,7 @@ PlayerUnityPath::PlayerUnityPath(GameObject& associated, TileMap<TileInfo>* tile
     pathFinished(this),
     parentSelected(false),
     tileMap(tileMap),
-    destination(&destination)
+    maxLength(3)
 {
     associated.showOnScreen = false;
     //ctor
@@ -106,7 +106,9 @@ void PlayerUnityPath::OnClick(){
            parentSelected = true;
     }
     if(parentSelected){
-        CreatePath();
+        if(pathMarkers.size() < maxLength){
+            CreatePath();
+        }
     }
     if(parentSelected &&
        InputManager::GetInstance().MouseRelease(LEFT_MOUSE_BUTTON)){
@@ -116,5 +118,9 @@ void PlayerUnityPath::OnClick(){
         pathFinished.FireEvent(i);
     }
     DEBUG_UPDATE("fim");
+}
+
+void PlayerUnityPath::SetLength(int length){
+    this->maxLength = length;
 }
 #include "Error_footer.h"
